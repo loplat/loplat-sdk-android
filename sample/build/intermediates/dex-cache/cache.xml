@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/koojh74/work/loplatsample/app/build/intermediates/exploded-aar/plengi/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="373ee64d03298f28532adb95412da526dca38a93">
+        <dex dex="/Users/koojh74/work/loplatsample/app/build/intermediates/pre-dexed/debug/classes-52d741a4eaa99452617a19dbcb8c801d8ea6631b.jar" />
+    </item>
+
+</items>
