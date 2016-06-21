@@ -46,11 +46,11 @@
     |context| Context|-|
     
 - response
-    - reuslt: PlengiResponse.Result를 통해서 결과를 전달 받음 
-        (ex. PlengiResponse.Result.SUCESS/ERROR_CLOUD_ACCESS )
+    - reuslt: PlengiResponse.Result를 통해서 결과를 전달 받음
+    	- ex) PlengiResponse.Result.SUCESS/ERROR_CLOUD_ACCESS
         
-    - event type: PlengiResponse.ResponseType를 통해서 전달됨 
-        (ex. PlengiResponse.ResponseType.PLACE)
+    - event type: PlengiResponse.ResponseType를 통해서 전달됨
+    	- ex) PlengiResponse.ResponseType.PLACE
 			
     | result |data type| description|
     |:---:| :----:|:----:|
@@ -97,11 +97,11 @@
 - response
     - result : PlengiResponse.PlaceEvent로 전달 (ex. PlengiResponse.PlaceEvent.ENTER/LEAVE)
     - event type : PlengiResponse.ResposeType로 전달 (ex. PlengiResponse.ResposeType.PLACE_EVENT)
-    
-    |result|data type|description|
-    |:----:|:---:|:--------:|
-    | ENTER |PlengiResponse.PlaceEvent| 현재 위치한 장소가 인식 됨|
-    | LEAVE |PlengiResponse.PlaceEvent| 이전 장소 떠남|
+     
+        |result|data type|description|
+        |:----:|:---:|:--------:|
+        | ENTER |PlengiResponse.PlaceEvent| 현재 위치한 장소가 인식 됨|
+        | LEAVE |PlengiResponse.PlaceEvent| 이전 장소 떠남|
 
 #### c. Stay or Move
 	Plengi.getInstance(Context Context).getCurrentPlaceStatus()
@@ -113,7 +113,7 @@
     |context| Context|-| 
 
 - result
-    - type: PlengiResponse.PlaceStatus 로 전달 (ex. PlengiResponse.PlaceStatus.STAY/MOVE)
+    - type: PlengiResponse.PlaceStatus로 전달 (ex. PlengiResponse.PlaceStatus.STAY/MOVE)
           
       | result | data type |descryption|
       |:----:| :-----:| :-----:|
@@ -138,10 +138,11 @@
     |context| Context|-|
     
 - response
-    - reuslt: PlengiResponse.Result를 통해서 결과를 전달 
-    	(ex. PlengiResponse.Result.SUCESS/ERROR_CLOUD_ACCESS) 
-    - event type: PlengiResponse.ResponseType를 통해서 전달 
-    	(ex. PlengiResponse.ResponseType.PLACE)    
+    - reuslt: PlengiResponse.Result를 통해서 결과를 전달 받음
+    	- ex) PlengiResponse.Result.SUCESS/ERROR_CLOUD_ACCESS
+        
+    - event type: PlengiResponse.ResponseType를 통해서 전달됨
+    	- ex) PlengiResponse.ResponseType.PLACE    
         
         | result |data type| descryption|
         |:---:| :----:|:----:|
