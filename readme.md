@@ -119,18 +119,12 @@
       |:----:| :-----:| :-----:|
       |STAY | PlengiResponse.PlaceStatus|현재 사용자가 한 장소에 머물러 있는 상태|
       |MOVE | PlengiResponse.PlaceStatus|현재 사용자가 이동 중인 상태|
-
-#### d. History of places  
-	Plengi.getInstance(this).getVisitList()
-
-- Plengi.getInstance(this).getVisitList()를 통해 방문 장소 기록을 획득
-   
-- result: 사용자의 방문 위치 리스트를 얻을 수 있음
-
+      
 ### 2. Traker Mode
+- Recognizer mode에서 제공하는 recoginzer a place(a) API도 사용 가능
+
+#### a. Traking Event
 - 일정 주기마다 사용자의 위치 정보를 PlengiEventListener를 통해 결과를 처리
- 
-- Recognizer mode에서 제공하는 recoginzer a place(a), history of place(d) API도 사용 가능
 - event type:  PlengiResponse.ResponseType를 통해 전달(ex.  PlengiResponse.ResponseType.PLACE_TRACKING)
  
  	|parameter|data type|descryption|
