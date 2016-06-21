@@ -121,7 +121,7 @@
       |MOVE | PlengiResponse.PlaceStatus|현재 사용자가 이동 중인 상태|
       
 ### 2. Traker Mode
-- Recognizer mode에서 제공하는 recoginzer a place(a) API도 사용 가능
+- Recognizer mode에서 제공하는 recoginze a place(a) API도 사용 가능
 
 #### a. Traking Event
 - 일정 주기마다 사용자의 위치 정보를 PlengiEventListener를 통해 결과를 처리
