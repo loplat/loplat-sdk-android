@@ -36,7 +36,9 @@
 		Plengi.getInstance(Context context).refreshPlace()
 	
 - Plengi.getInstanc(Context Context).refreshPlace() : 주변 WiFi AP들을 탐색하여, 서버에게 현재 위치 정보를 요청
+  
 - PlengiEventListener: listen()를 통해 Plengi 서버로 부터 받은 결과를 수신하여 PlengiBraodcastReceiver로 송신
+  
 - PlengiBroadcastReciver: PlengiEventLinstener로 부터 받은 결과 처리
 
     |parameter|data type|description|
@@ -46,7 +48,8 @@
 - response
     - reuslt: PlengiResponse.Result를 통해서 결과를 전달 받음 
         (ex. PlengiResponse.Result.SUCESS/ERROR_CLOUD_ACCESS )
-    - event type: PlengiResponse.ResponseType를 통해서 전달됨
+        
+    - event type: PlengiResponse.ResponseType를 통해서 전달됨 
         (ex. PlengiResponse.ResponseType.PLACE)
 			
     | result |data type| description|
@@ -57,25 +60,26 @@
     > ##### SUCESS
 
     > * 위치 정보 결과 (PlengiResponse.Place Class, response.place로 획득 가능)
-            	public long placeid;       // 장소 id(단말기 내에서 장소 id)
-                public long loplat_id;     // 장소 식별자(loplat 서버에 등록된 id)
-        		public String name;        // 장소 이름
-        		public String tags;        // 장소와 관련된 tag
-            	public int floor;          // 층 정보
-            	public String category;    // 장소 유형
-            	public double lat;         // 위도
-                public double lng;	       // 경도 
-                public float accuracy;     // 정확도
-                public float threshold;    // 한계치
-                public String client_code; // 클라이언트 코드
-			
-        > * accuracy > threshold: 현재 위치 내에 있는 경우
+    > 
+    		public long placeid;       // 장소 id(단말기 내에서 장소 id)		
+    		public String name;        // 장소 이름		
+    		public String tags;        // 장소와 관련된 tag		
+    		public int floor;          // 층 정보		
+    		public String category;    // 장소 유형		
+    		public double lat;         // 위도		
+    		public double lng;	       // 경도		
+    		public float accuracy;     // 정확도		
+    		public float threshold;    // 한계치		
+    		public String client_code; // 클라이언트 코드		
+    		public long loplat_id;     // loplat place id (loplat 서버에 등록된 장소 id)
+    >		
+    > * accuracy > threshold: 현재 위치 내에 있는 경우
 
-        > * 그 외에 경우: 현재 위치 근처에 있는 경우
+    > * 그 외에 경우: 현재 위치 근처에 있는 경우
 
-        > ##### ERROR_CLOUD_ACCESS
-        > - 'Not Allowed Client': 유효하지 않는 client (clientID 및 clientSecret 확인 바람)
-        > - 'Location Acquisition Fail' : 학습 되지 않은 장소
+    > ##### ERROR_CLOUD_ACCESS
+    > - 'Not Allowed Client': 유효하지 않는 client (clientID 및 clientSecret 확인 바람)
+    > - 'Location Acquisition Fail' : 학습 되지 않은 장소
        
 
  
@@ -118,7 +122,9 @@
 
 #### d. History of places  
 	Plengi.getInstance(this).getVisitList()
+
 - Plengi.getInstance(this).getVisitList()를 통해 방문 장소 기록을 획득
+   
 - result: 사용자의 방문 위치 리스트를 얻을 수 있음
 
 ### 2. Traker Mode
@@ -132,9 +138,9 @@
     |context| Context|-|
     
 - response
-    - reuslt: PlengiResponse.Result를 통해서 결과를 전달 받음 
-        (ex. PlengiResponse.Result.SUCESS/ERROR_CLOUD_ACCESS )
-    - event type: PlengiResponse.ResponseType를 통해서 전달됨 
+    - reuslt: PlengiResponse.Result를 통해서 결과를 전달 
+    	(ex. PlengiResponse.Result.SUCESS/ERROR_CLOUD_ACCESS) 
+    - event type: PlengiResponse.ResponseType를 통해서 전달 
     	(ex. PlengiResponse.ResponseType.PLACE)    
         
         | result |data type| descryption|
