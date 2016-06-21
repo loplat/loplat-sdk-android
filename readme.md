@@ -39,7 +39,7 @@
 - PlengiEventListener: listen()를 통해 Plengi 서버로 부터 받은 결과를 수신하여 PlengiBraodcastReceiver로 송신
 - PlengiBroadcastReciver: PlengiEventLinstener로 부터 받은 결과 처리
 
-    |parameter|data type|descryption|
+    |parameter|data type|description|
     |:-----:|:-------:|:------:|
     |context| Context|-|
     
@@ -49,7 +49,7 @@
     - event type: PlengiResponse.ResponseType를 통해서 전달됨
         (ex. PlengiResponse.ResponseType.PLACE)
 			
-    | result |data type| descryption|
+    | result |data type| description|
     |:---:| :----:|:----:|
     | SUCCESS|PlengiResponse.Result |위치 정보 획득 성공, 아래의 위치 정보 결과 참고 바람|
     | ERROR_CLOUD_ACCESS |PlengiResponse.Result| 유효하지 않는 client 혹은 학습되지 않은 장소 |
@@ -87,7 +87,7 @@
 
 - PlengiEventListener와 PlengiBroadcastReceiver를 통해 Event 결과를 처리
     
-    |parameter|data type|descryption|
+    |parameter|data type|description|
     |:-----:|:-------:|:------:|
     |context| Context|-|
     
@@ -95,7 +95,7 @@
     - result : PlengiResponse.PlaceEvent로 전달 (ex. PlengiResponse.PlaceEvent.ENTER/LEAVE)
     - event type : PlengiResponse.ResposeType로 전달 (ex. PlengiResponse.ResposeType.PLACE_EVENT)
     
-    |result|data type|descryption|
+    |result|data type|description|
     |:----:|:---:|:--------:|
     | ENTER |PlengiResponse.PlaceEvent| 현재 위치한 장소가 인식 됨|
     | LEAVE |PlengiResponse.PlaceEvent| 이전 장소 떠남|
@@ -144,14 +144,13 @@
     > ##### SUCESS
 
     > * 위치 정보 결과 (PlengiResponse.Place Class, response.place로 획득 가능)
-        >
             	public long placeid;       // 장소 id(단말기 내에서 장소 id)
         		public String name;        // 장소 이름
         		public String tags;        // 장소와 관련된 tag
             	public int floor;          // 층 정보
             	public String category;    // 장소 유형
             	public double lat;         // 위도
-                public double lng;	       // 경도 
+                public double lng;	       // 경도
                 public float accuracy;     // 정확도
                 public float threshold;    // 한계치
                 public String client_code; // 클라이언트 코드
@@ -284,7 +283,7 @@
 	
 3. Plengi init 수행 (1회만 수행하면 됨, MainActivity 참고 바람)
         - Plengi.getInstance(Context context).init((String clientId, String clientSecret, String uniqueUserId)
-    | parameter | type | descryption |
+    | parameter | type | description |
     |:-----:|:-----:|:-----:|
     |context(required)|Context| |
     |clientId(required)|String| SDK를 사용하기 위한 client ID|
