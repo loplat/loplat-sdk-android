@@ -103,6 +103,7 @@
 	Plengi.getInstance(Context Context).getCurrentPlaceStatus()
     
 - Plengi.getInstance(Context Context).getCurrentPlaceStatus()를 통해 사용자가 현재 이동 중인지 한 장소에 머물고 있는지 확인 가능
+
 	|parameter|data type|descryption|
     |:-----:|:-------:|:------:|
     |context| Context|-| 
@@ -145,17 +146,17 @@
 
     > * 위치 정보 결과 (PlengiResponse.Place Class, response.place로 획득 가능)
     > 
-    >		public long placeid;       // 장소 id(단말기 내에서 장소 id)
-    >		public String name;        // 장소 이름
-    >		public String tags;        // 장소와 관련된 tag
-    >		public int floor;          // 층 정보
-    >		public String category;    // 장소 유형
-    >		public double lat;         // 위도
-    >		public double lng;	       // 경도
-    >		public float accuracy;     // 정확도
-    >		public float threshold;    // 한계치
-    >		public String client_code; // 클라이언트 코드
-    >		public long loplat_id;     // loplat place id (loplat 서버에 등록된 장소 id)
+    	>		public long placeid;       // 장소 id(단말기 내에서 장소 id)		
+    	>		public String name;        // 장소 이름		
+    	>		public String tags;        // 장소와 관련된 tag		
+    	>		public int floor;          // 층 정보		
+    	>		public String category;    // 장소 유형		
+    	>		public double lat;         // 위도		
+    	>		public double lng;	       // 경도		
+    	>		public float accuracy;     // 정확도		
+    	>		public float threshold;    // 한계치		
+    	>		public String client_code; // 클라이언트 코드		
+    	>		public long loplat_id;     // loplat place id (loplat 서버에 등록된 장소 id)
     >		
     > * accuracy > threshold: 현재 위치 내에 있는 경우
 
