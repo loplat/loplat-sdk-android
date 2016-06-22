@@ -1,6 +1,5 @@
 ﻿#### Note ####
-* If you want to see loplat REST API, please refer to https://github.com/loplat/loplat-rest-api for details
-* If you want to see Plengi iOS SDK, please refer to https://github.com/loplat/loplat-sdk-ios for details 
+* If you want to see loplat REST API, please refer to https://github.com/loplat/loplat-rest-api for details 
 
 # Plengi SDK
 
@@ -22,173 +21,21 @@
 * 2016.01.27 - initial release
 
 ## Function
-현재 Plengi SDK에서는 사용자의 위치를 확인하기 위하여 아래와 같은 mode를 제공함
 
-1. Recognizer Mode
-	- 장소를 방문 할 때 마다 사용자의 위치를 확인 하는 방식
-2. Tracker Mode
-	- 일정 주기마다 사용자의 위치를 확인하는 방식
-
-
-### 1. Recongize Mode
-
-#### a. Recognize a place
-		Plengi.getInstance(Context context).refreshPlace()
-	
+#### 1. Recognize a place
 - Plengi.getInstanc(Context Context).refreshPlace() : 주변 WiFi AP들을 탐색하여, 서버에게 현재 위치 정보를 요청
-  
 - PlengiEventListener: listen()를 통해 Plengi 서버로 부터 받은 결과를 수신하여 PlengiBraodcastReceiver로 송신
-  
 - PlengiBroadcastReciver: PlengiEventLinstener로 부터 받은 결과 처리
-
-    |parameter|data type|description|
-    |:-----:|:-------:|:------:|
-    |context| Context|-|
-    
-- response
-    - reuslt: PlengiResponse.Result를 통해서 결과를 전달 받음
-    	- ex) PlengiResponse.Result.SUCESS/ERROR_CLOUD_ACCESS
-        
-    - event type: PlengiResponse.ResponseType를 통해서 전달됨
-    	- ex) PlengiResponse.ResponseType.PLACE
-			
-    | result |data type| description|
-    |:---:| :----:|:----:|
-    | SUCCESS|PlengiResponse.Result |위치 정보 획득 성공, 아래의 위치 정보 결과 참고 바람|
-    | ERROR_CLOUD_ACCESS |PlengiResponse.Result| 유효하지 않는 client 혹은 학습되지 않은 장소 |
-            
-    > ##### SUCESS
-
-    > * 위치 정보 결과 (PlengiResponse.Place Class, response.place로 획득 가능)
-    > 
-    		public long placeid;       // 장소 id(단말기 내에서 장소 id)		
-    		public String name;        // 장소 이름		
-    		public String tags;        // 장소와 관련된 tag		
-    		public int floor;          // 층 정보		
-    		public String category;    // 장소 유형		
-    		public double lat;         // 위도		
-    		public double lng;	       // 경도		
-    		public float accuracy;     // 정확도		
-    		public float threshold;    // 한계치		
-    		public String client_code; // 클라이언트 코드		
-    		public long loplat_id;     // loplat place id (loplat 서버에 등록된 장소 id)
-    >		
-    > * accuracy > threshold: 현재 위치 내에 있는 경우
-
-    > * 그 외에 경우: 현재 위치 근처에 있는 경우
-
-    > ##### ERROR_CLOUD_ACCESS
-    > - 'Not Allowed Client': 유효하지 않는 client (clientID 및 clientSecret 확인 바람)
-    > - 'Location Acquisition Fail' : 학습 되지 않은 장소
-       
-
  
-#### b. Place Event
-	Plengi.getInstance(Context context).start()/ Plengi.getInstance(Context context).stop()
-    
+#### 2. Place Event
 - Plengi.getInstance(Context Context).start()/ Plengi.getInstance(Context Context).stop()을 통해서 모니터링을 on/off
-
 - PlengiEventListener와 PlengiBroadcastReceiver를 통해 Event 결과를 처리
-    
-    |parameter|data type|description|
-    |:-----:|:-------:|:------:|
-    |context| Context|-|
-    
-- response
-    - result : PlengiResponse.PlaceEvent로 전달 (ex. PlengiResponse.PlaceEvent.ENTER/LEAVE)
-    - event type : PlengiResponse.ResposeType로 전달 (ex. PlengiResponse.ResposeType.PLACE_EVENT)
-     
-        |result|data type|description|
-        |:----:|:---:|:--------:|
-        | ENTER |PlengiResponse.PlaceEvent| 현재 위치한 장소가 인식 됨|
-        | LEAVE |PlengiResponse.PlaceEvent| 이전 장소 떠남|
 
-#### c. Stay or Move
-	Plengi.getInstance(Context Context).getCurrentPlaceStatus()
-    
+#### 3. Stay or Move
 - Plengi.getInstance(Context Context).getCurrentPlaceStatus()를 통해 사용자가 현재 이동 중인지 한 장소에 머물고 있는지 확인 가능
 
-	|parameter|data type|descryption|
-    |:-----:|:-------:|:------:|
-    |context| Context|-| 
-
-- result
-    - type: PlengiResponse.PlaceStatus로 전달 (ex. PlengiResponse.PlaceStatus.STAY/MOVE)
-          
-      | result | data type |descryption|
-      |:----:| :-----:| :-----:|
-      |STAY | PlengiResponse.PlaceStatus|현재 사용자가 한 장소에 머물러 있는 상태|
-      |MOVE | PlengiResponse.PlaceStatus|현재 사용자가 이동 중인 상태|
-      
-### 2. Traker Mode
-- Recognizer mode에서 제공하는 recoginze a place(a) API도 사용 가능
-
-#### a. Traking Event
-- 일정 주기마다 사용자의 위치 정보를 PlengiEventListener를 통해 결과를 처리
-- event type:  PlengiResponse.ResponseType를 통해 전달(ex.  PlengiResponse.ResponseType.PLACE_TRACKING)
- 
- 	|parameter|data type|descryption|
-    |:-----:|:-------:|:------:|
-    |context| Context|-|
-    
-- response
-    - reuslt: PlengiResponse.Result를 통해서 결과를 전달 받음
-    	- ex) PlengiResponse.Result.SUCESS/ERROR_CLOUD_ACCESS
-        
-    - event type: PlengiResponse.ResponseType를 통해서 전달됨
-    	- ex) PlengiResponse.ResponseType.PLACE    
-        
-        | result |data type| descryption|
-        |:---:| :----:|:----:|
-        | SUCCESS|PlengiResponse.Result |위치 정보 획득 성공, 아래의 위치 정보 결과 참고 바람|
-        | ERROR_CLOUD_ACCESS |PlengiResponse.Result| 유효하지 않는 client 혹은 학습되지 않은 장소 | 
-            
-    > ##### SUCESS
-
-    > * 위치 정보 결과 (PlengiResponse.Place Class, response.place로 획득 가능)
-    > 
-    		public long placeid;       // 장소 id(단말기 내에서 장소 id)		
-    		public String name;        // 장소 이름		
-    		public String tags;        // 장소와 관련된 tag		
-    		public int floor;          // 층 정보		
-    		public String category;    // 장소 유형		
-    		public double lat;         // 위도		
-    		public double lng;	       // 경도		
-    		public float accuracy;     // 정확도		
-    		public float threshold;    // 한계치		
-    		public String client_code; // 클라이언트 코드		
-    		public long loplat_id;     // loplat place id (loplat 서버에 등록된 장소 id)
-    >		
-    > * accuracy > threshold: 현재 위치 내에 있는 경우
-
-    > * 그 외에 경우: 현재 위치 근처에 있는 경우
-
-    > ##### ERROR_CLOUD_ACCESS
-    > - 'Not Allowed Client': 유효하지 않는 client (clientID 및 clientSecret 확인 바람)
-    > - 'Location Acquisition Fail' : 학습 되지 않은 장소
-       
-- 예시 코드
-
-        public class ModePlengiListener implements PlengiListener {
-        @Override
-        public void listen(PlengiResponse response) {
-            LoplatLogger.writeLog("ModePlengiListener: " + response.type);
-
-            if(response.type == PlengiResponse.ResponseType.PLACE_TRACKING) {
-                Intent i = new Intent();
-                i.setAction("com.loplat.mode.response");
-
-                if(response.place == null) {
-                    // 특정장소 트래킹하다 벗어난 경우 한번 전달
-                }
-                else {
-                    // tracking 결과 값 주기적으로 발생
-                    // response.place.name
-                    // response.place.loplatid
-                }
-             }
-          }
-        }
+#### 4. History of places  
+- Plengi.getInstance(this).getVisitList()를 통해 방문 장소 기록을 획득
 
 ## Contents
 
@@ -286,56 +133,68 @@
 	- Plengi 에 1번에서 생성한 Listener를 등록함
 	
 3. Plengi init 수행 (1회만 수행하면 됨, MainActivity 참고 바람)
-        - Plengi.getInstance(Context context).init((String clientId, String clientSecret, String uniqueUserId)
-    | parameter | type | description |
-    |:-----:|:-----:|:-----:|
-    |context(required)|Context| |
-    |clientId(required)|String| SDK를 사용하기 위한 client ID|
-    |clientSecret| String| SDK를 사용하기 위한 client secret (password)|
-    |uniqueUserId| String| App에서 사용자를 식별하기 위한 ID임 (ex, id,email,....,etc.)|
-
-	- Plengi SDK초기화 하는 기능
+	- clientid, clientsecret, uniqueUserId를 인자로 넒김
 	
 	  > * clientid & clientsecret: loplat server로 접근하기 위한 ID와 PW임
 	  
-	  > * test를 원하시는 분은 clientid: loplatdemo, clientsecret: loplatdemokey로 이용 할 수 있음
+	  > * test를 원하시는 분은 clientid: loplatdemo, clientsecret: loplatdemokey로 이용 할 수 있음  
 	
 	  > * 정식 id와 secret을 원하는 분은 아래에 기입 된 메일 주소로 연락 바람
 	
-   - response
-   	- PlengiResponse.Result를 통해서 결과를 전달 받음
+	- uniqueUserId: App에서 사용자를 식벽하기 위한 ID임 (ex, id,email,....,etc.)
 
-       | result |type |descryption|
-       | :---: |:---: |:-------:|
-       | SUCCESS |PlengiResponse.Result |init 성공|
-       | FAIL_INTERNET_UNAVAILABLE |PlengiResponse.Result | Network 상태가 불안정하거나 사용 불가능 한 상태|
-       | FAIL_WIFI_SCAN_UNAVAILABLE |PlengiResponse.Result | WiFi scan이 불가능 한 상태|
-   
 4. 필요한 기능 구현 (MainActivity 참고 바람)
 	- Recognizing Place: 현재 장소의 위치를 서버에서 받아오고자 하는 경우	
-		- Plengi.getInstance(Context context).refreshPlace()을 호출하여 주변 WiFi AP들을 loplat서버로 보
-
+	
+		- Plengi.getInstance(this).refreshPlace()을 호출하여 주변 WiFi AP들을 loplat서버로 보냄
 		- loplat 서버는 Plengi Engine으로 부터 받은 WiFi신호를 분석하여 최적의 위치정보를 PlengiEventListenter로 전달
-		- PlengiBroadcastReceiver는 PlengiEventListener를 통해서 위치 정보 결과 획득
+                - PlengiEventListener에 전달 되는 response 종류는 다음과 같음
+			
+			> * Type: PlengiResponse.ResposeType.PLACE
 
+			> * 위치 정보 결과 (PlengiResponse.Place Class, response.place로 획득 가능)
+				>
+			 	    public long placeid;       // 장소 id
+				    public String name;        // 장소 이름
+				    public String tags;        // 장소와 관련된 tag
+				    public int floor;          // 층 정보
+				    public String category;    // 장소 유형
+				    public double lat;         // 위도
+				    public double lng;	       // 경도 
+				    public float accuracy;     // 정확도
+				    public float threshold;    // 한계치
+				    public String client_code; // 클라이언트 코드
+			
+			> * accuracy > threshold: 현재 위치 내에 있는 경우
+
+			> * 그 외에 경우: 현재 위치 근처에 있는 경우
+	
+		- PlengiBroadcastReceiver는 PlengiEventListener를 통해서 위치 정보 결과 획득
 		- 현재 위치가 인식 된 경우 현재 위치 정보 획득, 그렇지 않을 경우는 'unknown'으로 표시 됨
 
 	- Place Event: Background로 장소 변화를 모니터링을 하고자 하는 경우
-		- Plengi.getInstance(Context context).start()/ Plengi.getInstance(Context context).stop()을 통해서 장소 변화 모니터링을 on/off
-		
+		- Plengi.getInstance(this).start()/ Plengi.getInstance(this).stop()을 통해서 장소 변화 모니터링을 on/off
 		- loplat 서버는 PlengiEventListenter로 모니터링 결과를 전달
+                - PlengiEventListener에 전달 되는 response 종류는 다음과 같음
+			
+			> * Type: PlengiResponse.ResposeType.PLACE_EVENT
+			
+			> * PlengiResponse.PlaceEvent.ENTER / PlengiResponse.PlaceEvent.LEAVE
+	
 		- PlengiBroadcastReceiver는 PlengiEventListener를 통해서 위치 정보 결과 획득
 		- Broadcast를 통해서 서버로 부터 Place Event 결과(Enter or Leaver) 획득
 	
 	- Stay or Move : 현재 사용자가 머물고 있는 장소의 방문 기록을 알고자 하는 경우
-		- Plengi.getInstance(Context context).getCurrentPlaceStatus()를 호출 Stay / Move 상태 획득
+		- Plengi.getInstance(this).getCurrentPlaceStatus()를 호출 Stay / Move 상태 획득
+		
+			> * Type: PlengiResponse.PlaceStatus.STAY / PlengiResponse.PlaceStatus.MOVE
 
-		- Stay 일 경우, 현재 사용자가 현재 위치한 장소를 머문 시간을 표시 할 수 있음(코드 참고 바람)
-	
+
+   		- Stay 일 경우, 현재 사용자가 현재 위치한 장소를 머문 시간을 표시 할 수 있음(코드 참고 바람)
+
 	- History of Places: 방문 장소 이력을 알고자 하는 경우
-		- Plengi.getInstance(Context context).getVisitList()를 통해 방문 목록을 획득
-		- response: 사용자 방문 리스트 값을 얻을 수 있음 
-        
+		- Plengi.getInstance(this).getVisitList()를 통해 방문 목록을 획득
+		
 
 ## Notice 
 
