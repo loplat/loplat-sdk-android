@@ -1,5 +1,6 @@
 ﻿#### Note ####
-* If you want to see loplat REST API, please refer to https://github.com/loplat/loplat-rest-api for details 
+* If you want to see loplat REST API, please refer to https://github.com/loplat/loplat-rest-api for details
+* If you want to see Plengi iOS SDK, please refer to https://github.com/loplat/loplat-sdk-ios for details
 
 # Plengi SDK
 
