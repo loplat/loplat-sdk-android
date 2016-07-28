@@ -142,7 +142,7 @@
 	
 	  > * 정식 id와 secret을 원하는 분은 아래에 기입 된 메일 주소로 연락 바람
 	
-	- uniqueUserId: App에서 사용자를 식벽하기 위한 ID임 (ex, id,email,....,etc.)
+	- uniqueUserId: App에서 사용자를 식벽하기 위한 ID임 (ex, 광고id,id,....,etc.)
 
 4. 필요한 기능 구현 (MainActivity 참고 바람)
 	- Recognizing Place: 현재 장소의 위치를 서버에서 받아오고자 하는 경우	
