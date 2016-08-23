@@ -47,13 +47,13 @@
 * Plengi.getInstance(this).getVisitList()를 통해 방문 장소 기록을 획득
 
 ## Contents
-1. [디렉토리 및 샘플코드 소개](https://github.com/loplat/loplat-sdk-android#1-디렉토리-소개 "디렉토리 소개")
-2. [SDK Setup](https://github.com/loplat/loplat-sdk-android#2-SDK-Setup "SDK Setup")
+1. 디렉토리 및 샘플코드 소개
+2. SDK Setup
 	- 계정 만들기 
 	- Permission 등록
 	- Receiver & Service 등록
 	- Constraints 
-3. [SDK 초기화 및 시작하기](https://github.com/loplat/loplat-sdk-android#3-SDK-초기회-및-시작하기 "SDK 초기화 설정 및 시작하기")
+3. SDK 초기화 및 시작하기
 	- PlengiListenr 생성
 	- Plengi Instance 생성 및 EventListener 등록
 	-  Plengi Init
@@ -235,21 +235,21 @@
 	> * 그 외에 경우: 현재 위치 근처에 있는 경우  
 	> * 현재 위치가 인식 된 경우 현재 위치 정보 획득, 그렇지 않을 경우는 'unknown'으로 표시 됨
 
-* 자세한 사항은 API문서를 참조해주시기 바랍니다.
+* 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 위치 확인하기](https://github.com/loplat/loplat-sdk-android/wiki/1.-현재-위치-확인하기)
 	
 ### 5. 현재 사용자 상태 확인하기  (Stay or Move)
 -  현재 사용자가 이동(Move) 중인지 매장/장소에 머무르고(Stay) 있는지 확인할 수 있습니다.
 - 현재 사용자의 상태를 확인하기 위하여 다음과 같이 선언을 합니다. 
  
 		Plengi.getInstance(this).getCurrentPlaceStatus
-- 자세한 사항은 API문서를 참조해주시기 바랍니다.
+- 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 사용자 상태 확인하기](https://github.com/loplat/loplat-sdk-android/wiki/2.-현재-사용자-상태-확인하기)
 
 ### 6. 방문 매장/장소 기록 확인하기 (History of Places)
 * 사용자의 방문한 매장/장소 이력을 확인할 수 있습니다.
 * 사용자의 방문 장소 이력을 알고자 하는 경우 다음과 같이 선언을 합니다.
 		
 		Plengi.getInstance(MainActivity.this).getVisitList()
-* 자세한 사항은 API문서를 참조해주시기 바랍니다.
+* 자세한 사항은 API문서를 참조해주시기 바랍니다. [방문 매장/장소 기록 확인하기](https://github.com/loplat/loplat-sdk-android/wiki/3.-방문-매장-장소-기록-확인하기)
 		
 ## Notice 
 
