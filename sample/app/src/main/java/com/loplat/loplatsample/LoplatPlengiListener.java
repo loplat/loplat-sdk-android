@@ -79,6 +79,23 @@ public class LoplatPlengiListener implements PlengiListener {
             System.out.println(detail);
             sendLoplatResponseToApplication("placeevent", detail);
         }
+        else if(response.type == PlengiResponse.ResponseType.PLACE_TRACKING) {
+            String detail = "PLACE EVENT: ";
+
+            if(response.place == null) {
+                // 특정장소 트래킹하다 벗어난 경우 한번 전달
+            }
+            else {
+                // tracking 결과 값 주기적으로 발생
+                // response.place.name
+                // response.place.loplatid
+                detail += " - " + response.place.name;
+                detail += " (" + response.place.floor + "F)";
+                detail += ", client_code: " + response.place.client_code;
+            }
+            System.out.println(detail);
+            sendLoplatResponseToApplication("placeevent", detail);
+        }
         else if(response.type == PlengiResponse.ResponseType.NEARBY_DEVICE) {
             String colocateInfo = "";
 

@@ -145,6 +145,7 @@ public class MainActivity extends Activity {
         int moveScanPeriod = 3 * 60000; // 3 mins (milliseconds)
         int stayScanPeriod = 6 * 60000; // 6 mins (milliseconds)
         Plengi.getInstance(this).setScanPeriod(moveScanPeriod, stayScanPeriod);
+
     }
 
     public void onRequestLocationInfo(View view) {
