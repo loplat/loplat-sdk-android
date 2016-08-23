@@ -192,9 +192,12 @@
 		- Recognizer mode 일 경우  move, stay에 대해 주기를 설정합니다. 
 	
 				Plengi.getInstance(MainActivity.this).setScanPeriod(3*60*1000, 6*60*1000);  // move: 3 mins, stay: 6 mins  
-			- move:  매장/장소를 인식하기 위한 기본 WFi scan 주기이며 default 값으로 3분이 설정되어 있습니다.
-			- stay: 매장/장소가 인식 된 후 WiFi scan 주기이며 default 값으로 6분이 설정되어 있습니다.
-		- Tracker mode 일 경우 분 단위로 설정이 가능하며 default 값으로 2분이 설정되어 있습니다.
+			- move:  매장/장소를 인식하기 위한 기본 WFi scan 주기이며 default 값으로 3분이 설정되어 있습니다.  
+                - 3분이하의 분으로 주기 설정시 default 값인 3분으로 설정이 됩니다.
+			- stay: 매장/장소가 인식 된 후 WiFi scan 주기이며 default 값으로 6분이 설정되어 있습니다.  
+                - 6분이하의 분으로 주기 설정시 default 값인 6분으로 설정이 됩니다.
+		- Tracker mode 일 경우 분 단위로 설정이 가능하며 default 값으로 2분이 설정되어 있습니다.  
+                - 1분이하의 분으로 주기 설정시 주기는 1분으로 설정이 됩니다. (최소 주기 값: 1분)
 		
 				Plengi.getInstance(MainActivity.this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
 6. Start/Stop
