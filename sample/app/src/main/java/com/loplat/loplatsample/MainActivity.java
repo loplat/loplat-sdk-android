@@ -1,8 +1,6 @@
 package com.loplat.loplatsample;
 
 import android.Manifest;
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -13,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.TextView;
 
@@ -21,7 +18,6 @@ import com.loplat.placeengine.Plengi;
 import com.loplat.placeengine.PlengiResponse;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
 
 public class MainActivity extends Activity {
@@ -130,7 +126,8 @@ public class MainActivity extends Activity {
         // do init process only once before calling other functions
         String clientId = "test";
         String clientSecret = "test";
-        String uniqueUserId = getUniqueUserId(this);
+        /* Please be careful not to input any personal information such as email, phone number. */
+        String uniqueUserId = "loplat_12345";
         int result = Plengi.getInstance(this).init(clientId, clientSecret, uniqueUserId);
         if(result == PlengiResponse.Result.SUCCESS) {
             // ok
@@ -148,24 +145,6 @@ public class MainActivity extends Activity {
         int moveScanPeriod = 3 * 60000; // 3 mins (milliseconds)
         int stayScanPeriod = 6 * 60000; // 6 mins (milliseconds)
         Plengi.getInstance(this).setScanPeriod(moveScanPeriod, stayScanPeriod);
-    }
-
-    // in this sample, we use email address as a user id
-    private String getUniqueUserId(Context context) {
-        String email=null;
-        Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
-        Account[] accounts = AccountManager.get(context).getAccounts();
-        for (Account account : accounts) {
-            if (emailPattern.matcher(account.name).matches()) {
-                String possibleEmail = account.type + ", " + account.name; // com.google
-                System.out.println("emails: " + possibleEmail);
-                if(account.type.equals("com.google")) {
-                    email = account.name;
-                    break;
-                }
-            }
-        }
-        return email;
     }
 
     public void onRequestLocationInfo(View view) {
