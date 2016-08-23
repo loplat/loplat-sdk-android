@@ -200,7 +200,7 @@
 		- Tracker mode 일 경우 분 단위로 설정이 가능하며 default 값으로 2분이 설정되어 있습니다.  
 			   - 1분이하의 분으로 주기 설정시 주기는 1분으로 설정이 됩니다. (최소 주기 값: 1분)
 		
-				Plengi.getInstance(MainActivity.this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
+                    Plengi.getInstance(MainActivity.this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
 6. Start/Stop
 	- 사용자 장소/매장 방문 모니터링을 시작하거나 정지 할 수 있습니다.
 	- 설정된 주기마다 WiFi 신호를 스캔하여 사용자의 위치를 확인합니다.  
