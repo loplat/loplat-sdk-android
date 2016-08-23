@@ -174,6 +174,7 @@
 		* test를 원하시는 분은 clientid: loplatdemo, clientsecret: loplatdemokey 사용하세요.  
 		* 정식 id와 secret을 원하는 분은 아래에 기입 된 메일 주소로 연락 바랍니다.  
 		* uniqueUserId: App에서 사용자를 식별하기 위한 ID입니다. (ex, 광고id,id,....,etc.)
+			* 이메일, 폰번호와 같이 개인정보와 관련된 정보는 전달하지 않도록 주의해주시기 바랍니다.
 
 4. Plengi 모드 설정  
 	* 매장/장소 방문을 확인하기 위한 모니터링 모드를 선택합니다.    
@@ -197,7 +198,7 @@
 			- stay: 매장/장소가 인식 된 후 WiFi scan 주기이며 default 값으로 6분이 설정되어 있습니다.  
                 - 6분이하의 분으로 주기 설정시 default 값인 6분으로 설정이 됩니다.
 		- Tracker mode 일 경우 분 단위로 설정이 가능하며 default 값으로 2분이 설정되어 있습니다.  
-                - 1분이하의 분으로 주기 설정시 주기는 1분으로 설정이 됩니다. (최소 주기 값: 1분)
+			   - 1분이하의 분으로 주기 설정시 주기는 1분으로 설정이 됩니다. (최소 주기 값: 1분)
 		
 				Plengi.getInstance(MainActivity.this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
 6. Start/Stop
