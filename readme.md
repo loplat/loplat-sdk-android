@@ -223,6 +223,7 @@
 * WiFi AP들을 수집하여 loplat 서버에게 현재 사용자의 위치 정보를 요청합니다.
 * loplat 서버는 최적의 위치정보를  PlengiEventListener로 전달합니다.  
 * PlengiEventListener에 전달 되는 response 종류는 다음과 같습니다.
+
 	*  현재 위치가 인식 된 경우
 	> * type: PlengiResponse.ResponseType.PLACE  
 	> * 위치 정보 결과 (PlengiResponse.Place Class, response.place로 획득 가능)
