@@ -243,7 +243,6 @@
 				    
 	> * accuracy > threshold: 현재 위치 내에 있는 경우  
 	> * 그 외에 경우: 현재 위치 근처에 있는 경우  
-	> * 위치 획득 실패시 오류값  
 
 	* 현재위치 획득 실패시
 		>* type: PlengiResponse.ResponseType.PLACE
