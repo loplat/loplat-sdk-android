@@ -5,6 +5,10 @@
 # Plengi SDK
 
 ## History
+* 2016.10.11
+	- Init시 uniquUserId 업데이트 관련 버그 개선
+	- 일부매장에서 현재요청시 발생하는 에러에 대해 보완처리 
+	
 * 2016.08.09
     - Init시 uniqueUserId 수정이 가능하도록 변경
     - BOOT_COMPLETED시 SDK 자동 재시작 설정
@@ -219,8 +223,8 @@
 * WiFi AP들을 수집하여 loplat 서버에게 현재 사용자의 위치 정보를 요청합니다.
 * loplat 서버는 최적의 위치정보를  PlengiEventListener로 전달합니다.  
 * PlengiEventListener에 전달 되는 response 종류는 다음과 같습니다.
-   
-	> * Type: PlengiResponse.ResponseType.PLACE  
+	*  현재 위치가 인식 된 경우
+	> * type: PlengiResponse.ResponseType.PLACE  
 	> * 위치 정보 결과 (PlengiResponse.Place Class, response.place로 획득 가능)
 	> 
 				 	public long placeid;       // 장소 id
@@ -237,7 +241,17 @@
 				    
 	> * accuracy > threshold: 현재 위치 내에 있는 경우  
 	> * 그 외에 경우: 현재 위치 근처에 있는 경우  
-	> * 현재 위치가 인식 된 경우 현재 위치 정보 획득, 그렇지 않을 경우는 'unknown'으로 표시 됨
+	> * 위치 획득 실패시 오류값  
+
+	* 현재위치 획득 실패시
+		>* type: PlengiResponse.ResponseType.PLACE
+		>* result: PlengiResponse.Result.ERROR_CLOUD_ACCESS
+		>* errorReason : Location Acquisition Fail  
+	
+	* Client 인증 실패시
+		>* type: PlengiResponse.ResponseType.PLACE
+		>* result: PlengiResponse.Result.ERROR_CLOUD_ACCESS
+		>* errorReason : Not Allowed Client
 
 * 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 위치 확인하기](https://github.com/loplat/loplat-sdk-android/wiki/1.-현재-위치-확인하기)
 	
@@ -260,7 +274,7 @@
 * 코드 구현과 관련해서는 sample코드와 javadoc 폴더 참고 바람
 * 실제 테스트를 위해서는 기존에 학습된 장소가 있어야 함
 
-	> /place_registerer 폴더에 있는 loplat cook 이라는 학습기 앱을 다운받아서 인식을 원하는 장소에서 학습을 수행함 
+	> loplat 홈페이지 [Demo&SDK](http://loplat.azurewebsites.net/demo.html#)에서 loplat cook 이라는 학습기 앱을 다운받아서 인식을 원하는 장소에서 학습을 수행함 
 	
   	> 그 후에 loplat_demo를 통해 테스트를 해 보면 장소를 인식하는 것을 확인할 수 있음
   	
