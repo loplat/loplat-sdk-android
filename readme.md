@@ -5,6 +5,9 @@
 # Plengi SDK
 
 ## History
+* 2016.11.02
+	- Tracker Mode 장소 인식 개선
+
 * 2016.10.17
     - 방문 매장/장소 기록 확인하기 (History of Places) function 삭제
     - **주의**: 현재 Plengi.getInstance(Context context).getVisitList()은 deprecated 되었으니, 이점 유의 해주시길 바랍니다.
@@ -90,8 +93,7 @@
 
 	※ loplat서버로부터 다음과 같은 위치 정보가 제공
 	  - a. Place Event: enter or leave places
-	  - b. Recognizing Place
-	  - c. History of Places
+	  - b. Recognizing Places
 
 * MainActivity.java : 장소 변화 모니터링 on/off, 현재 위치 획득 요청 및 결과 표시 해줌
 
@@ -238,10 +240,12 @@
 				    public String tags;        // 장소와 관련된 tag
 				    public int floor;          // 층 정보
 				    public String category;    // 장소 유형
-				    public double lat;         // 위도
-				    public double lng;	       // 경도 
+				    public double lat;         // 인식된 장소의 위도
+				    public double lng;	       // 인식된 장소의 경도 
 				    public float accuracy;     // 정확도
 				    public float threshold;    // 한계치
+				    public double lat_est;     // 예측된 위치의 위도 
+				    public double lng_est;     // 예측된 위치의 경도  
 				    public String client_code; // 클라이언트 코드
 				    public long loplatid;      // 서버에 학습된 장소 id  
 				    
@@ -274,7 +278,7 @@
 		Plengi.getInstance(this).getCurrentPlaceInfo();  
 * 매장/장소 정보는 PlengiResponse.Place로 전달됩니다. ([현재 위치 확인하기 참조](https://github.com/loplat/loplat-sdk-android#4-현재-위치-확인하기))
 * **참고사항**: 현재 사용자 상태가 STAY일 경우에만 정확한 장소/매장 정보를 획득 할 수 있습니다. 
-* 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 사용자 상태 확인하기](https://github.com/loplat/loplat-sdk-android/wiki/3.-현재-장소-정보-가져오기)
+* 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 장소 정보 가져오기](https://github.com/loplat/loplat-sdk-android/wiki/3.-현재-장소-정보-가져오기)
 		
 ## Notice 
 
