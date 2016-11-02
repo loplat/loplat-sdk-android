@@ -6,37 +6,46 @@
 
 ## History
 * 2016.11.02
-	- Tracker Mode 장소 인식 개선
+	- loplat SDK version 1.71 release
+		- 업데이트 내용: Tracker Mode 장소 인식 개선
 
 * 2016.10.17
     - 방문 매장/장소 기록 확인하기 (History of Places) function 삭제
     - **주의**: 현재 Plengi.getInstance(Context context).getVisitList()은 deprecated 되었으니, 이점 유의 해주시길 바랍니다.
 
 * 2016.10.11
-	- Init시 uniquUserId 업데이트 관련 버그 개선
-	- 일부매장에서 현재요청시 발생하는 에러에 대해 보완처리 
+	* loplat SDK version 1.7 release
+		* 업데이트 내용
+			1. Init시 uniqueUserId 업데이트 관련 버그 개선
+			2. 일부매장에서 현재요청시 발생하는 에러에 대해 보완처리 
 	
 * 2016.08.09
-    - Init시 uniqueUserId 수정이 가능하도록 변경
-    - BOOT_COMPLETED시 SDK 자동 재시작 설정
-    - 편의점 매장 인식 속도 개선
+	* loplat SDK version 1.6 release
+		* 업데이트 내용
+		    1. Init시 uniqueUserId 수정이 가능하도록 변경
+		    2. BOOT_COMPLETED시 SDK 자동 재시작 설정
+		    3. 편의점 매장 인식 속도 개선
 
-* 2016.06.17
-    - Tracking Mode, Tracking Event 추가
-    - 위치 정보 결과에 loplatid 추가
-
-* 2016.05.19 
-	- 일부 모델 간헐적 db access 에러에 대해 보완 처리
-
+* 2016.05.19
+	* loplat SDK version 1.5 release 
+		- 업데이트 내용
+			1. 일부 모델 간헐적 db access 에러에 대해 보완 처리
+			2. Tracking Mode, Tracking Event 추가
+			3. 위치 정보 결과에 loplatid 추가
+			
 * 2016.04.22
-	- library 포함하여 build 시에 proguard 관련 오류 제거
+	* loplat SDK version 1.4 release
+		- 업데이트 내용: library 포함하여 build 시에 proguard 관련 오류 제거
 
 
 * 2016.02.12 
-	- 장소 정보에 client_code 추가
-	- 동일 client_code를 가지는 장소 내에서의 이동 시에 중복해서 ENTER Event를 발생하지 않도록 변경
+	* loplat SDK version 1.3 release
+		* 업데이트 내용
+			1. 장소 정보에 client_code 추가
+			2. 동일 client_code를 가지는 장소 내에서의 이동 시에 중복해서 ENTER Event를 발생하지 않도록 변경
+		- **주의**: 이전 library와 db 호환이 되지 않아, 이전버전으로 만든 앱은 꼭 삭제 후 새 버전 설치
 	- 장소학습기 (loplat cook) 릴리즈
-	- **주의**: 이전 library와 db 호환이 되지 않아, 이전버전으로 만든 앱은 꼭 삭제 후 새 버전 설치
+	
 
 * 2016.01.27 - initial release
 
