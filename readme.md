@@ -5,6 +5,9 @@
 # Plengi SDK
 
 ## History
+* 2016.11.17
+    - loplat SDK version 1.72 release
+        - 업데이트 내용: 일부 모델 wifi state access 에러에 대한 보완 처리  
 * 2016.11.02
 	- loplat SDK version 1.71 release
 		- 업데이트 내용: Tracker Mode 장소 인식 개선
@@ -17,7 +20,7 @@
 	* loplat SDK version 1.7 release
 		* 업데이트 내용
 			1. Init시 uniqueUserId 업데이트 관련 버그 개선
-			2. 일부매장에서 현재요청시 발생하는 에러에 대해 보완처리 
+			2. 일부매장에서 현재요청시 발생하는 에러에 대해 보완 처리 
 	
 * 2016.08.09
 	* loplat SDK version 1.6 release
