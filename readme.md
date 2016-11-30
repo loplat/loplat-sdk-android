@@ -5,6 +5,12 @@
 # Plengi SDK
 
 ## History
+* 2016.11.30
+    - SDK version name 변경: 1.71 -> 1.7.1, 1.72 -> 1.7.2
+    - lolat SDK version 1.7.3 release
+        - 업데이트 내용
+            1. wifi scan 요청 후, OS내에서 발생하는 에러에 대해 보완 처리
+
 * 2016.11.17
     - loplat SDK version 1.72 release
         - 업데이트 내용: 일부 모델 wifi state access 에러에 대한 보완 처리  
