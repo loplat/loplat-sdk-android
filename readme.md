@@ -5,6 +5,20 @@
 # Plengi SDK
 
 ## History
+* 2016.12.20
+    - loplat SDK version 1.7.5 release
+        - 업데이트 내용
+            1. Location Provider 획득 실패에 대한 예외 처리
+            2. DB access error 보완
+            3. LocationMonitorService 동작 확인 기능 추가
+        
+* 2016.12.13
+    - loplat SDK version 1.7.4 release
+        - 업데이트 내용
+            1. DB access error 보완
+            2. 위치 권한 미설정으로 WiFi Scan 결과값 획득 실패에 대한 보완 처리
+            3. 위치 권한 확인 중 PackageManager가 죽는 현상에 따른 에러 보완 처리
+
 * 2016.11.30
     - SDK version name 변경: 1.71 -> 1.7.1, 1.72 -> 1.7.2
     - lolat SDK version 1.7.3 release
