@@ -321,7 +321,7 @@
 	
   	> 그 후에 loplat_demo를 통해 테스트를 해 보면 장소를 인식하는 것을 확인할 수 있음
   	
-* 기술 관련 문의는 stkment@gmail.com으로 메일 보내주시기 바랍니다.
+* 기술 관련 문의는 mjlee@loplat.com으로 메일 보내주시기 바랍니다.
 * 정식 id와 secret을 원하시는 분은 Lamen2357@loplat.com으로 아래의 내용을 기입하여 보내 주시기 바랍니다.
  - a. 이름
  - b. 회사
