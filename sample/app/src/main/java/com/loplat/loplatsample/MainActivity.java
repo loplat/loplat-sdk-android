@@ -141,10 +141,16 @@ public class MainActivity extends Activity {
             // but, in the "init" process, this error does not matter
         }
 
+        //if you want to use Recognizer mode
+        Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.STAY);
         // set scan period (optional)
         int moveScanPeriod = 3 * 60000; // 3 mins (milliseconds)
         int stayScanPeriod = 6 * 60000; // 6 mins (milliseconds)
         Plengi.getInstance(this).setScanPeriod(moveScanPeriod, stayScanPeriod);
+
+        //if you want to use Tracker mode
+//        Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.TRACKING);
+//        Plengi.getInstance(this).setScanPeriodTracking(2 * 60000);
 
     }
 
