@@ -17,8 +17,6 @@ import android.widget.TextView;
 import com.loplat.placeengine.Plengi;
 import com.loplat.placeengine.PlengiResponse;
 
-import java.util.List;
-
 
 public class MainActivity extends Activity {
 
@@ -101,20 +99,14 @@ public class MainActivity extends Activity {
                 tv_status.setText("Staying...");
 
                 PlengiResponse.Place currentPlace = Plengi.getInstance(this).getCurrentPlaceInfo();
-                List<PlengiResponse.Visit> visits = Plengi.getInstance(null).getVisitList();
-                if(visits.size() >= 1) {
-                    PlengiResponse.Visit visit = visits.get(visits.size() - 1);
-                    long duration = (System.currentTimeMillis() - visit.enter) / 60000;
-                    if (currentPlace.name == null) {
-                        tv_result.setText("Unknown Place (" + duration / 60 + "시간 " + duration % 60 + "분)");
-                    } else {
-                        String name = currentPlace.name;
-                        String tags = currentPlace.tags;
-                        String category = currentPlace.category;
-                        int floor = currentPlace.floor;
-                        String info = name + ", " + tags + ", " + category + ", " + floor + "F\n";
-                        tv_result.setText("" + info + "(" + duration / 60 + "시간 " + duration % 60 + "분째)");
-                    }
+                if(currentPlace != null)
+                {
+                    String name = currentPlace.name;
+                    String tags = currentPlace.tags;
+                    String category = currentPlace.category;
+                    int floor = currentPlace.floor;
+                    String info = name + ", " + tags + ", " + category + ", " + floor + "F\n";
+                    tv_result.setText("" + info);
                 }
                 break;
         }
