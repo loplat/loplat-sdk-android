@@ -272,7 +272,7 @@
 * WiFi AP들을 수집하여 loplat 서버에게 현재 사용자의 위치 정보를 요청합니다.
 * loplat 서버는 최적의 위치정보를  PlengiEventListener로 전달합니다.  
 * PlengiEventListener에 전달 되는 response 종류는 다음과 같습니다.
-* 참고: SDK 1.7.5 이하 버전은 loplatid(서버에 학습된 장소 id), placeid 전달되며,  1.7.6 이상 버전 부터 장소 id는 loplatid로 통합되어 전달 됩니다.
+* **참고: SDK 1.7.5 이하 버전은 장소id는 loplatid(서버에 학습된 장소 id), placeid 둘다 전달되며,  1.7.6 이상 버전 부터 장소 id는 loplatid로 통합되어 전달 됩니다.**
 
 
 	*  현재 위치가 인식 된 경우
@@ -292,7 +292,7 @@
 				    public double lat_est;     // 예측된 위치의 위도 
 				    public double lng_est;     // 예측된 위치의 경도  
 				    public String client_code; // 클라이언트 코드
-					~~public long placeid;       // 장소id~~
+					
 				    
 	> * accuracy > threshold: 현재 위치 내에 있는 경우  
 	> * 그 외에 경우: 현재 위치 근처에 있는 경우  
