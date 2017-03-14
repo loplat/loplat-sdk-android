@@ -5,6 +5,12 @@
 # Plengi SDK
 
 ## History
+* 2017.3.7
+	- loplat SDK version 1.7.6 release
+		- 업데이트 내용
+			1. 위치인식된 장소의 id를 loplatid 하나로 통합 (placeid는 더이상 전달되지 않음)
+			2. 'unknown place'에 관련하여 enter/leave event 발생 중단
+			3. PlengiResponse.EnterType 추가
 * 2016.12.20
     - loplat SDK version 1.7.5 release
         - 업데이트 내용
@@ -201,6 +207,10 @@
 	* PlengiListener를 상속받은 listener class를 생성합니다.
 		- loplat서버로 부터 받은 모든 asynchronous Result는 모두 해당 리스너를 통해 전달됩니다.
 		- PLACE(Recognize a place), PLACE_EVENT(Enter/Leave, Recognizer mode), PLACE_TRACKING(Tracker mode) 등의 Event에 따른 결과를 작성합니다. (LoplatPlengiListener.Java 참조 바람)
+		- PLACE_EVENT 발생시 place 정보와 함께 EnterType이 전달됩니다.
+			- ENTER, NEARBY 두가의 값으로 제공됨
+			- EnterType.ENTER : 현재 사용자의 위치가 매장안 이라고 인식 된 경우, accuracy > threshold
+			- EnterType.NEARBY : 현재 사용자의 위치가 매장 주변이라고 인식 된 경우, accuracy < threshold
    
 2. Plengi instance 생성 및 EventListner 등록
 	- Application class 상속 받아 Plengi class 생성합니다. (LoplatSampleApplication.java 참고 바람)
@@ -221,6 +231,7 @@
 4. Plengi 모드 설정  
 	* 매장/장소 방문을 확인하기 위한 모니터링 모드를 선택합니다.    
 	* 사용자의 매장/장소 방문을 확인하기 위하여 아래와 같은 2가지 모드를 제공하고 있습니다.  
+	* **참고: 사용자 매장 방문 확인을 위해 기본으로 제공 되는 모드는 Recognizer 모드 입니다. Tracker 모드를 사용하기 위해서는 협의가 필요 하오니 아래에 기입된 메일로 연락 바랍니다.** 
 
 		> * Recognizer Mode: 일정시간동안(5분이상) 한 장소에 머무를 경우 사용자의 위치를 확인합니다.
 		> * Tracker Mode: 사용자의 위치를 일정주기마다 확인합니다.
@@ -261,13 +272,15 @@
 * WiFi AP들을 수집하여 loplat 서버에게 현재 사용자의 위치 정보를 요청합니다.
 * loplat 서버는 최적의 위치정보를  PlengiEventListener로 전달합니다.  
 * PlengiEventListener에 전달 되는 response 종류는 다음과 같습니다.
+* 참고: SDK 1.7.5 이하 버전은 loplatid(서버에 학습된 장소 id), placeid 전달되며,  1.7.6 이상 버전 부터 장소 id는 loplatid로 통합되어 전달 됩니다.
+
 
 	*  현재 위치가 인식 된 경우
 
 	> * type: PlengiResponse.ResponseType.PLACE  
 	> * 위치 정보 결과 (PlengiResponse.Place Class, response.place로 획득 가능)
 	> 
-				 	public long placeid;       // 장소 id
+				 	public long loplatid;       // 장소 id
 				    public String name;        // 장소 이름
 				    public String tags;        // 장소와 관련된 tag
 				    public int floor;          // 층 정보
@@ -279,7 +292,7 @@
 				    public double lat_est;     // 예측된 위치의 위도 
 				    public double lng_est;     // 예측된 위치의 경도  
 				    public String client_code; // 클라이언트 코드
-				    public long loplatid;      // 서버에 학습된 장소 id  
+					<del>public long placeid;       // 장소id</del>
 				    
 	> * accuracy > threshold: 현재 위치 내에 있는 경우  
 	> * 그 외에 경우: 현재 위치 근처에 있는 경우  
@@ -322,7 +335,7 @@
   	> 그 후에 loplat_demo를 통해 테스트를 해 보면 장소를 인식하는 것을 확인할 수 있음
   	
 * 기술 관련 문의는 mjlee@loplat.com으로 메일 보내주시기 바랍니다.
-* 정식 id와 secret을 원하시는 분은 Lamen2357@loplat.com으로 아래의 내용을 기입하여 보내 주시기 바랍니다.
+* 정식 id와 secret을 원하시는 분은 yeddie@loplat.com으로 아래의 내용을 기입하여 보내 주시기 바랍니다.
  - a. 이름
  - b. 회사
  - c. 사용 목적 
