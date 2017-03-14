@@ -292,7 +292,7 @@
 				    public double lat_est;     // 예측된 위치의 위도 
 				    public double lng_est;     // 예측된 위치의 경도  
 				    public String client_code; // 클라이언트 코드
-					<del>public long placeid;       // 장소id</del>
+					~~public long placeid;       // 장소id~~
 				    
 	> * accuracy > threshold: 현재 위치 내에 있는 경우  
 	> * 그 외에 경우: 현재 위치 근처에 있는 경우  
