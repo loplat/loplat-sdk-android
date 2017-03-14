@@ -65,16 +65,24 @@ public class LoplatPlengiListener implements PlengiListener {
 
             if(event == PlengiResponse.PlaceEvent.ENTER) {
                 detail += " - " + response.place.name;
+                if(response.enterType == PlengiResponse.EnterType.ENTER)
+                {
+                    // device is within the detected place
+                    detail += " (IN)";
+                }
+                else if(response.enterType == PlengiResponse.EnterType.NEARBY)
+                {
+                    // device is outside the detected place
+                    detail += " (Near)";
+                }
+
                 detail += " (" + response.place.floor + "F)";
                 detail += ", client_code: " + response.place.client_code;
 
-                // start nearby session in case people enter to a place
-                // Plengi.getInstance(null).startNearbySession();
             }
             else if(event == PlengiResponse.PlaceEvent.LEAVE) {
 
-                // stop nearby session in case people leave from a place
-                // Plengi.getInstance(null).stopNearbySession();
+
             }
             System.out.println(detail);
             sendLoplatResponseToApplication("placeevent", detail);
