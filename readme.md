@@ -9,7 +9,7 @@
 	- loplat SDK version 1.7.6 release
 		- 업데이트 내용
 			1. 위치인식된 장소의 id를 loplatid 하나로 통합 (placeid는 더이상 전달되지 않음)
-			2. 'unknown place'에 관련하여 enter/leave event 발생 중단
+			2. 'unknown place'(학습되지 않은 장소)에 대한 enter/leave event 발생 중단
 			3. PlengiResponse.EnterType 추가
             4. Plengi.getInstance(Context context).getVisitList(), Plengi.getInstance(Context context).getPlaceList() 삭제 
 * 2016.12.20
