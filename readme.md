@@ -5,6 +5,15 @@
 # Plengi SDK
 
 ## History
+* 2017.4.22
+    - loplat SDK version 1.7.8 release
+        - 업데이트 내용
+            1. WiFi SSID 확인 중 발생하는 에러 보완 처리
+
+* 2017.3.23
+    - loplat SDK version 1.7.7 release
+        - 업데이트 내용: PlengiListener 동작 보완
+
 * 2017.3.7
 	- loplat SDK version 1.7.6 release
 		- 업데이트 내용
@@ -35,6 +44,7 @@
 * 2016.11.17
     - loplat SDK version 1.72 release
         - 업데이트 내용: 일부 모델 wifi state access 에러에 대한 보완 처리  
+
 * 2016.11.02
 	- loplat SDK version 1.71 release
 		- 업데이트 내용: Tracker Mode 장소 인식 개선
