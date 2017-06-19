@@ -116,22 +116,11 @@ public class MainActivity extends Activity {
 
     public void onInitPlaceEngine(View view) {
         // do init process only once before calling other functions
-        String clientId = "test";
-        String clientSecret = "test";
+        String clientId = "loplatdemo";
+        String clientSecret = "loplatdemokey";
         /* Please be careful not to input any personal information such as email, phone number. */
         String uniqueUserId = "loplat_12345";
-        int result = Plengi.getInstance(this).init(clientId, clientSecret, uniqueUserId);
-        if(result == PlengiResponse.Result.SUCCESS) {
-            // ok
-        }
-        else if(result == PlengiResponse.Result.FAIL_INTERNET_UNAVAILABLE) {
-            // internet is not connected
-            // need to retry "init"
-        }
-        else if(result == PlengiResponse.Result.FAIL_WIFI_SCAN_UNAVAILABLE) {
-            // wifi scan is not available
-            // but, in the "init" process, this error does not matter
-        }
+        Plengi.getInstance(this).init(clientId, clientSecret, uniqueUserId);
 
         //if you want to use Recognizer mode
         Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.STAY);
@@ -148,9 +137,9 @@ public class MainActivity extends Activity {
 
     public void onRequestLocationInfo(View view) {
         // request location to loplat engine
-        int result = Plengi.getInstance(this).refreshPlace();
+        int status = Plengi.getInstance(this).isEngineWorkable();
 
-        if(result == PlengiResponse.Result.SUCCESS) {
+        if(status == PlengiResponse.Result.SUCCESS) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -160,26 +149,29 @@ public class MainActivity extends Activity {
                     mProgressDialog.show();
                 }
             });
+            Plengi.getInstance(this).refreshPlace();
         }
-        else if(result == PlengiResponse.Result.FAIL_INTERNET_UNAVAILABLE) {
+        else if(status == PlengiResponse.Result.FAIL_INTERNET_UNAVAILABLE) {
             // internet is not connected
         }
-        else if(result == PlengiResponse.Result.FAIL_WIFI_SCAN_UNAVAILABLE) {
+        else if(status == PlengiResponse.Result.FAIL_WIFI_SCAN_UNAVAILABLE) {
             // wifi scan is not available
         }
     }
 
     public void onStartPlaceMonitoring(View view) {
         // request location to loplat engine
-        int result = Plengi.getInstance(this).start();
+        int status = Plengi.getInstance(this).isEngineWorkable();
 
-        if(result == PlengiResponse.Result.SUCCESS) {
+
+        if(status == PlengiResponse.Result.SUCCESS) {
             // ok
+            Plengi.getInstance(this).start();
         }
-        else if(result == PlengiResponse.Result.FAIL_INTERNET_UNAVAILABLE) {
+        else if(status == PlengiResponse.Result.FAIL_INTERNET_UNAVAILABLE) {
             // internet is not connected
         }
-        else if(result == PlengiResponse.Result.FAIL_WIFI_SCAN_UNAVAILABLE) {
+        else if(status == PlengiResponse.Result.FAIL_WIFI_SCAN_UNAVAILABLE) {
             // wifi scan is not available
         }
     }
