@@ -5,6 +5,10 @@
 # Plengi SDK
 
 ## History
+* 2017.06.19
+    - loplat SDK version 1.7.9 release
+        - 업데이트 내용
+            1. SDK 동작 상태를 확인 할 수 있는 기능 추가
 * 2017.4.22
     - loplat SDK version 1.7.8 release
         - 업데이트 내용
@@ -273,6 +277,20 @@
 	
 			Plengi.getInstance(MainActivity.this).start(); //Monitoring Start  
 			Plengi.getInstance(MainActivity.this).stop(); //Monitoring Stop
+
+    - 모니터링 상태 확인은 Plengi.getEngineStatus를 통해서 확인 할 수 있습니다.
+        - 예시코드
+
+            >int engineStatus = Plengi.getInstance(this).getEngineStatus();
+
+            if(engineStatus == PlengiResponse.EngineStatus.STARTED)
+            {
+                
+            } 
+            else if(engineStatus == PlengiResponse.EngineStatus.STARTED) 
+            {
+                
+            }
 
 ### 4. 현재 위치 확인하기
 
