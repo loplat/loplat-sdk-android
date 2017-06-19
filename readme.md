@@ -286,11 +286,11 @@
 
                 if(engineStatus == PlengiResponse.EngineStatus.STARTED)
                 {
-                    //Monitoring On
+                    //Monitoring Off
                 } 
                 else if(engineStatus == PlengiResponse.EngineStatus.STARTED) 
                 {
-                    //Monitoring Off
+                    //Monitoring On
                 }
 
 ### 4. 현재 위치 확인하기
