@@ -1,7 +1,7 @@
 package com.loplat.loplatsample;
 
-import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDexApplication;
 
 import com.loplat.placeengine.Plengi;
 import com.loplat.placeengine.utils.LoplatLogger;
@@ -9,7 +9,7 @@ import com.loplat.placeengine.utils.LoplatLogger;
 
 
 
-public class LoplatSampleApplication extends Application {
+public class LoplatSampleApplication extends MultiDexApplication {
 
     Plengi mPlengi = null;
 
