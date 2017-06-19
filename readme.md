@@ -284,13 +284,13 @@
             >
                 int engineStatus = Plengi.getInstance(this).getEngineStatus();
 
-                if(engineStatus == PlengiResponse.EngineStatus.STARTED)
-                {
-                    //Monitoring Off
-                } 
-                else if(engineStatus == PlengiResponse.EngineStatus.STARTED) 
+                if(engineStatus == PlaceEngine.EngineStatus.STARTED)
                 {
                     //Monitoring On
+                }
+                else if(engineStatus == PlaceEngine.EngineStatus.STOPPED)
+                {
+                    //Monitoring Off
                 }
 
 ### 4. 현재 위치 확인하기
