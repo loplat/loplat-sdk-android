@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.loplat.placeengine.PlaceEngine;
 import com.loplat.placeengine.Plengi;
 import com.loplat.placeengine.PlengiResponse;
 
@@ -88,15 +89,25 @@ public class MainActivity extends Activity {
         final TextView tv_status = (TextView)findViewById(R.id.tv_status);
         final TextView tv_result = (TextView)findViewById(R.id.tv_result);
 
+        //Monitoring 상태 확인하기
+        int engineStatus = Plengi.getInstance(this).getEngineStatus();
+
+        if(engineStatus == PlaceEngine.EngineStatus.STARTED)
+        {
+            tv_status.setText("Monitoring On");
+        }
+        else if(engineStatus == PlaceEngine.EngineStatus.STOPPED)
+        {
+            tv_status.setText("Monitoring off");
+        }
+
         int currentPlaceStatus = Plengi.getInstance(this).getCurrentPlaceStatus();
 
         switch (currentPlaceStatus) {
             case PlengiResponse.PlaceStatus.MOVE:
-                tv_status.setText("Welcome to loplat");
                 break;
 
             case PlengiResponse.PlaceStatus.STAY:
-                tv_status.setText("Staying...");
 
                 PlengiResponse.Place currentPlace = Plengi.getInstance(this).getCurrentPlaceInfo();
                 if(currentPlace != null)

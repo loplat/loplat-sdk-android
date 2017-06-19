@@ -12,9 +12,17 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/tv_title"
+        android:text="Welcome to loplat"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/tv_status"
         android:text="Welcome to loplat"
         />
+
 
     <TextView
         android:layout_width="match_parent"
