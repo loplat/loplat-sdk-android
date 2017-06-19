@@ -281,16 +281,17 @@
     - 모니터링 상태 확인은 Plengi.getEngineStatus를 통해서 확인 할 수 있습니다.
         - 예시코드
 
-            >int engineStatus = Plengi.getInstance(this).getEngineStatus();
+            >
+                int engineStatus = Plengi.getInstance(this).getEngineStatus();
 
-            if(engineStatus == PlengiResponse.EngineStatus.STARTED)
-            {
-                
-            } 
-            else if(engineStatus == PlengiResponse.EngineStatus.STARTED) 
-            {
-                
-            }
+                if(engineStatus == PlengiResponse.EngineStatus.STARTED)
+                {
+                    //Monitoring On
+                } 
+                else if(engineStatus == PlengiResponse.EngineStatus.STARTED) 
+                {
+                    //Monitoring Off
+                }
 
 ### 4. 현재 위치 확인하기
 
