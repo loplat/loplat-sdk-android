@@ -4,95 +4,6 @@
 
 # Plengi SDK
 
-## History
-* 2017.06.19
-    - loplat SDK version 1.7.9 release
-        - 업데이트 내용
-            1. SDK 동작 상태를 확인 할 수 있는 기능 추가
-* 2017.4.22
-    - loplat SDK version 1.7.8 release
-        - 업데이트 내용
-            1. WiFi SSID 확인 중 발생하는 에러 보완 처리
-
-* 2017.3.23
-    - loplat SDK version 1.7.7 release
-        - 업데이트 내용: PlengiListener 동작 보완
-
-* 2017.3.7
-	- loplat SDK version 1.7.6 release
-		- 업데이트 내용
-			1. 위치인식된 장소의 id를 loplatid 하나로 통합 (placeid는 더이상 전달되지 않음)
-			2. 'unknown place'(학습되지 않은 장소)에 대한 enter/leave event 발생 중단
-			3. PlengiResponse.EnterType 추가
-            4. Plengi.getInstance(Context context).getVisitList(), Plengi.getInstance(Context context).getPlaceList() 삭제 
-* 2016.12.20
-    - loplat SDK version 1.7.5 release
-        - 업데이트 내용
-            1. Location Provider 획득 실패에 대한 예외 처리
-            2. DB access error 보완
-            3. LocationMonitorService 동작 확인 기능 추가
-        
-* 2016.12.13
-    - loplat SDK version 1.7.4 release
-        - 업데이트 내용
-            1. DB access error 보완
-            2. 위치 권한 미설정으로 WiFi Scan 결과값 획득 실패에 대한 보완 처리
-            3. 위치 권한 확인 중 PackageManager가 죽는 현상에 따른 에러 보완 처리
-
-* 2016.11.30
-    - SDK version name 변경: 1.71 -> 1.7.1, 1.72 -> 1.7.2
-    - lolat SDK version 1.7.3 release
-        - 업데이트 내용
-            1. wifi scan 요청 후, OS내에서 발생하는 에러에 대해 보완 처리
-
-* 2016.11.17
-    - loplat SDK version 1.72 release
-        - 업데이트 내용: 일부 모델 wifi state access 에러에 대한 보완 처리  
-
-* 2016.11.02
-	- loplat SDK version 1.71 release
-		- 업데이트 내용: Tracker Mode 장소 인식 개선
-
-* 2016.10.17
-    - 방문 매장/장소 기록 확인하기 (History of Places) function 삭제
-    - **주의**: 현재 Plengi.getInstance(Context context).getVisitList()은 deprecated 되었으니, 이점 유의 해주시길 바랍니다.
-
-* 2016.10.11
-	* loplat SDK version 1.7 release
-		* 업데이트 내용
-			1. Init시 uniqueUserId 업데이트 관련 버그 개선
-			2. 일부매장에서 현재요청시 발생하는 에러에 대해 보완 처리 
-	
-* 2016.08.09
-	* loplat SDK version 1.6 release
-		* 업데이트 내용
-		    1. Init시 uniqueUserId 수정이 가능하도록 변경
-		    2. BOOT_COMPLETED시 SDK 자동 재시작 설정
-		    3. 편의점 매장 인식 속도 개선
-
-* 2016.05.19
-	* loplat SDK version 1.5 release 
-		- 업데이트 내용
-			1. 일부 모델 간헐적 db access 에러에 대해 보완 처리
-			2. Tracking Mode, Tracking Event 추가
-			3. 위치 정보 결과에 loplatid 추가
-			
-* 2016.04.22
-	* loplat SDK version 1.4 release
-		- 업데이트 내용: library 포함하여 build 시에 proguard 관련 오류 제거
-
-
-* 2016.02.12 
-	* loplat SDK version 1.3 release
-		* 업데이트 내용
-			1. 장소 정보에 client_code 추가
-			2. 동일 client_code를 가지는 장소 내에서의 이동 시에 중복해서 ENTER Event를 발생하지 않도록 변경
-		- **주의**: 이전 library와 db 호환이 되지 않아, 이전버전으로 만든 앱은 꼭 삭제 후 새 버전 설치
-	- 장소학습기 (loplat cook) 릴리즈
-	
-
-* 2016.01.27 - initial release
-
 ## Function
 
 #### 1. Recognize a place
@@ -216,6 +127,13 @@
 	
 	>  * sample코드에 구현된 checkWiFiScanConditionInMashmallow(Context context) 참고 바랍니다.
 
+#### Retrofit 및 GSON library 적용하기
+loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통신을 위해Retrofit 및 GSON library 사용합니다. Retrofit 및 GSON 라이브러리 적용을 위해서  Android Studio의 build.gradle에 다음과 같이 추가합니다.
+
+ > compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.okhttp3:okhttp:3.8.1'
+
 ### 3. SDK 초기화 및 시작하기
 
 1. PlengiListner 생성
@@ -281,9 +199,7 @@
     - 모니터링 상태 확인은 Plengi.getEngineStatus를 통해서 확인 할 수 있습니다.
         - 예시코드
 
-            >
-                int engineStatus = Plengi.getInstance(this).getEngineStatus();
-
+        >  int engineStatus = Plengi.getInstance(this).getEngineStatus();
                 if(engineStatus == PlaceEngine.EngineStatus.STARTED)
                 {
                     //Monitoring On
@@ -369,5 +285,101 @@
  - a. 이름
  - b. 회사
  - c. 사용 목적 
+
+## History
+* 2017.06.25
+    - loplat SDK version 1.7.10 release
+	    - 업데이트 내용
+		    - Retrofit 라이브러리 적용
+		    - 인식 성능 개선
+
+* 2017.06.19
+    - loplat SDK version 1.7.9 release
+        - 업데이트 내용
+            1. SDK 동작 상태를 확인 할 수 있는 기능 추가
+* 2017.4.22
+    - loplat SDK version 1.7.8 release
+        - 업데이트 내용
+            1. WiFi SSID 확인 중 발생하는 에러 보완 처리
+
+* 2017.3.23
+    - loplat SDK version 1.7.7 release
+        - 업데이트 내용: PlengiListener 동작 보완
+
+* 2017.3.7
+	- loplat SDK version 1.7.6 release
+		- 업데이트 내용
+			1. 위치인식된 장소의 id를 loplatid 하나로 통합 (placeid는 더이상 전달되지 않음)
+			2. 'unknown place'(학습되지 않은 장소)에 대한 enter/leave event 발생 중단
+			3. PlengiResponse.EnterType 추가
+            4. Plengi.getInstance(Context context).getVisitList(), Plengi.getInstance(Context context).getPlaceList() 삭제 
+* 2016.12.20
+    - loplat SDK version 1.7.5 release
+        - 업데이트 내용
+            1. Location Provider 획득 실패에 대한 예외 처리
+            2. DB access error 보완
+            3. LocationMonitorService 동작 확인 기능 추가
+        
+* 2016.12.13
+    - loplat SDK version 1.7.4 release
+        - 업데이트 내용
+            1. DB access error 보완
+            2. 위치 권한 미설정으로 WiFi Scan 결과값 획득 실패에 대한 보완 처리
+            3. 위치 권한 확인 중 PackageManager가 죽는 현상에 따른 에러 보완 처리
+
+* 2016.11.30
+    - SDK version name 변경: 1.71 -> 1.7.1, 1.72 -> 1.7.2
+    - lolat SDK version 1.7.3 release
+        - 업데이트 내용
+            1. wifi scan 요청 후, OS내에서 발생하는 에러에 대해 보완 처리
+
+* 2016.11.17
+    - loplat SDK version 1.72 release
+        - 업데이트 내용: 일부 모델 wifi state access 에러에 대한 보완 처리  
+
+* 2016.11.02
+	- loplat SDK version 1.71 release
+		- 업데이트 내용: Tracker Mode 장소 인식 개선
+
+* 2016.10.17
+    - 방문 매장/장소 기록 확인하기 (History of Places) function 삭제
+    - **주의**: 현재 Plengi.getInstance(Context context).getVisitList()은 deprecated 되었으니, 이점 유의 해주시길 바랍니다.
+
+* 2016.10.11
+	* loplat SDK version 1.7 release
+		* 업데이트 내용
+			1. Init시 uniqueUserId 업데이트 관련 버그 개선
+			2. 일부매장에서 현재요청시 발생하는 에러에 대해 보완 처리 
+	
+* 2016.08.09
+	* loplat SDK version 1.6 release
+		* 업데이트 내용
+		    1. Init시 uniqueUserId 수정이 가능하도록 변경
+		    2. BOOT_COMPLETED시 SDK 자동 재시작 설정
+		    3. 편의점 매장 인식 속도 개선
+
+* 2016.05.19
+	* loplat SDK version 1.5 release 
+		- 업데이트 내용
+			1. 일부 모델 간헐적 db access 에러에 대해 보완 처리
+			2. Tracking Mode, Tracking Event 추가
+			3. 위치 정보 결과에 loplatid 추가
+			
+* 2016.04.22
+	* loplat SDK version 1.4 release
+		- 업데이트 내용: library 포함하여 build 시에 proguard 관련 오류 제거
+
+
+* 2016.02.12 
+	* loplat SDK version 1.3 release
+		* 업데이트 내용
+			1. 장소 정보에 client_code 추가
+			2. 동일 client_code를 가지는 장소 내에서의 이동 시에 중복해서 ENTER Event를 발생하지 않도록 변경
+		- **주의**: 이전 library와 db 호환이 되지 않아, 이전버전으로 만든 앱은 꼭 삭제 후 새 버전 설치
+	- 장소학습기 (loplat cook) 릴리즈
+	
+
+* 2016.01.27 - initial release
+
   
  
