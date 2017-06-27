@@ -128,11 +128,11 @@
 	>  * sample코드에 구현된 checkWiFiScanConditionInMashmallow(Context context) 참고 바랍니다.
 
 #### Retrofit 및 GSON library 적용하기
-loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통신을 위해Retrofit 및 GSON library 사용합니다. Retrofit 및 GSON 라이브러리 적용을 위해서  Android Studio의 build.gradle에 다음과 같이 추가합니다.
+loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통신을 위해 Retrofit 및 GSON library 사용합니다. Retrofit 및 GSON 라이브러리 적용을 위해서  Android Studio의 build.gradle에 다음과 같이 추가합니다.
 
  > compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'com.squareup.okhttp3:okhttp:3.8.1'
+   compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+   compile 'com.squareup.okhttp3:okhttp:3.8.1'
 
 ### 3. SDK 초기화 및 시작하기
 
