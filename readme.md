@@ -130,9 +130,9 @@
 #### Retrofit 및 GSON library 적용하기
 loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통신을 위해 Retrofit 및 GSON library 사용합니다. Retrofit 및 GSON 라이브러리 적용을 위해서  Android Studio의 build.gradle에 다음과 같이 추가합니다.
 
- > compile 'com.squareup.retrofit2:retrofit:2.3.0'
-   compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-   compile 'com.squareup.okhttp3:okhttp:3.8.1'
+ 		compile 'com.squareup.retrofit2:retrofit:2.3.0'
+   		compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+   		compile 'com.squareup.okhttp3:okhttp:3.8.1'
 
 ### 3. SDK 초기화 및 시작하기
 
@@ -199,15 +199,15 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
     - 모니터링 상태 확인은 Plengi.getEngineStatus를 통해서 확인 할 수 있습니다.
         - 예시코드
 
-        >  int engineStatus = Plengi.getInstance(this).getEngineStatus();
-                if(engineStatus == PlaceEngine.EngineStatus.STARTED)
-                {
-                    //Monitoring On
-                }
-                else if(engineStatus == PlaceEngine.EngineStatus.STOPPED)
-                {
-                    //Monitoring Off
-                }
+				int engineStatus = Plengi.getInstance(this).getEngineStatus();
+				if(engineStatus == PlaceEngine.EngineStatus.STARTED)
+				{
+				    //Monitoring On
+				}
+				else if(engineStatus == PlaceEngine.EngineStatus.STOPPED)
+				{
+				    //Monitoring Off
+				}
 
 ### 4. 현재 위치 확인하기
 
@@ -226,7 +226,7 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 	> * type: PlengiResponse.ResponseType.PLACE  
 	> * 위치 정보 결과 (PlengiResponse.Place Class, response.place로 획득 가능)
 	> 
-				 	public long loplatid;       // 장소 id
+				    public long loplatid;       // 장소 id
 				    public String name;        // 장소 이름
 				    public String tags;        // 장소와 관련된 tag
 				    public int floor;          // 층 정보
