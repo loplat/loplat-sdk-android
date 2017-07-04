@@ -287,6 +287,10 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
  - c. 사용 목적 
 
 ## History
+* 2017.07.4
+    - loplat SDK version 1.8.0 release
+        - 업데이트 내용 : 인식 성능 개선 
+
 * 2017.06.25
     - loplat SDK version 1.7.10 release
 	    - 업데이트 내용
