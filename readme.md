@@ -134,7 +134,7 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
    		compile 'com.squareup.retrofit2:converter-gson:2.3.0'
    		compile 'com.squareup.okhttp3:okhttp:3.8.1'
 
-    - 참고: proguard를 사용할 시에는 아래와 같이 proguard 설정을 추가해야 합니다.
+  - 참고: proguard를 사용할 시에는 아래와 같이 proguard 설정을 추가해야 합니다.
 
             -dontwarn okio.**
             -dontwarn javax.annotation.**
@@ -148,11 +148,7 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 1. PlengiListner 생성
 	* PlengiListener를 상속받은 listener class를 생성합니다.
 		- loplat서버로 부터 받은 모든 asynchronous Result는 모두 해당 리스너를 통해 전달됩니다.
-		- PLACE(Recognize a place), PLACE_EVENT(Enter/Leave, Recognizer mode), PLACE_TRACKING(Tracker mode) 등의 Event에 따른 결과를 작성합니다. (LoplatPlengiListener.Java 참조 바람)
-		- PLACE_EVENT 발생시 place 정보와 함께 EnterType이 전달됩니다.
-			- ENTER, NEARBY 두가의 값으로 제공됨
-			- EnterType.ENTER : 현재 사용자의 위치가 매장안 이라고 인식 된 경우, accuracy > threshold
-			- EnterType.NEARBY : 현재 사용자의 위치가 매장 주변이라고 인식 된 경우, accuracy < threshold
+		- PLACE(Recognize a place), PLACE_EVENT(Enter/Leave/Nearby, Recognizer mode), PLACE_TRACKING(Tracker mode) 등의 Event에 따른 결과를 작성합니다. (LoplatPlengiListener.Java 참조 바람)
    
 2. Plengi instance 생성 및 EventListner 등록
 	- Application class 상속 받아 Plengi class 생성합니다. (LoplatSampleApplication.java 참고 바람)
@@ -235,18 +231,22 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 	> * type: PlengiResponse.ResponseType.PLACE  
 	> * 위치 정보 결과 (PlengiResponse.Place Class, response.place로 획득 가능)
 	> 
-				    public long loplatid;       // 장소 id
-				    public String name;        // 장소 이름
-				    public String tags;        // 장소와 관련된 tag
-				    public int floor;          // 층 정보
-				    public String category;    // 장소 유형
-				    public double lat;         // 인식된 장소의 위도
-				    public double lng;	       // 인식된 장소의 경도 
-				    public float accuracy;     // 정확도
-				    public float threshold;    // 한계치
-				    public double lat_est;     // 예측된 위치의 위도 
-				    public double lng_est;     // 예측된 위치의 경도  
-				    public String client_code; // 클라이언트 코드
+				    public long loplatid;        // 장소 id
+				    public String name;          // 장소 이름
+				    public String tags;          // 장소와 관련된 tag
+				    public int floor;            // 층 정보
+				    public String category;      // 장소 유형
+				    public String category_code; // 장소 유형 코드
+				    public double lat;           // 인식된 장소의 위도
+				    public double lng;	         // 인식된 장소의 경도 
+				    public float accuracy;       // 정확도
+				    public float threshold;      // 한계치
+				    public double lat_est;       // 예측된 위치의 위도 
+				    public double lng_est;       // 예측된 위치의 경도  
+				    public String client_code;   // 클라이언트 코드
+				    public String address;       // 장소 (구)주소
+				    public String address_road;  // 장소 신 주소
+		
 					
 				    
 	> * accuracy > threshold: 현재 위치 내에 있는 경우  
@@ -299,6 +299,7 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 * 2017.08.07
     - loplat SDK versio 1.8.1 release
         - Nearby event, Enter Event 분리
+	- EnterType class deprecated
 
 * 2017.07.4
     - loplat SDK version 1.8.0 release
