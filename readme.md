@@ -134,6 +134,15 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
    		compile 'com.squareup.retrofit2:converter-gson:2.3.0'
    		compile 'com.squareup.okhttp3:okhttp:3.8.1'
 
+    - 참고: proguard를 사용할 시에는 아래와 같이 proguard 설정을 추가해야 합니다.
+
+            -dontwarn okio.**
+            -dontwarn javax.annotation.**
+            -keepclasseswithmembers class * {
+                @retrofit2.http.* <methods>;
+            }
+
+
 ### 3. SDK 초기화 및 시작하기
 
 1. PlengiListner 생성
@@ -287,6 +296,10 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
  - c. 사용 목적 
 
 ## History
+* 2017.08.07
+    - loplat SDK versio 1.8.1 release
+        - Nearby event, Enter Event 분리
+
 * 2017.07.4
     - loplat SDK version 1.8.0 release
         - 업데이트 내용 : 인식 성능 개선 
