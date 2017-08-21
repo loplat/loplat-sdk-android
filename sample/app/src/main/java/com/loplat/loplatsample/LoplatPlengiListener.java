@@ -61,29 +61,20 @@ public class LoplatPlengiListener implements PlengiListener {
             int event = response.placeEvent;
 
             String detail = "PLACE EVENT: ";
-            detail += event;
+            detail += event + " - " + response.place.name;
 
             if(event == PlengiResponse.PlaceEvent.ENTER) {
-                detail += " - " + response.place.name;
-                if(response.enterType == PlengiResponse.EnterType.ENTER)
-                {
-                    // device is within the detected place
-                    detail += " (IN)";
-                }
-                else if(response.enterType == PlengiResponse.EnterType.NEARBY)
-                {
-                    // device is outside the detected place
-                    detail += " (Near)";
-                }
+                detail += " (IN)";
 
-                detail += " (" + response.place.floor + "F)";
-                detail += ", client_code: " + response.place.client_code;
+            } else if (event == PlengiResponse.PlaceEvent.NEARBY) {
+                detail += " (Nearby)";
 
+            } else if (event == PlengiResponse.PlaceEvent.LEAVE) {
+                // (가장 최근에 인식된 장소 기준) 인식 결과가 IN(Enter)인 장소를 벗어났을 때 leave event 발생
             }
-            else if(event == PlengiResponse.PlaceEvent.LEAVE) {
 
-
-            }
+            detail += " (" + response.place.floor + "F)";
+            detail += ", client_code: " + response.place.client_code;
             System.out.println(detail);
             sendLoplatResponseToApplication("placeevent", detail);
         }
