@@ -44,9 +44,6 @@
 #### 디렉토리 소개
 - /sample : 샘플코드
 - /library : plengi.aar 파일이 실제 라이브러리 파일
-
-	> * jar 라이브러리가 필요한 경우 plengi.jar를 사용하고 AndroidManifest.xml 에 있는 권한을 추가 
-
 - /javadoc : library 설명 문서
 - /place_registerer : 장소 학습기 안드로이드 앱
 
@@ -70,15 +67,14 @@
 * test를 원하시는 분은 clientid: loplatdemo, clientsecret: loplatdemokey 사용하세요.  
 *  정식 clientid와 clientsecret을 원하는 분은 아래에 기입 된 메일 주소로 연락 바랍니다. 
  
-#### Permission (AnroidManifest.xml 참고)  
-* SDK를 사용하기 위해서 AndroidManifest.xml에 아래와 같은 권한들을 설정해야합니다.  
-	 	
-		<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />  
-		<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-		<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-		<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-		<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-		<uses-permission android:name="android.permission.INTERNET" />
+#### Permission
+* SDK를 적용하면 하기 권한이 자동으로 추가됩니다.  
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />  
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+	<uses-permission android:name="android.permission.INTERNET" />
         <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
 	* ACCESS_FINE_LOCATION: GPS를 이용하여 현재 위치의 위도와 경도 값을 획득할 수 있는 권한  
@@ -87,24 +83,6 @@
 	* ACCESS_WIFI_STATE / CHANGE_WIFI_STATE: 주변 WiFi AP들을 스캔하기 위한 권한
 	* INTERNET: 인터넷을 사용할 수 있는 권한
 	* RECEIVE_BOOT_COMPLETED: 핸드폰 부팅되는 과정을 브로드캐스팅하기 위한 권한
-		
-
-#### Receiver & Service (AnroidManifest.xml 참고)
-* SDK를 사용하기 위해서 AndroidManifest.xml에 Broadcast recevier와 Servcie 등록을 해야합니다.
-
-		<receiver
-			android:name="com.loplat.placeengine.EventReceiver"
-			android:enabled="true"
-			android:exported="true" >
-			<intent-filter>
-				<action android:name="android.intent.action.BOOT_COMPLETED" />
-				<action android:name="android.net.wifi.SCAN_RESULTS" />
-				<action android:name="android.net.wifi.WIFI_AP_STATE_CHANGED" />
-				<action android:name="com.loplat.placeengine.event.scanwifi" />
-			</intent-filter>
-		</receiver>
-		
-		<service android:name="com.loplat.placeengine.location.LocationMonitorService" />
 
 #### Constraints
 
