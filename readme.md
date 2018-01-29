@@ -244,8 +244,8 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 				    public double lng;	         // 인식된 장소의 경도 
 				    public float accuracy;       // 정확도
 				    public float threshold;      // 한계치
-				    ~~public double lat_est;       // 예측된 위치의 위도~~  v1.8.6에서 삭제
-				    ~~public double lng_est;       // 예측된 위치의 경도~~ v1.8.6에서 삭제  
+				    public double lat_est;       // 예측된 위치의 위도, v1.8.6에서 삭제
+				    public double lng_est;       // 예측된 위치의 경도, v1.8.6에서 삭제 
 				    public String client_code;   // 클라이언트 코드
 				    public String address;       // 장소 (구)주소
 				    public String address_road;  // 장소 신 주소
@@ -262,7 +262,7 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 			1. 장소 인식 결과값이 있다면 -> 인식된 장소 위도/ 경도
 			2. 장소 인식 결과값이 없으면 -> device의 위도/경도
 	> 
-					public int id;         // Area ID
+				public int id;         // Area ID
 			        public String name;    // 상권 이름
 			        public String tag;       // 상권 위치 [도, 시 단위 ex) 서울, 경기도, 인천]
 			        public double lat;      // 위도 
