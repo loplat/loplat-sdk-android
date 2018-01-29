@@ -36,7 +36,6 @@
 	- Library 적용하기
 	- Constraints 
 2. SDK 기능
-	- function
 3. SDK 초기화 및 시작하기
 	- PlengiListenr 생성
 	- Plengi Instance 생성 및 EventListener 등록
