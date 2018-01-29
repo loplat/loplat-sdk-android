@@ -1,25 +1,35 @@
-#### Note ####
+﻿#### Note ####
 * If you want to see loplat REST API, please refer to https://github.com/loplat/loplat-rest-api for details
 * If you want to see Plengi iOS SDK, please refer to https://github.com/loplat/loplat-sdk-ios for details
 
 # Plengi SDK
 
-## Function
+## Intallation
 
-#### 1. Recognize a place
-* Plengi.getInstance(Context Context).refreshPlace() : 주변 WiFi AP들을 탐색하여, 서버에게 현재 위치 정보를 요청
-* PlengiEventListener: listen()를 통해 Plengi 서버로 부터 받은 결과를 수신하여 PlengiBraodcastReceiver로 송신
-* PlengiBroadcastReciver: PlengiEventLinstener로 부터 받은 결과 처리
- 
-#### 2. Place Event
-* Plengi.getInstance(Context Context).start()/ Plengi.getInstance(Context Context).stop()을 통해서 모니터링을 on/off
-* PlengiEventListener와 PlengiBroadcastReceiver를 통해 Event 결과를 처리
+### How to import
 
-#### 3. Stay or Move
-* Plengi.getInstance(Context Context).getCurrentPlaceStatus()를 통해 사용자가 현재 이동 중인지 한 장소에 머물고 있는지 확인 가능
+#### 1. repository 추가 하기
+- In your top-level project build.gradle, add
 
-#### 4. Get a current place information
-* Plengi.getInstance(Context context).getCurrentPlaceInfo()를 통해 사용자가 방문 중인 장소 정보 불러오기
+		maven { url "http://maven.loplat.com/artifactory/plengi"}
+
+	as repositories under allprojects -> repositoreies.
+	For example, 
+		
+		allprojects {
+			repositories {
+		        jcenter()
+		        mavenCentral()
+		        maven { url "http://maven.loplat.com/artifactory/plengi}
+		        google()
+			}
+		}
+
+#### 2. loplat SDK dependency 추가 하기
+	
+	compile 'com.loplat:placeengine:1.8.6'
+
+- **참고**: 현재 최신 버전 1.8.6
 
 ## Contents
 1. 디렉토리 및 샘플코드 소개
@@ -27,17 +37,23 @@
 	- 계정 만들기 
 	- Permission 등록
 	- Receiver & Service 등록
+	- Library 적용하기
 	- Constraints 
+2. SDK 기능
+	- function
 3. SDK 초기화 및 시작하기
 	- PlengiListenr 생성
 	- Plengi Instance 생성 및 EventListener 등록
 	-  Plengi Init
 	- Plengi 모드 설정
 	- WiFi 스캔 주기 설정
+	- Gravity 연동하기
 	- Start/Stop
-4. 현재 위치 확인하기
-5. 현재 사용자 상태(Move/Stay) 확인하기
-6. 현재 장소 정보 가져오기
+	- 장소 인식 결과
+5. API
+	- 현재 위치 확인하기
+	- 현재 사용자 상태(Move/Stay) 확인하기 
+	- 현재 장소 정보 가져오기
 
 ### 1. 디렉토리 소개  및 샘플 코드 소개
 
@@ -68,7 +84,7 @@
 *  정식 clientid와 clientsecret을 원하는 분은 아래에 기입 된 메일 주소로 연락 바랍니다. 
  
 #### Permission
-* SDK를 적용하면 하기 권한이 자동으로 추가됩니다.  
+* SDK를 적용하면 하기 권한이 자동으로 추가됩니다.  
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />  
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -105,7 +121,14 @@
 	
 	>  * sample코드에 구현된 checkWiFiScanConditionInMashmallow(Context context) 참고 바랍니다.
 
-#### Retrofit 및 GSON library 적용하기
+#### Library 적용하기
+
+##### Gravity 사용을 위한 Google Play Services library 적용하기
+Gravity를 사용하기 위해서 google play service library 적용을 위해서 build.gradle의 denpendency에 아래와 같이  선언 필요합니다.
+
+	compile 'com.google.android.gms:play-services-ads:11.8.0'
+
+##### Retrofit 및 GSON library 적용하기
 loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통신을 위해 Retrofit 및 GSON library 사용합니다. Retrofit 및 GSON 라이브러리 적용을 위해서  Android Studio의 build.gradle에 다음과 같이 추가합니다.
 
  		compile 'com.squareup.retrofit2:retrofit:2.3.0'
@@ -120,8 +143,25 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
                 @retrofit2.http.* <methods>;
             }
 
+### 3. SDK 기능
 
-### 3. SDK 초기화 및 시작하기
+#### Recognize a place
+* Plengi.getInstance(Context Context).refreshPlace() : 주변 WiFi AP들을 탐색하여, 서버에게 현재 위치 정보를 요청
+* PlengiEventListener: listen()를 통해 Plengi 서버로 부터 받은 결과를 수신하여 PlengiBraodcastReceiver로 송신
+* PlengiBroadcastReciver: PlengiEventLinstener로 부터 받은 결과 처리
+ 
+#### Place Event
+* Plengi.getInstance(Context Context).start()/ Plengi.getInstance(Context Context).stop()을 통해서 모니터링을 on/off
+* PlengiEventListener와 PlengiBroadcastReceiver를 통해 Event 결과를 처리
+
+#### Stay or Move
+* Plengi.getInstance(Context Context).getCurrentPlaceStatus()를 통해 사용자가 현재 이동 중인지 한 장소에 머물고 있는지 확인 가능
+
+#### Get a current place information
+* Plengi.getInstance(Context context).getCurrentPlaceInfo()를 통해 사용자가 방문 중인 장소 정보 불러오기
+
+
+### 4. SDK 초기화 및 시작하기
 
 1. PlengiListner 생성
 	* PlengiListener를 상속받은 listener class를 생성합니다.
@@ -170,7 +210,14 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 			   - 1분이하의 분으로 주기 설정시 주기는 1분으로 설정이 됩니다. (최소 주기 값: 1분)
 		
                     Plengi.getInstance(MainActivity.this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
-6. Start/Stop
+
+6. Gravity 연동하기
+	* **Gravity**를 통해 **푸쉬 메시지** (광고 및 알림 메시지)를 받기 위해서는 앱이 다시 시작하거나(onResme) 광고 알림 허용을 한 시점 아래와 같이 코드 작성이 필요 합니다.
+			
+			Plengi.getInstance(mContext).enableAdNetwork(true);            // 푸쉬 메시지 설정 on
+	        Plengi.getInstance(mContext).setAdNotiIcon(R.drawable.ic_launcher);  // 푸쉬 메세지 icon
+        
+7. Start/Stop
 	- 사용자 장소/매장 방문 모니터링을 시작하거나 정지 할 수 있습니다.
 	- 설정된 주기마다 WiFi 신호를 스캔하여 사용자의 위치를 확인합니다.  
 	- 사용자의 위치 정보는 PlengiEventListener로 전달됩니다.
@@ -192,43 +239,61 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 				    //Monitoring Off
 				}
 
-### 4. 현재 위치 확인하기
+	
+8. 장소 인식 결과
 
-* 현재 사용자가 위치한 장소/매장 정보를 loplat 서버를 통해 확인할 수 있습니다.  
-* 현재 장소 정보를 서버에서 받아오고자 하는 경우 다음과 같은 선언을 합니다.
-		
-		Plengi.getInstance(MainActivity.this).refreshPlace();
-* WiFi AP들을 수집하여 loplat 서버에게 현재 사용자의 위치 정보를 요청합니다.
-* loplat 서버는 최적의 위치정보를  PlengiEventListener로 전달합니다.  
-* PlengiEventListener에 전달 되는 response 종류는 다음과 같습니다.
-* **참고: SDK 1.7.5 이하 버전은 장소id는 loplatid(서버에 학습된 장소 id), placeid 둘 다 전달되며,  1.7.6 이상 버전 부터 장소 id는 loplatid로 통합되어 전달 됩니다.**
+* **참고**:
+	1. SDK 1.7.5 이하 버전은 장소id는 loplatid(서버에 학습된 장소 id), placeid 둘 다 전달되며,  1.7.6 이상 버전 부터 장소 id는 loplatid로 통합되어 전달 됩니다.**
+	2. SDK 1.8.6부터 장소 인식시 인식된 장소 결과에 따라 area(상권정보), complex(복합몰) 정보가 추가로 전달됩니다. 상권만 인식 된 경우에는 place 정보가 null로 넘어가니 코드 작성시 주의 부탁드립니다.
+	3. SDK 1.8.6부터 lat_est, lng_est 항목은 삭제 되었습니다.
 
 
-	*  현재 위치가 인식 된 경우
+* 현재 위치가 인식 된 경우
 
 	> * type: PlengiResponse.ResponseType.PLACE  
-	> * 위치 정보 결과 (PlengiResponse.Place Class, response.place로 획득 가능)
+	> * 위치 정보 결과: **Place** (PlengiResponse.Place Class, response.place로 획득 가능)
+		 * accuracy > threshold: 현재 위치 내에 있는 경우  
+		 * 그 외에 경우: 현재 위치 근처에 있는 경우  
 	> 
 				    public long loplatid;        // 장소 id
 				    public String name;          // 장소 이름
 				    public String tags;          // 장소와 관련된 tag
 				    public int floor;            // 층 정보
 				    public String category;      // 장소 유형
-				    public String category_code; // 장소 유형 코드
-				    public double lat;           // 인식된 장소의 위도
+				    public String category_code; // 장소 유형 코드
+				    public double lat;           // 인식된 장소의 위도
 				    public double lng;	         // 인식된 장소의 경도 
 				    public float accuracy;       // 정확도
 				    public float threshold;      // 한계치
-				    public double lat_est;       // 예측된 위치의 위도 
-				    public double lng_est;       // 예측된 위치의 경도  
+				    ~~public double lat_est;       // 예측된 위치의 위도~~  v1.8.6에서 삭제
+				    ~~public double lng_est;       // 예측된 위치의 경도~~ v1.8.6에서 삭제  
 				    public String client_code;   // 클라이언트 코드
-				    public String address;       // 장소 (구)주소
-				    public String address_road;  // 장소 신 주소
-		
-					
+				    public String address;       // 장소 (구)주소
+				    public String address_road;  // 장소 신 주소
+				    public String post                // 우편번호
 				    
-	> * accuracy > threshold: 현재 위치 내에 있는 경우  
-	> * 그 외에 경우: 현재 위치 근처에 있는 경우  
+				    
+
+	> *  상권 정보 결과: **Area** (PlengiResponse.Area Class, response.area로 획득 가능)
+		*  장소 위치 요청한 장소가 상권 안일 경우 상권 정보가 인식 결과에 함께 같이 전달됩니다.
+		*  위도 및 경도는 아래의 조건으로 결과가 전달됩니다.
+			1. 장소 인식 결과값이 있다면 -> 인식된 장소 위도/ 경도
+			2. 장소 인식 결과값이 없으면 -> device의 위도/경도
+	> 
+					public int id;         // Area ID
+			        public String name;    // 상권 이름
+			        public String tag;       // 상권 위치 [도, 시 단위 ex) 서울, 경기도, 인천]
+			        public double lat;      // 위도 
+			        public double lng;     // 경도
+
+	> * Complex 정보 결과: **Complex** (PlengiResponse.Complex Class, reponse.complex로 획득 가능)
+		* 인식된 장소가 복합몰 내인 경우 복합몰 정도도 함께 인식 결과에  포함되어 저달됩니다.
+	>
+		        public int id;        // complex ID
+		        public String name;   // 복합몰 이름
+		        public String branch_name;  //지점명
+		        public String category;        //카테고리 명
+		        public String category_code;   //카테고리 코드
 
 	* 현재위치 획득 실패시
 		>* type: PlengiResponse.ResponseType.PLACE
@@ -240,16 +305,26 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 		>* result: PlengiResponse.Result.ERROR_CLOUD_ACCESS
 		>* errorReason : Not Allowed Client
 
+### 5. API
+#### 현재 위치 확인하기
+
+* 현재 사용자가 위치한 장소/매장 정보를 loplat 서버를 통해 확인할 수 있습니다.  
+* 현재 장소 정보를 서버에서 받아오고자 하는 경우 다음과 같은 선언을 합니다.
+		
+		Plengi.getInstance(MainActivity.this).refreshPlace();
+* WiFi AP들을 수집하여 loplat 서버에게 현재 사용자의 위치 정보를 요청합니다.
+* loplat 서버는 최적의 위치정보를  PlengiEventListener로 전달합니다.  
+
 * 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 위치 확인하기](https://github.com/loplat/loplat-sdk-android/wiki/1.-현재-위치-확인하기)
 	
-### 5. 현재 사용자 상태 확인하기  (Stay or Move)
+#### 현재 사용자 상태 확인하기  (Stay or Move)
 -  현재 사용자가 이동(Move) 중인지 매장/장소에 머무르고(Stay) 있는지 확인할 수 있습니다.
 - 현재 사용자의 상태를 확인하기 위하여 다음과 같이 선언을 합니다. 
  
 		Plengi.getInstance(this).getCurrentPlaceStatus();
 - 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 사용자 상태 확인하기](https://github.com/loplat/loplat-sdk-android/wiki/2.-현재-사용자-상태-확인하기)
 
-### 6. 현재 장소 정보 가져오기
+#### 현재 장소 정보 가져오기
 * 현재 사용자가 머무르고 있는 장소/매장 정보를 확인 할 수 있습니다.
 * 현재 사용자가 위치한 장소/매장 정보를 확인하기 위하여 다음과 같이 선언을 합니다.
 
