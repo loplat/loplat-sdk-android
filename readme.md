@@ -190,6 +190,7 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 
 6. Gravity 연동하기
 	* Gravity 연동은 **SDK version 1.8.6**부터 연동이 가능합니다.
+	* **Gravity는 (필수항목) 위치 궈한 허용, GPS on 상태에서 동작하오니 코드 작성시 유의하시기 바랍니다.**
 	* **Gravity**를 통해 **푸쉬 메시지** (광고 및 알림 메시지)를 받기 위해서는 앱이 다시 시작하거나(onResme) 광고 알림 허용을 한 시점 아래와 같이 코드 작성이 필요 합니다.
 			
 			Plengi.getInstance(mContext).enableAdNetwork(true);            // 푸쉬 메시지 설정 on
