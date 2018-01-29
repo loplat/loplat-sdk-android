@@ -246,7 +246,7 @@
 	> * type: PlengiResponse.ResponseType.PLACE  
 	>	- accuracy > threshold: 현재 위치 내에 있는 경우  
 	>	- 그 외에 경우: 현재 위치 근처에 있는 경우 
-		> ```java
+	> ```java
 		>	public long loplatid;        // 장소 id
 		>	public String name;          // 장소 이름
 		>	public String tags;          // 장소와 관련된 tag
