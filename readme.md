@@ -28,8 +28,7 @@
 - **참고**: 현재 최신 버전 1.8.6
 
 ## Contents
-1. 디렉토리 및 샘플코드 소개
-2. SDK Setup
+1. SDK Setup
 	- 계정 만들기 
 	- Permission 등록
 	- Receiver & Service 등록
@@ -45,31 +44,12 @@
 	- Gravity 연동하기
 	- Start/Stop
 	- 장소 인식 결과
-5. API
+4. API
 	- 현재 위치 확인하기
 	- 현재 사용자 상태(Move/Stay) 확인하기 
 	- 현재 장소 정보 가져오기
 
-### 1. 디렉토리 소개  및 샘플 코드 소개
-
-#### 디렉토리 소개
-- /sample : 샘플코드
-- /library : plengi.aar 파일이 실제 라이브러리 파일
-- /javadoc : library 설명 문서
-- /place_registerer : 장소 학습기 안드로이드 앱
-
-#### 샘플코드 간략 소개
-* LoplatSampleApplication.java : Application Class를 상속받아 plengi engine을 초기화 수행
-
-* LoplatPlengiListener.java : PlengiListener를 상속받아 loplat 서버로부터 위치 획득 결과를 받음
-
-	※ loplat서버로부터 다음과 같은 위치 정보가 제공
-	  - a. Place Event: enter or leave places
-	  - b. Recognizing Places
-
-* MainActivity.java : 장소 변화 모니터링 on/off, 현재 위치 획득 요청 및 결과 표시 해줌
-
-### 2. SDK Setup
+### 1. SDK Setup
 
 #### 계정 만들기  
 * Plengi SDK를 사용하기 위해서는 clientid와 clientsecret 필요합니다.  
@@ -140,7 +120,7 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
                 @retrofit2.http.* <methods>;
             }
 
-### 3. SDK 기능
+### 2. SDK 기능
 
 #### Recognize a place
 * Plengi.getInstance(Context Context).refreshPlace() : 주변 WiFi AP들을 탐색하여, 서버에게 현재 위치 정보를 요청
@@ -158,7 +138,7 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 * Plengi.getInstance(Context context).getCurrentPlaceInfo()를 통해 사용자가 방문 중인 장소 정보 불러오기
 
 
-### 4. SDK 초기화 및 시작하기
+### 3. SDK 초기화 및 시작하기
 
 1. PlengiListner 생성
 	* PlengiListener를 상속받은 listener class를 생성합니다.
@@ -309,7 +289,7 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 		>* result: PlengiResponse.Result.ERROR_CLOUD_ACCESS
 		>* errorReason : Not Allowed Client
 
-### 5. API
+### 4. API
 #### 현재 위치 확인하기
 
 * 현재 사용자가 위치한 장소/매장 정보를 loplat 서버를 통해 확인할 수 있습니다.  
