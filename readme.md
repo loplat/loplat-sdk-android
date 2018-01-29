@@ -1,7 +1,3 @@
-﻿#### Note ####
-* If you want to see loplat REST API, please refer to https://github.com/loplat/loplat-rest-api for details
-* If you want to see Plengi iOS SDK, please refer to https://github.com/loplat/loplat-sdk-ios for details
-
 # Plengi SDK
 
 ## Intallation
@@ -455,6 +451,11 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 	
 
 * 2016.01.27 - initial release
+
+#### Note ####
+* If you want to see loplat REST API, please refer to https://github.com/loplat/loplat-rest-api for details
+* If you want to see Plengi iOS SDK, please refer to https://github.com/loplat/loplat-sdk-ios for details
+
 
   
  
