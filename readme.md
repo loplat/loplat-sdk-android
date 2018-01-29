@@ -321,25 +321,25 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 ## History
 * 2018.01.22
   - loplat SDK versio 1.8.6 release
-   	- Area, Complex 정보 추가
+	- Area, Complex 정보 추가
 	- 인식 성능 개선 및 버그 수정
 
 * 2018.01.17
    - loplat SDK versio 1.8.5 release
-   	- Gravity 제공을 위한 기능 개선
-	- Advanced Tracker 추가
+   		- Gravity 제공을 위한 기능 개선
+		- Advanced Tracker 추가
 
 * 2017.12.27
    - loplat SDK versio 1.8.4 release
-   	- Gravity 연동
+   		- Gravity 연동
 	
 * 2017.11.23
    - loplat SDK versio 1.8.3 release
-   	- 인식 성능 개선 및 버그 수정
+   		- 인식 성능 개선 및 버그 수정
 	
 * 2017.11.05
-   - loplat SDK versio 1.8.2 release
-   	- 인식 성능 개선 및 버그 수정
+   - loplat SDK versio 1.8.2 release 
+   		- 인식 성능 개선 및 버그 수정
 	
 * 2017.08.07
     - loplat SDK versio 1.8.1 release
