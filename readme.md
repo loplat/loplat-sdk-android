@@ -41,7 +41,7 @@
 	- Constraints 
 2. SDK 기능
 3. SDK 초기화 및 시작하기
-	- PlengiListenr 생성
+	- PlengiListener 생성
 	- Plengi Instance 생성 및 EventListener 등록
 	-  Plengi Init
 	- Plengi 모드 설정
@@ -58,8 +58,7 @@
 
 #### 계정 만들기  
 * Plengi SDK를 사용하기 위해서는 clientid와 clientsecret 필요합니다.  
-	
-	  > * clientid & clientsecret: loplat server로 접근하기 위한 ID와 PW  
+	 > * clientid & clientsecret: loplat server로 접근하기 위한 ID와 PW  
 * test를 원하시는 분은 clientid: loplatdemo, clientsecret: loplatdemokey 사용하세요.  
 *  정식 clientid와 clientsecret을 원하는 분은 아래에 기입 된 메일 주소로 연락 바랍니다. 
  
@@ -181,17 +180,18 @@
 #### 5. WiFi 스캔 주기 설정
 * 사용자의 매장/장소 방문 확인을 위한 WiFi Scan 주기를 설정합니다.
 * WiFi scan 주기는 다음과 같이 설정합니다.
-		- Recognizer mode 일 경우  move, stay에 대해 주기를 설정합니다. 
+	* Recognizer mode 일 경우  move, stay에 대해 주기를 설정합니다. 
 	```java
 		Plengi.getInstance(MainActivity.this).setScanPeriod(3*60*1000, 6*60*1000);  // move: 3 mins, stay: 6 mins  
 	```
 
 - move:  매장/장소를 인식하기 위한 기본 WFi scan 주기이며 default 값으로 3분이 설정되어 있습니다.  
-                - 3분이하의 분으로 주기 설정시 default 값인 3분으로 설정이 됩니다.
+	- 3분이하의 분으로 주기 설정시 default 값인 3분으로 설정이 됩니다.
+
 - stay: 매장/장소가 인식 된 후 WiFi scan 주기이며 default 값으로 6분이 설정되어 있습니다.  
-                - 6분이하의 분으로 주기 설정시 default 값인 6분으로 설정이 됩니다.
+	- 6분이하의 분으로 주기 설정시 default 값인 6분으로 설정이 됩니다.
 		- Tracker mode 일 경우 분 단위로 설정이 가능하며 default 값으로 2분이 설정되어 있습니다.  
-			   - 1분이하의 분으로 주기 설정시 주기는 1분으로 설정이 됩니다. (최소 주기 값: 1분)
+		- 1분이하의 분으로 주기 설정시 주기는 1분으로 설정이 됩니다. (최소 주기 값: 1분)
 	```java
 	     Plengi.getInstance(MainActivity.this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
 	```
