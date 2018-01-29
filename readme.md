@@ -1,6 +1,6 @@
 # Plengi SDK
 
-## Intallation
+## Installation
 
 ### How to import
 
@@ -22,7 +22,11 @@
 		}
 
 #### 2. loplat SDK dependency 추가 하기
-	
+
+	// 앱 build.gradle (Gradle 3.0 이상)
+	implementation 'com.loplat:placeengine:1.8.6'
+ 
+	// 앱 build.gradle (Gradle 3.0 미만)
 	compile 'com.loplat:placeengine:1.8.6'
 
 - **참고**: 현재 최신 버전 1.8.6
