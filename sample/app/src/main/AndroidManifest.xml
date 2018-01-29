@@ -37,9 +37,6 @@
                 <action android:name="com.loplat.placeengine.event.scanwifi" />
             </intent-filter>
         </receiver>
-
-        <service android:name="com.loplat.placeengine.location.LocationMonitorService" />
-
     </application>
 
 </manifest>

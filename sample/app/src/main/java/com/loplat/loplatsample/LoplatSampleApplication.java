@@ -24,7 +24,7 @@ public class LoplatSampleApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        LoplatLogger.writeLog("LoplatApplication created ---------------");
+        LoplatLogger.i("LoplatApplication created ---------------");
 
         instance = this;
 

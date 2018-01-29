@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
@@ -23,6 +24,8 @@ public class MainActivity extends Activity {
 
     BroadcastReceiver mLoplatBroadcastReceiver;
     ProgressDialog mProgressDialog=null;
+
+    private static final String PREFS_NAME = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +125,12 @@ public class MainActivity extends Activity {
                 break;
         }
 
+        // gravity 설정하기
+        if (getEnableAdNetwork(this)) {
+            Plengi.getInstance(this).enableAdNetwork(true);
+            Plengi.getInstance(this).setAdNotiIcon(R.drawable.ic_launcher);
+        }
+
     }
 
 
@@ -139,6 +148,12 @@ public class MainActivity extends Activity {
         int moveScanPeriod = 3 * 60000; // 3 mins (milliseconds)
         int stayScanPeriod = 6 * 60000; // 6 mins (milliseconds)
         Plengi.getInstance(this).setScanPeriod(moveScanPeriod, stayScanPeriod);
+
+        // Gravity 연동하기
+        Plengi.getInstance(this).enableAdNetwork(true);
+        Plengi.getInstance(this).setAdNotiIcon(R.drawable.ic_launcher);
+        // App 내 gravity 연동 설정
+        setEnableAdNetwork(this, true);
 
         //if you want to use Tracker mode
 //        Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.TRACKING);
@@ -225,5 +240,28 @@ public class MainActivity extends Activity {
             // please enable permission on location access
         }
     }
+
+    // App에서 광고 연동 여부 설정
+    private void setEnableAdNetwork(Context context, boolean enableAdNetwork) {
+        try {
+            SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("ad_network", enableAdNetwork);
+            editor.commit();
+        } catch (Exception e) {
+        }
+    }
+
+    // App에서 광고 연동 여부 확인
+    private boolean getEnableAdNetwork(Context context) {
+        boolean enableAdNetwork = false;
+        try {
+            SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+            enableAdNetwork = settings.getBoolean("ad_network", false);
+        } catch (Exception e) {
+        }
+        return enableAdNetwork;
+    }
+
 
 }
