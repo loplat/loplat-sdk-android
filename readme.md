@@ -247,23 +247,23 @@
 	>	- accuracy > threshold: 현재 위치 내에 있는 경우  
 	>	- 그 외에 경우: 현재 위치 근처에 있는 경우 
 	> ```java
-		>	public long loplatid;        // 장소 id
-		>	public String name;          // 장소 이름
-		>	public String tags;          // 장소와 관련된 tag
-		>	public int floor;            // 층 정보
-		>	public String category;      // 장소 유형
-		>	public String category_code; // 장소 유형 코드
-		>	public double lat;           // 인식된 장소의 위도
-		>	public double lng;	         // 인식된 장소의 경도 
-		>	public float accuracy;       // 정확도
-		>	public float threshold;      // 한계치
-		>	public double lat_est;       // 예측된 위치의 위도, v1.8.6에서 삭제
-		>	public double lng_est;       // 예측된 위치의 경도, v1.8.6에서 삭제 
-		>	public String client_code;   // 클라이언트 코드
-		>	public String address;       // 장소 (구)주소
-		>	public String address_road;  // 장소 신 주소
-		>	public String post           // 우편번호
-		>	```
+	>	public long loplatid;        // 장소 id
+	>	public String name;          // 장소 이름
+	>	public String tags;          // 장소와 관련된 tag
+	>	public int floor;            // 층 정보
+	>	public String category;      // 장소 유형
+	>	public String category_code; // 장소 유형 코드
+	>	public double lat;           // 인식된 장소의 위도
+	>	public double lng;	         // 인식된 장소의 경도 
+	>	public float accuracy;       // 정확도
+	>	public float threshold;      // 한계치
+	>	public double lat_est;       // 예측된 위치의 위도, v1.8.6에서 삭제
+	>	public double lng_est;       // 예측된 위치의 경도, v1.8.6에서 삭제 
+	>	public String client_code;   // 클라이언트 코드
+	>	public String address;       // 장소 (구)주소
+	>	public String address_road;  // 장소 신 주소
+	>	public String post           // 우편번호
+	>	```
 	> * 상권 정보 결과: **Area** (PlengiResponse.Area Class, response.area로 획득 가능)
 	> * type: PlengiResponse.ResponseType.Area  
 	>	- 장소 위치 요청한 장소가 상권 안일 경우 상권 정보가 인식 결과에 함께 같이 전달됩니다.
