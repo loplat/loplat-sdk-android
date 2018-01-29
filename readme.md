@@ -332,21 +332,6 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 * 매장/장소 정보는 PlengiResponse.Place로 전달됩니다. ([현재 위치 확인하기 참조](https://github.com/loplat/loplat-sdk-android#4-현재-위치-확인하기))
 * **참고사항**: 현재 사용자 상태가 STAY일 경우에만 정확한 장소/매장 정보를 획득 할 수 있습니다. 
 * 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 장소 정보 가져오기](https://github.com/loplat/loplat-sdk-android/wiki/3.-현재-장소-정보-가져오기)
-		
-## Notice 
-
-* 코드 구현과 관련해서는 sample코드와 javadoc 폴더 참고 바람
-* 실제 테스트를 위해서는 기존에 학습된 장소가 있어야 함
-
-	> loplat 홈페이지 [Demo&SDK](http://loplat.azurewebsites.net/demo.html#)에서 loplat cook 이라는 학습기 앱을 다운받아서 인식을 원하는 장소에서 학습을 수행함 
-	
-  	> 그 후에 loplat_demo를 통해 테스트를 해 보면 장소를 인식하는 것을 확인할 수 있음
-  	
-* 기술 관련 문의는 mjlee@loplat.com으로 메일 보내주시기 바랍니다.
-* 정식 id와 secret을 원하시는 분은 yeddie@loplat.com으로 아래의 내용을 기입하여 보내 주시기 바랍니다.
- - a. 이름
- - b. 회사
- - c. 사용 목적 
 
 ## History
 * 2017.08.07
