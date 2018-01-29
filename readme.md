@@ -189,6 +189,7 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
                     Plengi.getInstance(MainActivity.this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
 
 6. Gravity 연동하기
+	* Gravity 연동은 **SDK version 1.8.6**부터 연동이 가능합니다.
 	* **Gravity**를 통해 **푸쉬 메시지** (광고 및 알림 메시지)를 받기 위해서는 앱이 다시 시작하거나(onResme) 광고 알림 허용을 한 시점 아래와 같이 코드 작성이 필요 합니다.
 			
 			Plengi.getInstance(mContext).enableAdNetwork(true);            // 푸쉬 메시지 설정 on
@@ -318,6 +319,28 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 * 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 장소 정보 가져오기](https://github.com/loplat/loplat-sdk-android/wiki/3.-현재-장소-정보-가져오기)
 
 ## History
+* 2018.01.22
+  - loplat SDK versio 1.8.6 release
+   	- Area, Complex 정보 추가
+	- 인식 성능 개선 및 버그 수정
+
+* 2018.01.17
+   - loplat SDK versio 1.8.5 release
+   	- Gravity 제공을 위한 기능 개선
+	- Advanced Tracker 추가
+
+* 2017.12.27
+   - loplat SDK versio 1.8.4 release
+   	- Gravity 연동
+	
+* 2017.11.23
+   - loplat SDK versio 1.8.3 release
+   	- 인식 성능 개선 및 버그 수정
+	
+* 2017.11.05
+   - loplat SDK versio 1.8.2 release
+   	- 인식 성능 개선 및 버그 수정
+	
 * 2017.08.07
     - loplat SDK versio 1.8.1 release
         - Nearby event, Enter Event 분리
@@ -420,11 +443,3 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 	
 
 * 2016.01.27 - initial release
-
-#### Note ####
-* If you want to see loplat REST API, please refer to https://github.com/loplat/loplat-rest-api for details
-* If you want to see Plengi iOS SDK, please refer to https://github.com/loplat/loplat-sdk-ios for details
-
-
-  
- 
