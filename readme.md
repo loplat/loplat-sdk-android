@@ -248,8 +248,9 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 
 * 현재 위치가 인식 된 경우
 
-	> * type: PlengiResponse.ResponseType.PLACE  
 	> * 위치 정보 결과: **Place** (PlengiResponse.Place Class, response.place로 획득 가능)
+	> * type: PlengiResponse.ResponseType.PLACE  
+		 
 		 * accuracy > threshold: 현재 위치 내에 있는 경우  
 		 * 그 외에 경우: 현재 위치 근처에 있는 경우  
 	> 
@@ -272,8 +273,10 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 				    
 				    
 
+
+	> * 상권 정보 결과: **Area** (PlengiResponse.Area Class, response.area로 획득 가능)
 	> * type: PlengiResponse.ResponseType.Area  
-	> *  상권 정보 결과: **Area** (PlengiResponse.Area Class, response.area로 획득 가능)
+		
 		*  장소 위치 요청한 장소가 상권 안일 경우 상권 정보가 인식 결과에 함께 같이 전달됩니다.
 		*  위도 및 경도는 아래의 조건으로 결과가 전달됩니다.
 			1. 장소 인식 결과값이 있다면 -> 인식된 장소 위도/ 경도
@@ -285,8 +288,10 @@ loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통�
 			        public double lat;      // 위도 
 			        public double lng;     // 경도
 
-	> * * type: PlengiResponse.ResponseType.Complex  
+
 	> * Complex 정보 결과: **Complex** (PlengiResponse.Complex Class, reponse.complex로 획득 가능)
+	> * type: PlengiResponse.ResponseType.Complex  
+		
 		* 인식된 장소가 복합몰 내인 경우 복합몰 정도도 함께 인식 결과에  포함되어 저달됩니다.
 	>
 		        public int id;        // complex ID
