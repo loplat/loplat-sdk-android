@@ -240,33 +240,30 @@
 	2. SDK 1.8.6부터 장소 인식시 인식된 장소 결과에 따라 area(상권정보), complex(복합몰) 정보가 추가로 전달됩니다. 상권만 인식 된 경우에는 place 정보가 null로 넘어가니 코드 작성시 주의 부탁드립니다.
 	3. SDK 1.8.6부터 lat_est, lng_est 항목은 삭제 되었습니다.
 
-
 * 현재 위치가 인식 된 경우
 
 	> * 위치 정보 결과: **Place** (PlengiResponse.Place Class, response.place로 획득 가능)
 	> * type: PlengiResponse.ResponseType.PLACE  
 	>	- accuracy > threshold: 현재 위치 내에 있는 경우  
 	>	- 그 외에 경우: 현재 위치 근처에 있는 경우 
- 
-	 ```java
-			    public long loplatid;        // 장소 id
-			    public String name;          // 장소 이름
-				public String tags;          // 장소와 관련된 tag
-				public int floor;            // 층 정보
-				public String category;      // 장소 유형
-				public String category_code; // 장소 유형 코드
-				public double lat;           // 인식된 장소의 위도
-				public double lng;	         // 인식된 장소의 경도 
-				public float accuracy;       // 정확도
-				public float threshold;      // 한계치
-				public double lat_est;       // 예측된 위치의 위도, v1.8.6에서 삭제
-				public double lng_est;       // 예측된 위치의 경도, v1.8.6에서 삭제 
-				public String client_code;   // 클라이언트 코드
-				public String address;       // 장소 (구)주소
-				public String address_road;  // 장소 신 주소
-				public String post           // 우편번호
-	```
-				    
+		> ```java
+		>	public long loplatid;        // 장소 id
+		>	public String name;          // 장소 이름
+		>	public String tags;          // 장소와 관련된 tag
+		>	public int floor;            // 층 정보
+		>	public String category;      // 장소 유형
+		>	public String category_code; // 장소 유형 코드
+		>	public double lat;           // 인식된 장소의 위도
+		>	public double lng;	         // 인식된 장소의 경도 
+		>	public float accuracy;       // 정확도
+		>	public float threshold;      // 한계치
+		>	public double lat_est;       // 예측된 위치의 위도, v1.8.6에서 삭제
+		>	public double lng_est;       // 예측된 위치의 경도, v1.8.6에서 삭제 
+		>	public String client_code;   // 클라이언트 코드
+		>	public String address;       // 장소 (구)주소
+		>	public String address_road;  // 장소 신 주소
+		>	public String post           // 우편번호
+		>	```
 	> * 상권 정보 결과: **Area** (PlengiResponse.Area Class, response.area로 획득 가능)
 	> * type: PlengiResponse.ResponseType.Area  
 	>	- 장소 위치 요청한 장소가 상권 안일 경우 상권 정보가 인식 결과에 함께 같이 전달됩니다.
@@ -274,35 +271,34 @@
 	>		1. 장소 인식 결과값이 있다면 -> 인식된 장소 위도/ 경도
 	>		2.  장소 인식 결과값이 없으면 -> device의 위도/경도
 	> 
-	```java
-					public int id;         // Area ID
-			        public String name;    // 상권 이름
-			        public String tag;     // 상권 위치 [도, 시 단위 ex) 서울, 경기도, 인천]
-			        public double lat;     // 위도 
-			        public double lng;     // 경도
-	```
-
+	>	```java
+	>		public int id;         // Area ID
+	>		public String name;    // 상권 이름
+	>		public String tag;     // 상권 위치 [도, 시 단위 ex) 서울, 경기도, 인천]
+	>		public double lat;     // 위도 
+	>		public double lng;     // 경도
+	>	```
 	> * Complex 정보 결과: **Complex** (PlengiResponse.Complex Class, reponse.complex로 획득 가능)
 	> * type: PlengiResponse.ResponseType.Complex  
 	> * 인식된 장소가 복합몰 내인 경우 복합몰 정도도 함께 인식 결과에 포함되어 전달됩니다.
-	```java
-					public int id;         // Complex ID
-			        public String name;    // 복합몰 이름
-			        public String branch_name;     // 복합몰 지점명
-			        public String category;     // 카테고리 
-			        public String category_code;     // 카테고리 코드
-	```
+	>	```java
+	>		public int id;         // Complex ID
+	> 		public String name;    // 복합몰 이름
+	>		public String branch_name;     // 복합몰 지점명
+	>		public String category;     // 카테고리 
+	> 		public String category_code;     // 카테고리 코드
+	>	```
 		
 			        
-	* 현재위치 획득 실패시
-		>* type: PlengiResponse.ResponseType.PLACE
-		>* result: PlengiResponse.Result.ERROR_CLOUD_ACCESS
-		>* errorReason : Location Acquisition Fail  
+* 현재위치 획득 실패시
+	>* type: PlengiResponse.ResponseType.PLACE
+	>* result: PlengiResponse.Result.ERROR_CLOUD_ACCESS
+	>* errorReason : Location Acquisition Fail  
 	
-	* Client 인증 실패시
-		>* type: PlengiResponse.ResponseType.PLACE
-		>* result: PlengiResponse.Result.ERROR_CLOUD_ACCESS
-		>* errorReason : Not Allowed Client
+* Client 인증 실패시
+	>* type: PlengiResponse.ResponseType.PLACE
+	>* result: PlengiResponse.Result.ERROR_CLOUD_ACCESS
+	>* errorReason : Not Allowed Client
 
 ### 4. API
 #### 현재 위치 확인하기
