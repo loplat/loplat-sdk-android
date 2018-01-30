@@ -200,7 +200,7 @@
 * Gravity 연동은 **SDK version 1.8.6**부터 연동이 가능합니다.
 * **Gravity는 (필수항목) 위치 궈한 허용, GPS on 상태에서 동작하오니 코드 작성시 유의하시기 바랍니다.**
 *  Gravity 사용을 위해서 구글 ADID가 필수 항목이오니 [Library 설정하기](https://github.com/loplat/loplat-sdk-android#library-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0) 참고 하여 라이브러리 설정  부탁드립니다.
-* **Gravity**를 통해 **푸쉬 메시지** (광고 및 알림 메시지)를 받기 위해서는 앱이 다시 시작하거나(onResme) 광고 알림 허용을 한 시점 아래와 같이 코드 작성이 필요 합니다.
+* **Gravity**를 통해 **푸쉬 메시지** (광고 및 알림 메시지)를 받기 위해서는 광고 알림 허용을 한 시점 아래와 같이 코드 작성이 필요 합니다.
 
 	```java
 		Plengi.getInstance(mContext).enableAdNetwork(true);            // 푸쉬 메시지 설정 on
