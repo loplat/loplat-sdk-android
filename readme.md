@@ -169,8 +169,8 @@
 * **참고: 사용자 매장 방문 확인을 위해 기본으로 제공 되는 모드는 Recognizer 모드 입니다. Tracker 모드를 사용하기 위해서는 협의가 필요 하오니 아래에 기입된 메일로 연락 바랍니다.** 
 
 	> * Recognizer Mode: 일정시간동안(5분이상) 한 장소에 머무를 경우 사용자의 위치를 확인합니다.
-		> * Tracker Mode: 사용자의 위치를 일정주기마다 확인합니다.
-	* 모드 설정은 다음과 같이 선언을 합니다.  (Recognizer, Tracker 둘 중 하나 선택)
+	> * Tracker Mode: 사용자의 위치를 일정주기마다 확인합니다.
+* 모드 설정은 다음과 같이 선언을 합니다.  (Recognizer, Tracker 둘 중 하나 선택)
 	
 	```java
 		Plengi.getInstance(MainActivity.this).setMonitoringType(PlengiResponse.MonitoringType.STAY);  //Recognizer mode
