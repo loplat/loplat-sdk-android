@@ -113,13 +113,13 @@
 		compile 'com.squareup.retrofit2:converter-gson:2.3.0'
 		compile 'com.squareup.okhttp3:okhttp:3.8.1'
 
- - 참고: proguard를 사용할 시에는 아래와 같이 proguard 설정을 추가해야 합니다.
+- 참고: proguard를 사용할 시에는 아래와 같이 proguard 설정을 추가해야 합니다.
 
-            -dontwarn okio.**
-            -dontwarn javax.annotation.**
-            -keepclasseswithmembers class * {
-                @retrofit2.http.* <methods>;
-            }
+		-dontwarn okio.**
+		-dontwarn javax.annotation.**
+		-keepclasseswithmembers class * {
+				@retrofit2.http.* <methods>;
+		}
 
 ### 2. SDK 기능
 
@@ -154,7 +154,7 @@
 - 사용자의 매장/장소 방문을 모니터링하기 위해 Plengi Engine을 초기화합니다.
 - Plengi init은 다음과 같이 선언을 합니다.  
 	```java
-		Plengi.getInstance(MainActivity.this).init(clientId,clientSecret,uniqueuserId);  
+	Plengi.getInstance(MainActivity.this).init(clientId,clientSecret,uniqueuserId);  
 	```
 - init을 위해 clientid, clientsecret, uniqueUserId를 인자값으로 전달해주셔야합니다.  
 	* clientid & clientsecret: loplat server로 접근하기 위한 ID와 PW입니다.  
@@ -173,8 +173,8 @@
 * 모드 설정은 다음과 같이 선언을 합니다.  (Recognizer, Tracker 둘 중 하나 선택)
 	
 	```java
-		Plengi.getInstance(MainActivity.this).setMonitoringType(PlengiResponse.MonitoringType.STAY);  //Recognizer mode
-		Plengi.getInstance(MainActivity.this).setMonitoringType(PlengiResponse.MonitoringType.TRACKING);  //Tracker mode
+	Plengi.getInstance(MainActivity.this).setMonitoringType(PlengiResponse.MonitoringType.STAY);  //Recognizer mode
+	Plengi.getInstance(MainActivity.this).setMonitoringType(PlengiResponse.MonitoringType.TRACKING);  //Tracker mode
 	```
 
 #### 5. WiFi 스캔 주기 설정
@@ -182,7 +182,7 @@
 * WiFi scan 주기는 다음과 같이 설정합니다.
 	* Recognizer mode 일 경우  move, stay에 대해 주기를 설정합니다. 
 	```java
-		Plengi.getInstance(MainActivity.this).setScanPeriod(3*60*1000, 6*60*1000);  // move: 3 mins, stay: 6 mins  
+	Plengi.getInstance(MainActivity.this).setScanPeriod(3*60*1000, 6*60*1000);  // move: 3 mins, stay: 6 mins  
 	```
 
 - move:  매장/장소를 인식하기 위한 기본 WFi scan 주기이며 default 값으로 3분이 설정되어 있습니다.  
@@ -193,7 +193,7 @@
 		- Tracker mode 일 경우 분 단위로 설정이 가능하며 default 값으로 2분이 설정되어 있습니다.  
 		- 1분이하의 분으로 주기 설정시 주기는 1분으로 설정이 됩니다. (최소 주기 값: 1분)
 	```java
-	     Plengi.getInstance(MainActivity.this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
+	Plengi.getInstance(MainActivity.this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
 	```
 
 #### 6. Gravity 연동하기
@@ -203,8 +203,8 @@
 * **Gravity**를 통해 **푸쉬 메시지** (광고 및 알림 메시지)를 받기 위해서는 광고 알림 허용을 한 시점 아래와 같이 코드 작성이 필요 합니다.
 
 	```java
-		Plengi.getInstance(mContext).enableAdNetwork(true);            // 푸쉬 메시지 설정 on
-	    Plengi.getInstance(mContext).setAdNotiIcon(R.drawable.ic_launcher);  // 푸쉬 메세지 icon
+	Plengi.getInstance(mContext).enableAdNetwork(true);            // 푸쉬 메시지 설정 on
+	Plengi.getInstance(mContext).setAdNotiIcon(R.drawable.ic_launcher);  // 푸쉬 메세지 icon
 	 ```
         
 #### 7. Start/Stop
@@ -214,23 +214,23 @@
 -  모니터링 시작과 정지는 다음과 같이 선언합니다.  
 	
 	```java	
-		Plengi.getInstance(MainActivity.this).start(); //Monitoring Start  
-		Plengi.getInstance(MainActivity.this).stop(); //Monitoring Stop
+	Plengi.getInstance(MainActivity.this).start(); //Monitoring Start  
+	Plengi.getInstance(MainActivity.this).stop(); //Monitoring Stop
 	```
 
  - 모니터링 상태 확인은 Plengi.getEngineStatus를 통해서 확인 할 수 있습니다.
 	 - 예시코드
 
 		```java
-			int engineStatus = Plengi.getInstance(this).getEngineStatus();
-			if(engineStatus == PlaceEngine.EngineStatus.STARTED)
-			{
-			    //Monitoring On
-			}
-			else if(engineStatus == PlaceEngine.EngineStatus.STOPPED)
-			{
+		int engineStatus = Plengi.getInstance(this).getEngineStatus();
+		if(engineStatus == PlaceEngine.EngineStatus.STARTED)
+		{
+		    //Monitoring On
+		}
+		else if(engineStatus == PlaceEngine.EngineStatus.STOPPED)
+		{
 			    //Monitoring Off			
-			}
+		}
 		```
 	
 #### 8. 장소 인식 결과
@@ -246,7 +246,7 @@
 	> * type: PlengiResponse.ResponseType.PLACE  
 	>	- accuracy > threshold: 현재 위치 내에 있는 경우  
 	>	- 그 외에 경우: 현재 위치 근처에 있는 경우 
-	> ```java
+	>	 ```java
 	>	public long loplatid;        // 장소 id
 	>	public String name;          // 장소 이름
 	>	public String tags;          // 장소와 관련된 tag
@@ -271,22 +271,22 @@
 	>		1. 장소 인식 결과값이 있다면 -> 인식된 장소 위도/ 경도
 	>		2.  장소 인식 결과값이 없으면 -> device의 위도/경도
 	> 
-	>	```java
+	>		```java
 	>		public int id;         // Area ID
 	>		public String name;    // 상권 이름
 	>		public String tag;     // 상권 위치 [도, 시 단위 ex) 서울, 경기도, 인천]
 	>		public double lat;     // 위도 
 	>		public double lng;     // 경도
-	>	```
+	>		```
 	> * Complex 정보 결과: **Complex** (PlengiResponse.Complex Class, reponse.complex로 획득 가능)
 	> * type: PlengiResponse.ResponseType.Complex  
 	> * 인식된 장소가 복합몰 내인 경우 복합몰 정도도 함께 인식 결과에 포함되어 전달됩니다.
 	>	```java
-	>		public int id;         // Complex ID
-	>		public String name;    // 복합몰 이름
-	>		public String branch_name;     // 복합몰 지점명
-	>		public String category;     // 카테고리 
-	>		public String category_code;     // 카테고리 코드
+	>	public int id;         // Complex ID
+	>	public String name;    // 복합몰 이름
+	>	public String branch_name;     // 복합몰 지점명
+	>	public String category;     // 카테고리 
+	>	public String category_code;     // 카테고리 코드
 	>	```
 		
 			        
@@ -307,7 +307,7 @@
 * 현재 장소 정보를 서버에서 받아오고자 하는 경우 다음과 같은 선언을 합니다.
 
 	```java
-		Plengi.getInstance(MainActivity.this).refreshPlace();
+	Plengi.getInstance(MainActivity.this).refreshPlace();
 	```
 * WiFi AP들을 수집하여 loplat 서버에게 현재 사용자의 위치 정보를 요청합니다.
 * loplat 서버는 최적의 위치정보를  PlengiEventListener로 전달합니다.  
@@ -319,7 +319,7 @@
 - 현재 사용자의 상태를 확인하기 위하여 다음과 같이 선언을 합니다. 
  
 	 ```java
-		Plengi.getInstance(this).getCurrentPlaceStatus();
+	Plengi.getInstance(this).getCurrentPlaceStatus();
 	```
 - 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 사용자 상태 확인하기](https://github.com/loplat/loplat-sdk-android/wiki/2.-현재-사용자-상태-확인하기)
 
@@ -327,7 +327,7 @@
 * 현재 사용자가 머무르고 있는 장소/매장 정보를 확인 할 수 있습니다.
 * 현재 사용자가 위치한 장소/매장 정보를 확인하기 위하여 다음과 같이 선언을 합니다.
 	```java
-		Plengi.getInstance(this).getCurrentPlaceInfo();  
+	Plengi.getInstance(this).getCurrentPlaceInfo();  
 	```
 * 매장/장소 정보는 PlengiResponse.Place로 전달됩니다. ([현재 위치 확인하기 참조](https://github.com/loplat/loplat-sdk-android#4-현재-위치-확인하기))
 * **참고사항**: 현재 사용자 상태가 STAY일 경우에만 정확한 장소/매장 정보를 획득 할 수 있습니다. 
