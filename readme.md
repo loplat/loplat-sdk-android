@@ -154,7 +154,7 @@
 - 사용자의 매장/장소 방문을 모니터링하기 위해 Plengi Engine을 초기화합니다.
 - Plengi init은 다음과 같이 선언을 합니다.  
 	```java
-	Plengi.getInstance(MainActivity.this).init(clientId,clientSecret,uniqueuserId);  
+	Plengi.getInstance(this).init(clientId,clientSecret,uniqueuserId);  
 	```
 - init을 위해 clientid, clientsecret, uniqueUserId를 인자값으로 전달해주셔야합니다.  
 	* clientid & clientsecret: loplat server로 접근하기 위한 ID와 PW입니다.  
@@ -173,8 +173,8 @@
 * 모드 설정은 다음과 같이 선언을 합니다.  (Recognizer, Tracker 둘 중 하나 선택)
 	
 	```java
-	Plengi.getInstance(MainActivity.this).setMonitoringType(PlengiResponse.MonitoringType.STAY);  //Recognizer mode
-	Plengi.getInstance(MainActivity.this).setMonitoringType(PlengiResponse.MonitoringType.TRACKING);  //Tracker mode
+	Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.STAY);  //Recognizer mode
+	Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.TRACKING);  //Tracker mode
 	```
 
 #### 5. WiFi 스캔 주기 설정
@@ -182,7 +182,7 @@
 * WiFi scan 주기는 다음과 같이 설정합니다.
 	* Recognizer mode 일 경우  move, stay에 대해 주기를 설정합니다. 
 	```java
-	Plengi.getInstance(MainActivity.this).setScanPeriod(3*60*1000, 6*60*1000);  // move: 3 mins, stay: 6 mins  
+	Plengi.getInstance(this).setScanPeriod(3*60*1000, 6*60*1000);  // move: 3 mins, stay: 6 mins  
 	```
 
 - move:  매장/장소를 인식하기 위한 기본 WFi scan 주기이며 default 값으로 3분이 설정되어 있습니다.  
@@ -193,7 +193,7 @@
 		- Tracker mode 일 경우 분 단위로 설정이 가능하며 default 값으로 2분이 설정되어 있습니다.  
 		- 1분이하의 분으로 주기 설정시 주기는 1분으로 설정이 됩니다. (최소 주기 값: 1분)
 	```java
-	Plengi.getInstance(MainActivity.this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
+	Plengi.getInstance(this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
 	```
 
 #### 6. Gravity 연동하기
@@ -203,8 +203,8 @@
 * **Gravity**를 통해 **푸쉬 메시지** (광고 및 알림 메시지)를 받기 위해서는 광고 알림 허용을 한 시점 아래와 같이 코드 작성이 필요 합니다.
 
 	```java
-	Plengi.getInstance(mContext).enableAdNetwork(true);            // 푸쉬 메시지 설정 on
-	Plengi.getInstance(mContext).setAdNotiIcon(R.drawable.ic_launcher);  // 푸쉬 메세지 icon
+	Plengi.getInstance(this).enableAdNetwork(true);            // 푸쉬 메시지 설정 on
+	Plengi.getInstance(this).setAdNotiIcon(R.drawable.ic_launcher);  // 푸쉬 메세지 icon
 	 ```
         
 #### 7. Start/Stop
@@ -214,8 +214,8 @@
 -  모니터링 시작과 정지는 다음과 같이 선언합니다.  
 	
 	```java	
-	Plengi.getInstance(MainActivity.this).start(); //Monitoring Start  
-	Plengi.getInstance(MainActivity.this).stop(); //Monitoring Stop
+	Plengi.getInstance(this).start(); //Monitoring Start  
+	Plengi.getInstance(this).stop(); //Monitoring Stop
 	```
 
  - 모니터링 상태 확인은 Plengi.getEngineStatus를 통해서 확인 할 수 있습니다.
@@ -307,7 +307,7 @@
 * 현재 장소 정보를 서버에서 받아오고자 하는 경우 다음과 같은 선언을 합니다.
 
 	```java
-	Plengi.getInstance(MainActivity.this).refreshPlace();
+	Plengi.getInstance(this).refreshPlace();
 	```
 * WiFi AP들을 수집하여 loplat 서버에게 현재 사용자의 위치 정보를 요청합니다.
 * loplat 서버는 최적의 위치정보를  PlengiEventListener로 전달합니다.  
