@@ -101,7 +101,7 @@
 
 ##### Gravity 사용을 위한 Google Play Services library 적용하기
 
-- Gravity를 사용하기 위해서 google play service library 적용을 위해서 build.gradle의 denpendency에 아래와 같이  선언 필요합니다.
+- Gravity를 사용하기 위해서 build.gradle의 dependency에 아래와 같이 google play service library 적용이 필요합니다.
 
 		compile 'com.google.android.gms:play-services-ads:11.8.0'
 
@@ -161,12 +161,12 @@
 	* test를 원하시는 분은 clientid: loplatdemo, clientsecret: loplatdemokey 사용하세요.  
 	* 정식 id와 secret을 원하는 분은 아래에 기입 된 메일 주소로 연락 바랍니다.  
 	* uniqueUserId: App에서 사용자를 식별하기 위한 ID입니다. (ex, 광고id,id,....,etc.)
-		* 이메일, 폰번호와 같이 개인정보와 관련된 정보는 전달하지 않도록 주의해주시기 바랍니다.
+		* 이메일, 폰번호와 같이 **개인정보와 관련된 정보**는 전달하지 않도록 주의해주시기 바랍니다.
 
 #### 4. Plengi 모드 설정  
 * 매장/장소 방문을 확인하기 위한 모니터링 모드를 선택합니다.    
 * 사용자의 매장/장소 방문을 확인하기 위하여 아래와 같은 2가지 모드를 제공하고 있습니다.  
-* **참고: 사용자 매장 방문 확인을 위해 기본으로 제공 되는 모드는 Recognizer 모드 입니다. Tracker 모드를 사용하기 위해서는 협의가 필요 하오니 아래에 기입된 메일로 연락 바랍니다.** 
+* **참고: 사용자 매장 방문 확인을 위해 기본으로 제공 되는 모드는 Recognizer 모드 입니다. Tracker 모드를 사용하기 위해서는 협의가 필요 하오니 메일(yeddie@loplat.com)로 연락 바랍니다.** 
 
 	> * Recognizer Mode: 일정시간동안(5분이상) 한 장소에 머무를 경우 사용자의 위치를 확인합니다.
 	> * Tracker Mode: 사용자의 위치를 일정주기마다 확인합니다.
@@ -198,8 +198,8 @@
 
 #### 6. Gravity 연동하기
 * Gravity 연동은 **SDK version 1.8.6**부터 연동이 가능합니다.
-* **Gravity는 (필수항목) 위치 궈한 허용, GPS on 상태에서 동작하오니 코드 작성시 유의하시기 바랍니다.**
-*  Gravity 사용을 위해서 구글 ADID가 필수 항목이오니 [Library 설정하기](https://github.com/loplat/loplat-sdk-android#library-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0) 참고 하여 라이브러리 설정  부탁드립니다.
+* **Gravity는 (필수항목) 위치 권한 허용, GPS on 상태에서 동작하오니 코드 작성시 유의하시기 바랍니다.**
+*  Gravity 사용을 위해서 구글 ADID가 필수 항목이오니 [Library 적용하기](https://github.com/loplat/loplat-sdk-android#library-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0) 참고 하여 라이브러리 설정  부탁드립니다.
 * **Gravity**를 통해 **푸쉬 메시지** (광고 및 알림 메시지)를 받기 위해서는 광고 알림 허용을 한 시점 아래와 같이 코드 작성이 필요 합니다.
 
 	```java
@@ -280,7 +280,7 @@
 	>		```
 	> * Complex 정보 결과: **Complex** (PlengiResponse.Complex Class, reponse.complex로 획득 가능)
 	> * type: PlengiResponse.ResponseType.Complex  
-	> * 인식된 장소가 복합몰 내인 경우 복합몰 정도도 함께 인식 결과에 포함되어 전달됩니다.
+	> * 인식된 장소가 복합몰 내인 경우 복합몰 정보도 함께 인식 결과에 포함되어 전달됩니다.
 	>	```java
 	>	public int id;         // Complex ID
 	>	public String name;    // 복합몰 이름
@@ -335,29 +335,29 @@
 
 ## History
 * 2018.01.22
-  - loplat SDK versio 1.8.6 release
+  - loplat SDK version 1.8.6 release
 	- Area, Complex 정보 추가
 	- 인식 성능 개선 및 버그 수정
 
 * 2018.01.17
-   - loplat SDK versio 1.8.5 release
+   - loplat SDK version 1.8.5 release
 	- Gravity 제공을 위한 기능 개선
 	- Advanced Tracker 추가
 
 * 2017.12.27
-   - loplat SDK versio 1.8.4 release
+   - loplat SDK version 1.8.4 release
 	- Gravity 연동
 	
 * 2017.11.23
-   - loplat SDK versio 1.8.3 release
+   - loplat SDK version 1.8.3 release
 	- 인식 성능 개선 및 버그 수정
 	
 * 2017.11.05
-   - loplat SDK versio 1.8.2 release 
+   - loplat SDK version 1.8.2 release 
 	- 인식 성능 개선 및 버그 수정
 	
 * 2017.08.07
-    - loplat SDK versio 1.8.1 release
+    - loplat SDK version 1.8.1 release
         - Nearby event, Enter Event 분리
 	- EnterType class deprecated
 
