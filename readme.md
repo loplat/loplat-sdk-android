@@ -109,9 +109,9 @@
 
 - loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통신을 위해 Retrofit 및 GSON library 사용합니다. Retrofit 및 GSON 라이브러리 적용을 위해서  Android Studio의 build.gradle에 다음과 같이 추가합니다.
 
- 		compile 'com.squareup.retrofit2:retrofit:2.3.0'
-   		compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-   		compile 'com.squareup.okhttp3:okhttp:3.8.1'
+		compile 'com.squareup.retrofit2:retrofit:2.3.0'
+		compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+		compile 'com.squareup.okhttp3:okhttp:3.8.1'
 
  - 참고: proguard를 사용할 시에는 아래와 같이 proguard 설정을 추가해야 합니다.
 
@@ -283,10 +283,10 @@
 	> * 인식된 장소가 복합몰 내인 경우 복합몰 정도도 함께 인식 결과에 포함되어 전달됩니다.
 	>	```java
 	>		public int id;         // Complex ID
-	> 		public String name;    // 복합몰 이름
+	>		public String name;    // 복합몰 이름
 	>		public String branch_name;     // 복합몰 지점명
 	>		public String category;     // 카테고리 
-	> 		public String category_code;     // 카테고리 코드
+	>		public String category_code;     // 카테고리 코드
 	>	```
 		
 			        
