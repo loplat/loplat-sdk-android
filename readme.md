@@ -207,19 +207,19 @@
 	    Plengi.getInstance(mContext).setAdNotiIcon(R.drawable.ic_launcher);  // 푸쉬 메세지 icon
 	 ```
         
-7. Start/Stop
-	- 사용자 장소/매장 방문 모니터링을 시작하거나 정지 할 수 있습니다.
-	- 설정된 주기마다 WiFi 신호를 스캔하여 사용자의 위치를 확인합니다.  
-	- 사용자의 위치 정보는 PlengiEventListener로 전달됩니다.
-	-  모니터링 시작과 정지는 다음과 같이 선언합니다.  
+#### 7. Start/Stop
+- 사용자 장소/매장 방문 모니터링을 시작하거나 정지 할 수 있습니다.
+- 설정된 주기마다 WiFi 신호를 스캔하여 사용자의 위치를 확인합니다.  
+- 사용자의 위치 정보는 PlengiEventListener로 전달됩니다.
+-  모니터링 시작과 정지는 다음과 같이 선언합니다.  
 	
 	```java	
 		Plengi.getInstance(MainActivity.this).start(); //Monitoring Start  
 		Plengi.getInstance(MainActivity.this).stop(); //Monitoring Stop
 	```
 
-    - 모니터링 상태 확인은 Plengi.getEngineStatus를 통해서 확인 할 수 있습니다.
-        - 예시코드
+ - 모니터링 상태 확인은 Plengi.getEngineStatus를 통해서 확인 할 수 있습니다.
+	 - 예시코드
 
 		```java
 			int engineStatus = Plengi.getInstance(this).getEngineStatus();
@@ -233,7 +233,7 @@
 			}
 		```
 	
-8. 장소 인식 결과
+#### 8. 장소 인식 결과
 
 * **참고**:
 	1. SDK 1.7.5 이하 버전은 장소id는 loplatid(서버에 학습된 장소 id), placeid 둘 다 전달되며,  1.7.6 이상 버전 부터 장소 id는 loplatid로 통합되어 전달 됩니다.**
