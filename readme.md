@@ -64,6 +64,7 @@
  
 #### Permission
 * SDK를 적용하면 하기 권한이 자동으로 추가됩니다.  
+	```xml
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />  
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -71,6 +72,7 @@
 	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    ```
 
 	* ACCESS_FINE_LOCATION: GPS를 이용하여 현재 위치의 위도와 경도 값을 획득할 수 있는 권한  
 	* ACCESS_COARSE_LOCATION: WiFi 혹은 Network를 이용하여 현재 위치의 위도와 경도 값을 획득할 수 있는 권한  
@@ -82,16 +84,16 @@
 #### Constraints
 
 * Android OS Marshmallow 버전 부터 WiFi Scan시 아래와 같은 위치 권한이 필요합니다.
-
-		<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-		<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-		
+	```xml
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	```
 * Plengi SDK 동작하기 위해서 OS 버전 및 위치 권한을 확인을 위한 작업이 필요합니다.
 	
 	> * Plengi SDK 기능을 사용 전 OS 버전 과 위치 권한 확인이 필요합니다.
 	> * Marshmallow 버전 부터 위치 권한은 Dangerous Permission으로 구분 되어 권한 획득을 위한 코드가 필요합니다.
 	> * sample코드에 구현된 checkWiFiScanConditionInMashmallow(Context context) 참고 바랍니다.
-	> * 좀 더 자세한 사항은 Google Developer를 참고 바랍니다. [Google Developer](http://developer.android.com/intl/ko/training/permissions/requesting.html)
+	> * 좀 더 자세한 사항은 Android Developer를 참고 바랍니다. [Android Developer](http://developer.android.com/intl/ko/training/permissions/requesting.html)
 
 * 사용자의 현재 위치를 확인 하기 위해서 위치 모드가 켜져 있어야 합니다.
 	
@@ -103,23 +105,28 @@
 
 - Gravity를 사용하기 위해서 build.gradle의 dependency에 아래와 같이 google play service library 적용이 필요합니다.
 
+	```gradle
 		compile 'com.google.android.gms:play-services-ads:11.8.0'
-
+	```
 ##### Retrofit 및 GSON library 적용하기
 
 - loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통신을 위해 Retrofit 및 GSON library 사용합니다. Retrofit 및 GSON 라이브러리 적용을 위해서  Android Studio의 build.gradle에 다음과 같이 추가합니다.
 
+	```gradle
 		compile 'com.squareup.retrofit2:retrofit:2.3.0'
 		compile 'com.squareup.retrofit2:converter-gson:2.3.0'
 		compile 'com.squareup.okhttp3:okhttp:3.8.1'
-
+	```
+	
 - 참고: proguard를 사용할 시에는 아래와 같이 proguard 설정을 추가해야 합니다.
 
+	```proguard
 		-dontwarn okio.**
 		-dontwarn javax.annotation.**
 		-keepclasseswithmembers class * {
 				@retrofit2.http.* <methods>;
 		}
+	```
 
 ### 2. SDK 기능
 
