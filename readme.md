@@ -347,7 +347,7 @@
 	```java
 	Plengi.getInstance(this).getCurrentPlaceInfo();  
 	```
-* 매장/장소 정보는 PlengiResponse.Place로 전달됩니다. ([위치 결과 확인하기 참조](https://github.com/loplat/loplat-sdk-android/wiki/API#response))
+* 매장/장소 정보는 PlengiResponse.Place로 전달됩니다. ([장소 인식 결과 참조](https://github.com/loplat/loplat-sdk-android/wiki/API#response))
 * **참고사항**: 현재 사용자 상태가 STAY일 경우에만 정확한 장소/매장 정보를 획득 할 수 있습니다. 
 * 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 장소 정보 가져오기](https://github.com/loplat/loplat-sdk-android/wiki/API#%ED%98%84%EC%9E%AC-%EC%9E%A5%EC%86%8C-%EC%A0%95%EB%B3%B4-%EA%B0%80%EC%A0%B8%EC%98%A4%EA%B8%B0)
 
