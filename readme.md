@@ -6,29 +6,36 @@
 
 #### 1. repository 추가 하기
 - In your top-level project build.gradle, add
-
-		maven { url "http://maven.loplat.com/artifactory/plengi"}
+	```gradle
+	maven { url "http://maven.loplat.com/artifactory/plengi"}
+	```
 
 	as repositories under allprojects -> repositoreies.
-	For example, 
-		
-		allprojects {
-			repositories {
-		        jcenter()
-		        mavenCentral()
-		        maven { url "http://maven.loplat.com/artifactory/plengi}
-		        google()
-			}
+	For example,
+
+	```gradle	
+	allprojects {
+		repositories {
+	        jcenter()
+			mavenCentral()
+			maven { url "http://maven.loplat.com/artifactory/plengi}
+	        google()
 		}
+	}
+	```
 
 #### 2. loplat SDK dependency 추가 하기
  - 앱 build.gradle (Gradle 3.0 이상)
-		
-		implementation 'com.loplat:placeengine:1.8.6'
+
+	```gradle	
+	implementation 'com.loplat:placeengine:1.8.6'
+	```
  
 - 앱 build.gradle (Gradle 3.0 미만)
 
-		compile 'com.loplat:placeengine:1.8.6'
+	```gradle
+	compile 'com.loplat:placeengine:1.8.6'
+	```
 
 - **참고**: 현재 최신 버전 1.8.6
 
