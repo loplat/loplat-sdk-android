@@ -201,15 +201,15 @@
 		- stay: 매장/장소가 인식 된 후 WiFi scan 주기이며 default 값으로 6분이 설정되어 있습니다.  
 			- 6분이하의 분으로 주기 설정시 default 값인 6분으로 설정이 됩니다.
 
-		```java
-		Plengi.getInstance(this).setScanPeriod(3*60*1000, 6*60*1000);  // move: 3 mins, stay: 6 mins  
-		```
+	```java
+	Plengi.getInstance(this).setScanPeriod(3*60*1000, 6*60*1000);  // move: 3 mins, stay: 6 mins  
+	```
 	- Tracker mode 일 경우 분 단위로 설정이 가능하며 default 값으로 2분이 설정되어 있습니다.  
 		- 1분이하의 분으로 주기 설정시 주기는 1분으로 설정이 됩니다. (최소 주기 값: 1분)
 
-		```java
-		Plengi.getInstance(this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
-		```
+	```java
+	Plengi.getInstance(this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
+	```
 
 #### 6. Gravity 연동하기
 * Gravity 연동은 **SDK version 1.8.6**부터 연동이 가능합니다.
@@ -234,7 +234,7 @@
 	```
 
  - 모니터링 상태 확인은 Plengi.getEngineStatus를 통해서 확인 할 수 있습니다.
-	 - 예시코드
+	- 예시코드
 		```java
 		int engineStatus = Plengi.getInstance(this).getEngineStatus();
 		if(engineStatus == PlaceEngine.EngineStatus.STARTED)
@@ -256,8 +256,8 @@
 
 * 현재 위치가 인식 된 경우
 
-	 * 위치 정보 결과: **Place** (PlengiResponse.Place Class, response.place로 획득 가능)
-	 * type: PlengiResponse.ResponseType.PLACE  
+	* 위치 정보 결과: **Place** (PlengiResponse.Place Class, response.place로 획득 가능)
+	* type: PlengiResponse.ResponseType.PLACE  
 		- accuracy > threshold: 현재 위치 내에 있는 경우  
 		- 그 외에 경우: 현재 위치 근처에 있는 경우 
 
@@ -299,24 +299,24 @@
 		public String post           // 우편번호
 	```
 	
-	 * 상권 정보 결과: **Area** (PlengiResponse.Area Class, response.area로 획득 가능)
-	 * type: PlengiResponse.ResponseType.Area  
+	* 상권 정보 결과: **Area** (PlengiResponse.Area Class, response.area로 획득 가능)
+	* type: PlengiResponse.ResponseType.Area  
 		- 장소 위치 요청한 장소가 상권 안일 경우 상권 정보가 인식 결과에 함께 같이 전달됩니다.
 		-  위도 및 경도는 아래의 조건으로 결과가 전달됩니다.
 			1. 장소 인식 결과값이 있다면 -> 인식된 장소 위도/ 경도
 			2.  장소 인식 결과값이 없으면 -> device의 위도/경도
 	 
-		```java
-		public int id;         // Area ID
-		public String name;    // 상권 이름
-		public String tag;     // 상권 위치 [도, 시 단위 ex) 서울, 경기도, 인천]
-		public double lat;     // 위도 
-		public double lng;     // 경도
-		```
+	```java
+	public int id;         // Area ID
+	public String name;    // 상권 이름
+	public String tag;     // 상권 위치 [도, 시 단위 ex) 서울, 경기도, 인천]
+	public double lat;     // 위도 
+	public double lng;     // 경도
+	```
 		
-	 * Complex 정보 결과: **Complex** (PlengiResponse.Complex Class, reponse.complex로 획득 가능)
-	 * type: PlengiResponse.ResponseType.Complex  
-	 * 인식된 장소가 복합몰 내인 경우 복합몰 정보도 함께 인식 결과에 포함되어 전달됩니다.
+	* Complex 정보 결과: **Complex** (PlengiResponse.Complex Class, reponse.complex로 획득 가능)
+	* type: PlengiResponse.ResponseType.Complex  
+	* 인식된 장소가 복합몰 내인 경우 복합몰 정보도 함께 인식 결과에 포함되어 전달됩니다.
 
 		```java
 		public int id;         // Complex ID
