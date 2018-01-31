@@ -202,13 +202,13 @@
 			- 6분이하의 분으로 주기 설정시 default 값인 6분으로 설정이 됩니다.
 
 	```java
-	Plengi.getInstance(this).setScanPeriod(3*60*1000, 6*60*1000);  // move: 3 mins, stay: 6 mins  
+	 Plengi.getInstance(this).setScanPeriod(3*60*1000, 6*60*1000);  // move: 3 mins, stay: 6 mins  
 	```
 	- Tracker mode 일 경우 분 단위로 설정이 가능하며 default 값으로 2분이 설정되어 있습니다.  
 		- 1분이하의 분으로 주기 설정시 주기는 1분으로 설정이 됩니다. (최소 주기 값: 1분)
 
 	```java
-	Plengi.getInstance(this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
+	 Plengi.getInstance(this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
 	```
 
 #### 6. Gravity 연동하기
@@ -263,22 +263,22 @@
 		- 그 외에 경우: 현재 위치 근처에 있는 경우 
 		 
 	```java
-	public long loplatid;        // 장소 id
-	public String name;          // 장소 이름
-	public String tags;          // 장소와 관련된 tag
-	public int floor;            // 층 정보
-	public String category;      // 장소 유형
-	public String category_code; // 장소 유형 코드
-	public double lat;           // 인식된 장소의 위도
-	public double lng;	         // 인식된 장소의 경도
-	public float accuracy;       // 정확도
-	public float threshold;      // 한계치
-	public double lat_est;       // 예측된 위치의 위도~~ v1.8.6에서 삭제
-	public double lng_est;       // 예측된 위치의 경도, v1.8.6에서 삭제 
-	public String client_code;   // 클라이언트 코드
-	public String address;       // 장소 (구)주소
-	public String address_road;  // 장소 신 주소
-	public String post           // 우편번호
+	 public long loplatid;        // 장소 id
+	 public String name;          // 장소 이름
+	 public String tags;          // 장소와 관련된 tag
+	 public int floor;            // 층 정보
+	 public String category;      // 장소 유형
+	 public String category_code; // 장소 유형 코드
+	 public double lat;           // 인식된 장소의 위도
+	 public double lng;	         // 인식된 장소의 경도
+	 public float accuracy;       // 정확도
+	 public float threshold;      // 한계치
+	 public double lat_est;       // 예측된 위치의 위도~~ v1.8.6에서 삭제
+	 public double lng_est;       // 예측된 위치의 경도, v1.8.6에서 삭제 
+	 public String client_code;   // 클라이언트 코드
+	 public String address;       // 장소 (구)주소
+	 public String address_road;  // 장소 신 주소
+	 public String post           // 우편번호
 	```
 	
 	 * 상권 정보 결과: **Area** (PlengiResponse.Area Class, response.area로 획득 가능)
@@ -289,22 +289,22 @@
 			2.  장소 인식 결과값이 없으면 -> device의 위도/경도
 	 
 		```java
-		public int id;         // Area ID
-		public String name;    // 상권 이름
-		public String tag;     // 상권 위치 [도, 시 단위 ex) 서울, 경기도, 인천]
-		public double lat;     // 위도 
-		public double lng;     // 경도
+		 public int id;         // Area ID
+		 public String name;    // 상권 이름
+		 public String tag;     // 상권 위치 [도, 시 단위 ex) 서울, 경기도, 인천]
+		 public double lat;     // 위도 
+		 public double lng;     // 경도
 		```
 		
 	 * Complex 정보 결과: **Complex** (PlengiResponse.Complex Class, reponse.complex로 획득 가능)
 	 * type: PlengiResponse.ResponseType.Complex  
 	 * 인식된 장소가 복합몰 내인 경우 복합몰 정보도 함께 인식 결과에 포함되어 전달됩니다.
 	```java
-	public int id;         // Complex ID
-	public String name;    // 복합몰 이름
-	public String branch_name;     // 복합몰 지점명
-	public String category;     // 카테고리 
-	public String category_code;     // 카테고리 코드
+	 public int id;         // Complex ID
+	 public String name;    // 복합몰 이름
+	 public String branch_name;     // 복합몰 지점명
+	 public String category;     // 카테고리 
+	 public String category_code;     // 카테고리 코드
 	```
 		
 			        
