@@ -330,7 +330,7 @@
 * WiFi AP들을 수집하여 loplat 서버에게 현재 사용자의 위치 정보를 요청합니다.
 * loplat 서버는 최적의 위치정보를  PlengiEventListener로 전달합니다.  
 
-* 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 위치 확인하기](https://github.com/loplat/loplat-sdk-android/wiki/1.-현재-위치-확인하기)
+* 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 위치 확인하기](https://github.com/loplat/loplat-sdk-android/wiki/API#%ED%98%84%EC%9E%AC%EC%9C%84%EC%B9%98-%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0)
 	
 #### 현재 사용자 상태 확인하기  (Stay or Move)
 -  현재 사용자가 이동(Move) 중인지 매장/장소에 머무르고(Stay) 있는지 확인할 수 있습니다.
@@ -339,7 +339,7 @@
 	 ```java
 	Plengi.getInstance(this).getCurrentPlaceStatus();
 	```
-- 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 사용자 상태 확인하기](https://github.com/loplat/loplat-sdk-android/wiki/2.-현재-사용자-상태-확인하기)
+- 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 사용자 상태 확인하기](hhttps://github.com/loplat/loplat-sdk-android/wiki/API#%ED%98%84%EC%9E%AC-%EC%82%AC%EC%9A%A9%EC%9E%90-%EC%83%81%ED%83%9C-%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0)
 
 #### 현재 장소 정보 가져오기
 * 현재 사용자가 머무르고 있는 장소/매장 정보를 확인 할 수 있습니다.
@@ -347,9 +347,9 @@
 	```java
 	Plengi.getInstance(this).getCurrentPlaceInfo();  
 	```
-* 매장/장소 정보는 PlengiResponse.Place로 전달됩니다. ([현재 위치 확인하기 참조](https://github.com/loplat/loplat-sdk-android#4-현재-위치-확인하기))
+* 매장/장소 정보는 PlengiResponse.Place로 전달됩니다. ([위치 결과 확인하기 참조](https://github.com/loplat/loplat-sdk-android/wiki/API#response)
 * **참고사항**: 현재 사용자 상태가 STAY일 경우에만 정확한 장소/매장 정보를 획득 할 수 있습니다. 
-* 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 장소 정보 가져오기](https://github.com/loplat/loplat-sdk-android/wiki/3.-현재-장소-정보-가져오기)
+* 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 장소 정보 가져오기](https://github.com/loplat/loplat-sdk-android/wiki/API#%ED%98%84%EC%9E%AC-%EC%9E%A5%EC%86%8C-%EC%A0%95%EB%B3%B4-%EA%B0%80%EC%A0%B8%EC%98%A4%EA%B8%B0)
 
 ## History
 * 2018.01.22
