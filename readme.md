@@ -106,26 +106,26 @@
 - Gravity를 사용하기 위해서 build.gradle의 dependency에 아래와 같이 google play service library 적용이 필요합니다.
 
 	```gradle
-		compile 'com.google.android.gms:play-services-ads:11.8.0'
+	compile 'com.google.android.gms:play-services-ads:11.8.0'
 	```
 ##### Retrofit 및 GSON library 적용하기
 
 - loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통신을 위해 Retrofit 및 GSON library 사용합니다. Retrofit 및 GSON 라이브러리 적용을 위해서  Android Studio의 build.gradle에 다음과 같이 추가합니다.
 
 	```gradle
-		compile 'com.squareup.retrofit2:retrofit:2.3.0'
-		compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-		compile 'com.squareup.okhttp3:okhttp:3.8.1'
+	compile 'com.squareup.retrofit2:retrofit:2.3.0'
+	compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+	compile 'com.squareup.okhttp3:okhttp:3.8.1'
 	```
 	
 - 참고: proguard를 사용할 시에는 아래와 같이 proguard 설정을 추가해야 합니다.
 
 	```proguard
-		-dontwarn okio.**
-		-dontwarn javax.annotation.**
-		-keepclasseswithmembers class * {
-				@retrofit2.http.* <methods>;
-		}
+	-dontwarn okio.**
+	-dontwarn javax.annotation.**
+	-keepclasseswithmembers class * {
+			@retrofit2.http.* <methods>;
+	}
 	```
 
 ### 2. SDK 기능
