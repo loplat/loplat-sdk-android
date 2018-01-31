@@ -260,6 +260,25 @@
 	 * type: PlengiResponse.ResponseType.PLACE  
 		- accuracy > threshold: 현재 위치 내에 있는 경우  
 		- 그 외에 경우: 현재 위치 근처에 있는 경우 
+
+		```java
+		public long loplatid;
+		public String name;
+		public String tags;
+		public int floor;
+		public String category;
+		public String category_code;
+		public double lat;
+		public double lng;
+		public float accuracy;
+		public float threshold;
+		public double lat_est;
+		public double lng_est;
+		public String address;
+		public String address_road;
+		public String post
+		```
+		
 		 
 		```java
 		public long loplatid;        // 장소 id
