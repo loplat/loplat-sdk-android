@@ -307,14 +307,14 @@
 		
 			        
 * 현재위치 획득 실패시
-	>* type: PlengiResponse.ResponseType.PLACE
-	>* result: PlengiResponse.Result.ERROR_CLOUD_ACCESS
-	>* errorReason : Location Acquisition Fail  
+	* type: PlengiResponse.ResponseType.PLACE
+	* result: PlengiResponse.Result.ERROR_CLOUD_ACCESS
+	* errorReason : Location Acquisition Fail  
 	
 * Client 인증 실패시
-	>* type: PlengiResponse.ResponseType.PLACE
-	>* result: PlengiResponse.Result.ERROR_CLOUD_ACCESS
-	>* errorReason : Not Allowed Client
+	* type: PlengiResponse.ResponseType.PLACE
+	* result: PlengiResponse.Result.ERROR_CLOUD_ACCESS
+	* errorReason : Not Allowed Client
 
 ### 4. API
 #### 현재 위치 확인하기
