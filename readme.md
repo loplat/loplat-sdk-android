@@ -98,7 +98,7 @@
 * Plengi SDK 동작하기 위해서 위치 권한, GPS 상태, WiFi scan 가능 여부 등을 확인을 위한 작업이 필요합니다.
 	
 	* 확인 방법 및 설정은 sample코드에 구현된 checkWiFiScanCondition() (in MainActivity.java) 참고 바랍니다.
-	* [참고] Marshmallow 부터 위치 권한 허용 & GPS on 상태에서만 WiFi scan 결과값 획득이 가능합니다.
+	* **[참고] Marshmallow 부터 위치 권한 허용 & GPS on 상태에서만 WiFi scan 결과값 획득이 가능합니다.**
 	* Marshmallow 버전 부터 위치 권한은 Dangerous Permission으로 구분 되어 권한 획득을 위한 코드가 필요합니다.
 	* 권한 설정과 관련하여 좀 더 자세한 사항은 Android Developer를 참고 바랍니다. [Android Developer](http://developer.android.com/intl/ko/training/permissions/requesting.html)
 
@@ -177,10 +177,9 @@
 #### 4. Plengi 모드 설정  
 * 매장/장소 방문을 확인하기 위한 모니터링 모드를 선택합니다.    
 * 사용자의 매장/장소 방문을 확인하기 위하여 아래와 같은 2가지 모드를 제공하고 있습니다.  
+	* Recognizer Mode: 일정시간동안(5분이상) 한 장소에 머무를 경우 사용자의 위치를 확인합니다.
+	* Tracker Mode: 사용자의 위치를 일정주기마다 확인합니다.
 * **참고: 사용자 매장 방문 확인을 위해 기본으로 제공 되는 모드는 Recognizer 모드 입니다. Tracker 모드를 사용하기 위해서는 협의가 필요 하오니 메일(yeddie@loplat.com)로 연락 바랍니다.** 
-
-	> * Recognizer Mode: 일정시간동안(5분이상) 한 장소에 머무를 경우 사용자의 위치를 확인합니다.
-	> * Tracker Mode: 사용자의 위치를 일정주기마다 확인합니다.
 * 모드 설정은 다음과 같이 선언을 합니다.  (Recognizer, Tracker 둘 중 하나 선택)
 	
 	```java
@@ -222,7 +221,7 @@
 #### 7. Start/Stop
 - 사용자 장소/매장 방문 모니터링을 시작하거나 정지 할 수 있습니다.
 - 설정된 주기마다 WiFi 신호를 스캔하여 사용자의 위치를 확인합니다.  
-- **주의**: 모니터링 시작 전에 위치권한, GPS 상태, WiFi scan 가능 여부 등을 확인하는 과정이 필요 합니다. 3가지 조건을 확인하는 방법은 샘플 코드내에 구현된 checkWiFiScanCondition api(in MainActivity.java) 참고 부탁드립니다.
+- **[주의] 모니터링 시작 전에 위치권한, GPS 상태, WiFi scan 가능 여부 등을 확인하는 과정이 필요 합니다. 3가지 조건을 확인하는 방법은 샘플 코드내에 구현된 checkWiFiScanCondition api(in MainActivity.java) 참고 부탁드립니다.**
 - 사용자의 위치 정보는 PlengiEventListener로 전달됩니다.
 -  모니터링 시작과 정지는 다음과 같이 선언합니다.  
 	
