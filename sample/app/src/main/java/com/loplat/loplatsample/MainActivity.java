@@ -202,6 +202,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         }
         else if(status == PlengiResponse.Result.FAIL_WIFI_SCAN_UNAVAILABLE) {
             // wifi scan is not available
+            checkWiFiScanCondition();
         }
     }
 
