@@ -95,16 +95,12 @@
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	```
-* Plengi SDK 동작하기 위해서 OS 버전 및 위치 권한을 확인을 위한 작업이 필요합니다.
+* Plengi SDK 동작하기 위해서 위치 권한, GPS 상태, WiFi scan 가능 여부 등을 확인을 위한 작업이 필요합니다.
 	
-	> * Plengi SDK 기능을 사용 전 OS 버전 과 위치 권한 확인이 필요합니다.
+	> * 확인 방법 및 서정은 sample코드에 구현된 checkWiFiScanCondition() (in MainActivity.java) 참고 바랍니다.
+	> * [참고] Marshmallow 부터 위치 권한 허용 & GPS on 상태에서만 WiFi scan 결과값 획득이 가능합니다.
 	> * Marshmallow 버전 부터 위치 권한은 Dangerous Permission으로 구분 되어 권한 획득을 위한 코드가 필요합니다.
-	> * sample코드에 구현된 checkWiFiScanConditionInMashmallow(Context context) 참고 바랍니다.
-	> * 좀 더 자세한 사항은 Android Developer를 참고 바랍니다. [Android Developer](http://developer.android.com/intl/ko/training/permissions/requesting.html)
-
-* 사용자의 현재 위치를 확인 하기 위해서 위치 모드가 켜져 있어야 합니다.
-	
-	>  * sample코드에 구현된 checkWiFiScanConditionInMashmallow(Context context) 참고 바랍니다.
+	> * 권한 설정과 관련하여 좀 더 자세한 사항은 Android Developer를 참고 바랍니다. [Android Developer](http://developer.android.com/intl/ko/training/permissions/requesting.html)
 
 #### Library 적용하기
 
@@ -226,6 +222,7 @@
 #### 7. Start/Stop
 - 사용자 장소/매장 방문 모니터링을 시작하거나 정지 할 수 있습니다.
 - 설정된 주기마다 WiFi 신호를 스캔하여 사용자의 위치를 확인합니다.  
+- **주의**: 모니터링 시작 전에 위치권한, GPS 상태, WiFi scan 가능 여부 등을 확인하는 과정이 필요 합니다. 3가지 조건을 확인하는 방법은 샘플 코드내에 구현된 checkWiFiScanCondition api(in MainActivity.java) 참고 부탁드립니다.
 - 사용자의 위치 정보는 PlengiEventListener로 전달됩니다.
 -  모니터링 시작과 정지는 다음과 같이 선언합니다.  
 	
