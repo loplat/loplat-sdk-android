@@ -30,6 +30,12 @@ public class LoplatSampleApplication extends MultiDexApplication {
 
         // set up loplat engine
         mPlengi = Plengi.getInstance(this);
+        // do init
+        String clientId = "loplatdemo";
+        String clientSecret = "loplatdemokey";
+        /* Please be careful not to input any personal information such as email, phone number. */
+        String uniqueUserId = "loplat_12345";
+        mPlengi.getInstance(this).init(clientId, clientSecret, uniqueUserId);
         mPlengi.setListener(new LoplatPlengiListener());
     }
 

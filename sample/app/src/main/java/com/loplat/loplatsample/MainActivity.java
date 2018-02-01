@@ -135,13 +135,6 @@ public class MainActivity extends Activity {
 
 
     public void onInitPlaceEngine(View view) {
-        // do init process only once before calling other functions
-        String clientId = "loplatdemo";
-        String clientSecret = "loplatdemokey";
-        /* Please be careful not to input any personal information such as email, phone number. */
-        String uniqueUserId = "loplat_12345";
-        Plengi.getInstance(this).init(clientId, clientSecret, uniqueUserId);
-
         //if you want to use Recognizer mode
         Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.STAY);
         // set scan period (optional)
