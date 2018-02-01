@@ -97,7 +97,7 @@
 	```
 * Plengi SDK 동작하기 위해서 위치 권한, GPS 상태, WiFi scan 가능 여부 등을 확인을 위한 작업이 필요합니다.
 	
-	> * 확인 방법 및 서정은 sample코드에 구현된 checkWiFiScanCondition() (in MainActivity.java) 참고 바랍니다.
+	> * 확인 방법 및 설정은 sample코드에 구현된 checkWiFiScanCondition() (in MainActivity.java) 참고 바랍니다.
 	> * [참고] Marshmallow 부터 위치 권한 허용 & GPS on 상태에서만 WiFi scan 결과값 획득이 가능합니다.
 	> * Marshmallow 버전 부터 위치 권한은 Dangerous Permission으로 구분 되어 권한 획득을 위한 코드가 필요합니다.
 	> * 권한 설정과 관련하여 좀 더 자세한 사항은 Android Developer를 참고 바랍니다. [Android Developer](http://developer.android.com/intl/ko/training/permissions/requesting.html)
