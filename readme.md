@@ -164,7 +164,7 @@
 - Application class 상속 받아 Plengi class 생성합니다. (LoplatSampleApplication.java 참고 바람)
 	- Plengi instance를 생성한 후, 1번에서 생성한 Listener를 등록합니다.
 	
-#### 3. Plengi init (1회만 수행하면 됨, MainActivity.java 참고 바람)
+#### 3. Plengi init (LoplatSampleApplication.java 참고 바람)
 - 사용자의 매장/장소 방문을 모니터링하기 위해 Plengi Engine을 초기화합니다.
 - Plengi init은 다음과 같이 선언을 합니다. 
 
