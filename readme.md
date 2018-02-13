@@ -162,7 +162,7 @@
 	
 #### 3. Plengi init (LoplatSampleApplication.java 참고 바람)
 - 사용자의 매장/장소 방문을 모니터링하기 위해 Plengi Engine을 초기화합니다.
-- Plengi init은 다음과 같이 선언을 합니다. 
+- **생성한 Application class(2번 항목 참조)에서 Plengi init을 다음과 같이 선언을 합니다.** 
 
 	```java
 	Plengi.getInstance(this).init(clientId,clientSecret,uniqueuserId);  
