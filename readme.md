@@ -105,6 +105,7 @@
 #### Gradle 설정 및 Library 적용
 
 ##### Android Oreo에서의 동작을 위한 gradle 설정 및 library 적용
+- ** SDK 1.8.8 이상 version 적용할 경우 해당 **
 - compileSdkVersion 설정 
 
 	```gradle
