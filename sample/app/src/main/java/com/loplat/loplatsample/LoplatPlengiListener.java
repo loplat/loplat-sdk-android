@@ -110,6 +110,7 @@ public class LoplatPlengiListener implements PlengiListener {
 
     private void sendLoplatResponseToApplication(String type, String response) {
         Intent i = new Intent();
+        i.setPackage(LoplatSampleApplication.getContext().getPackageName());
         i.setAction("com.loplat.mode.response");
         i.putExtra("type", type);
         i.putExtra("response", response);

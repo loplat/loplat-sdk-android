@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,6 +66,11 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         mLoplatBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                String packageName = intent.getPackage();
+                if (!packageName.equals(context.getPackageName())) {
+                    return;
+                }
+
                 String action = intent.getAction();
                 if(action.equals("com.loplat.mode.response")) {
                     try {
@@ -102,14 +108,17 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         };
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.loplat.mode.response");
-        registerReceiver(mLoplatBroadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mLoplatBroadcastReceiver, intentFilter);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        unregisterReceiver(mLoplatBroadcastReceiver);
+        if (mLoplatBroadcastReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mLoplatBroadcastReceiver);
+            mLoplatBroadcastReceiver = null;
+        }
     }
 
     @Override
