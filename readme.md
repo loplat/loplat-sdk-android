@@ -102,7 +102,21 @@
 	* Marshmallow 버전 부터 위치 권한은 Dangerous Permission으로 구분 되어 권한 획득을 위한 코드가 필요합니다.
 	* 권한 설정과 관련하여 좀 더 자세한 사항은 Android Developer를 참고 바랍니다. [Android Developer](http://developer.android.com/intl/ko/training/permissions/requesting.html)
 
-#### Library 적용하기
+#### Gradle 설정 및 Library 적용
+
+##### Android Oreo내에서 동작을 위한 gradle 설정 및 library 적용
+- compileSdkVersion 설정 
+	```gradle
+	android {
+		compileSdkVersion 26
+		...
+	}
+- android support library 적용
+	- 아래의 예시 처럼 appcompat v7 라이브러리 version 26이상으로 적용
+	- **주의**: appcompat v7의 version이 26이상이 아닌 경우에는 SDK 동작 중 error가 발생하여 **앱 동작이 중지 될 수 있으니**, 기존의 적용된 라이브러리 버전을 확인 후 업그레이드 하시길 바랍니다.
+		```gradle
+		compile 'com.android.support:appcompat-v7:26.1.0'
+		```
 
 ##### Gravity 사용을 위한 Google Play Services library 적용하기
 
