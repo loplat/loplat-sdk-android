@@ -111,6 +111,7 @@
 		compileSdkVersion 26
 		...
 	}
+	```
 - android support library 적용
 	- 아래의 예시 처럼 appcompat v7 라이브러리 version 26이상으로 적용
 	- **주의**: appcompat v7의 version이 26이상이 아닌 경우에는 SDK 동작 중 error가 발생하여 **앱 동작이 중지 될 수 있으니**, 기존의 적용된 라이브러리 버전을 확인 후 업그레이드 하시길 바랍니다.
