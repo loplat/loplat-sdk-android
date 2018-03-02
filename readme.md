@@ -104,7 +104,7 @@
 
 #### Gradle 설정 및 Library 적용
 
-##### Android Oreo내에서 동작을 위한 gradle 설정 및 library 적용
+##### Android Oreo에서의 동작을 위한 gradle 설정 및 library 적용
 - compileSdkVersion 설정 
 	```gradle
 	android {
