@@ -34,10 +34,10 @@
 - 앱 build.gradle (Gradle 3.0 미만)
 
 	```gradle
-	compile 'com.loplat:placeengine:1.8.6'
+	compile 'com.loplat:placeengine:1.8.8'
 	```
 
-- **참고**: 현재 최신 버전 1.8.6
+- **참고**: 현재 최신 버전 1.8.8
 
 ## Contents
 1. SDK Specification
