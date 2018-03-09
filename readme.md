@@ -40,14 +40,15 @@
 - **참고**: 현재 최신 버전 1.8.6
 
 ## Contents
-1. SDK Setup
+1. SDK Specification
+2. SDK Setup
 	- 계정 만들기 
 	- Permission 등록
 	- Receiver & Service 등록
 	- Library 적용하기
 	- Constraints 
-2. SDK 기능
-3. SDK 초기화 및 시작하기
+3. SDK 기능
+4. SDK 초기화 및 시작하기
 	- PlengiListener 생성
 	- Plengi Instance 생성 및 EventListener 등록
 	-  Plengi Init
@@ -56,12 +57,21 @@
 	- Gravity 연동하기
 	- Start/Stop
 	- 장소 인식 결과
-4. API
+5. API
 	- 현재 위치 확인하기
 	- 현재 사용자 상태(Move/Stay) 확인하기 
 	- 현재 장소 정보 가져오기
 
-### 1. SDK Setup
+### 1. SDK Specification
+
+##### SDK 지원 버전
+``` gradle
+	minSdkversion 14
+	targetSdkversion 26
+```
+
+
+### 2. SDK Setup
 
 #### 계정 만들기  
 * Plengi SDK를 사용하기 위해서는 clientid와 clientsecret 필요합니다.  
@@ -148,7 +158,7 @@
 	}
 	```
 
-### 2. SDK 기능
+### 3. SDK 기능
 
 #### Recognize a place
 * Plengi.getInstance(Context Context).refreshPlace() : 주변 WiFi AP들을 탐색하여, 서버에게 현재 위치 정보를 요청
@@ -166,7 +176,7 @@
 * Plengi.getInstance(Context context).getCurrentPlaceInfo()를 통해 사용자가 방문 중인 장소 정보 불러오기
 
 
-### 3. SDK 초기화 및 시작하기
+### 4. SDK 초기화 및 시작하기
 
 #### 1. PlengiListener 생성
 * PlengiListener를 상속받은 listener class를 생성합니다.
@@ -193,16 +203,20 @@
 
 #### 4. Plengi 모드 설정  
 * 매장/장소 방문을 확인하기 위한 모니터링 모드를 선택합니다.    
-* 사용자의 매장/장소 방문을 확인하기 위하여 아래와 같은 2가지 모드를 제공하고 있습니다.  
+* 사용자의 매장/장소 방문을 확인하기 위하여 아래와 같은 3가지 모드를 제공하고 있습니다.  
 	* Recognizer Mode: 일정시간동안(5분이상) 한 장소에 머무를 경우 사용자의 위치를 확인합니다.
 	* Tracker Mode: 사용자의 위치를 일정주기마다 확인합니다.
-* **참고: 사용자 매장 방문 확인을 위해 기본으로 제공 되는 모드는 Recognizer 모드 입니다. Tracker 모드를 사용하기 위해서는 협의가 필요 하오니 메일(yeddie@loplat.com)로 연락 바랍니다.** 
-* 모드 설정은 다음과 같이 선언을 합니다.  (Recognizer, Tracker 둘 중 하나 선택)
+	* Advanced Tracker Mode: Android에서 제공하는 awareness api를 이용하여 효율적으로 사용자의 위치를 화긴합니다.
+* 모드 설정은 다음과 같이 선언을 합니다.  (Recognizer, Tracker,  Advanced Tracker중 하나 선택)
 	
 	```java
 	Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.STAY);  //Recognizer mode
 	Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.TRACKING);  //Tracker mode
+	Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.ADV_TRACKING);  //Tracker mode
 	```
+* Advanced Tracker를 사용하기 위해서는 Android API Key 등록 및 설정이 필요합니다. 
+	* Awareness API 설명 및 API Key 등록과 관련 사항은 [Awareness API 설정](https://github.com/loplat/loplat-sdk-android/wiki/Advanced-Tracker-%EC%84%A4%EC%A0%95#advanced-tracker-setting) 페이지 참고부탁드립니다.
+* **참고: 사용자 매장 방문 확인을 위해 기본으로 제공 되는 모드는 Recognizer 모드 입니다. Tracker/Advanced Tracker 모드를 사용하기 위해서는 협의가 필요 하오니 메일(yeddie@loplat.com)로 연락 바랍니다.** 
 
 #### 5. WiFi 스캔 주기 설정
 * 사용자의 매장/장소 방문 확인을 위한 WiFi Scan 주기를 설정합니다.
@@ -210,8 +224,8 @@
 	* Recognizer mode 일 경우  move, stay에 대해 주기를 설정합니다. 
 		- move:  매장/장소를 인식하기 위한 기본 WFi scan 주기이며 default 값으로 3분이 설정되어 있습니다.  
 			- 3분이하의 분으로 주기 설정시 default 값인 3분으로 설정이 됩니다.
-		- stay: 매장/장소가 인식 된 후 WiFi scan 주기이며 default 값으로 6분이 설정되어 있습니다.  
-			- 6분이하의 분으로 주기 설정시 default 값인 6분으로 설정이 됩니다.
+		- stay: 매장/장소가 인식 된 후 WiFi scan 주기이며 default 값으로 2분이 설정되어 있습니다.  
+			- 4분이하의 분으로 주기 설정시 default 값인 4분으로 설정이 됩니다.
 
 	```java
 	Plengi.getInstance(this).setScanPeriod(3*60*1000, 6*60*1000);  // move: 3 mins, stay: 6 mins  
@@ -222,6 +236,14 @@
 
 	```java
 	Plengi.getInstance(this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
+	```
+	* Advanced Tracker mode 일 경우 move, stay에 대해 주기를 설정합니다. 
+		- move:  매장/장소를 인식하기 위한 기본 WFi scan 주기이며 default 값으로 1분 30초 설정되어 있습니다.  
+			- 1분 30초이하 주기 설정시 default 값이 1분 30초으로 설정이 됩니다.
+		- stay: 매장/장소가 인식 된 후 WiFi scan 주기이며 default 값으로 2분 30초 설정되어 있습니다.  
+			- 2분 30초이하 주기 설정시 default 값이 4분으로 설정이 됩니다.
+	```java
+	Plengi.getInstance(this).setScanPeriodAdvTracking(90*1000, 150*1000 ); // move: 1 min 30 sec, stay: 2 mins 30 sec 
 	```
 
 #### 6. Gravity 연동하기
@@ -333,7 +355,7 @@
 	* result: PlengiResponse.Result.ERROR_CLOUD_ACCESS
 	* errorReason : Not Allowed Client
 
-### 4. API
+### 5. API
 #### 현재 위치 확인하기
 
 * 현재 사용자가 위치한 장소/매장 정보를 loplat 서버를 통해 확인할 수 있습니다.  
