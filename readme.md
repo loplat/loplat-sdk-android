@@ -65,10 +65,8 @@
 ### 1. SDK Specification
 
 ##### SDK 지원 버전
-``` gradle
-minSdkversion 14
-targetSdkversion 26
-```
+* minSdkversion 14
+* targetSdkversion 26
 
 
 ### 2. SDK Setup
@@ -228,11 +226,11 @@ targetSdkversion 26
 
 	- 발급 받은 API Key를 아래의 샘플코드와 같이 YOUR_API_KEY란에 API key를 입력하여 AndroidManifest에 추가
 	```xml
-	<application> 
-	  ... 
-	  <meta-data  
-		  android:name="com.google.android.awareness.API_KEY"  
-		  android:value="YOUR_API_KEY"/>  
+	<application>
+		... 
+		<meta-data  
+		android:name="com.google.android.awareness.API_KEY"  
+		android:value="YOUR_API_KEY"/>  
 	</application>
 	```
 	* Awareness API 설명 및 API Key 등록과 관련 사항은 [Awareness API 설정](https://github.com/loplat/loplat-sdk-android/wiki/Advanced-Tracker-%EC%84%A4%EC%A0%95#advanced-tracker-setting) 페이지 참고부탁드립니다.
