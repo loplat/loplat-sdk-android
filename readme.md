@@ -242,6 +242,7 @@ targetSdkversion 26
 			- 1분 30초이하 주기 설정시 default 값이 1분 30초으로 설정이 됩니다.
 		- stay: 매장/장소가 인식 된 후 WiFi scan 주기이며 default 값으로 2분 30초 설정되어 있습니다.  
 			- 2분 30초이하 주기 설정시 default 값이 4분으로 설정이 됩니다.
+
 	```java
 	Plengi.getInstance(this).setScanPeriodAdvTracking(90*1000, 150*1000 ); // move: 1 min 30 sec, stay: 2 mins 30 sec 
 	```
