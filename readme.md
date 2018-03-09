@@ -206,15 +206,22 @@ targetSdkversion 26
 * 사용자의 매장/장소 방문을 확인하기 위하여 아래와 같은 3가지 모드를 제공하고 있습니다.  
 	* Recognizer Mode: 일정시간동안(5분이상) 한 장소에 머무를 경우 사용자의 위치를 확인합니다.
 	* Tracker Mode: 사용자의 위치를 일정주기마다 확인합니다.
-	* Advanced Tracker Mode: Android에서 제공하는 awareness api를 이용하여 효율적으로 사용자의 위치를 화긴합니다.
-* 모드 설정은 다음과 같이 선언을 합니다.  (Recognizer, Tracker,  Advanced Tracker중 하나 선택)
+	* Advanced Tracker Mode: Android에서 제공하는 awareness api를 이용하여 효율적으로 사용자의 위치를 확인합니다.
+		* Awareness API는 Google Play Service를 제공하는 API이며, 여러가지 센서를 통해 Applicaition이 사용자의 상황(ex. 걷고있음, 이어폰을 연결함 등)을 인지할 수 있도록 제공하는 API
+		* Awareness API는 Android System Framework을 이용하여  효율적으로 배터리 소모량을 관리함 
+		* **참고사항**: Android System Framework에서 App의 배터리 소모를 관리 하므로 App의 배터리 소모량이 확인되지 않음
+		* 하루 한도 사용량(Quota)
+			* Queries per day : 8,640,000
+			* Queries per 100 seconds per user : 1000
+		* **하루 한도 사용량이 초과하더라도 Adavanced Tracker 동작에는 지장이 없음 (사용량 초과시 Tracker 모드와 동일하게 동작)**
+	* 모드 설정은 다음과 같이 선언을 합니다.  (Recognizer, Tracker,  Advanced Tracker중 하나 선택)
 	
 	```java
 	Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.STAY);  //Recognizer mode
 	Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.TRACKING);  //Tracker mode
 	Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.ADV_TRACKING);  //Tracker mode
 	```
-* Advanced Tracker를 사용하기 위해서는 Android API Key 등록 및 설정이 필요합니다. 
+* Advanced Tracker를 사용하기 위해서는 별도의 설정의 필요합니다.
 	* Awareness API 설명 및 API Key 등록과 관련 사항은 [Awareness API 설정](https://github.com/loplat/loplat-sdk-android/wiki/Advanced-Tracker-%EC%84%A4%EC%A0%95#advanced-tracker-setting) 페이지 참고부탁드립니다.
 * **참고: 사용자 매장 방문 확인을 위해 기본으로 제공 되는 모드는 Recognizer 모드 입니다. Tracker/Advanced Tracker 모드를 사용하기 위해서는 협의가 필요 하오니 메일(yeddie@loplat.com)로 연락 바랍니다.** 
 
