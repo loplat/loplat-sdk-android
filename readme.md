@@ -66,8 +66,8 @@
 
 ##### SDK 지원 버전
 ``` gradle
-	minSdkversion 14
-	targetSdkversion 26
+minSdkversion 14
+targetSdkversion 26
 ```
 
 
