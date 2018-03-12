@@ -15,7 +15,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +37,7 @@ import com.loplat.placeengine.PlengiResponse;
 
 public class MainActivity extends Activity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    BroadcastReceiver mLoplatBroadcastReceiver;
+    BroadcastReceiver  mLoplatBroadcastReceiver;
     ProgressDialog mProgressDialog=null;
 
     private static final String PREFS_NAME = MainActivity.class.getSimpleName();
@@ -66,13 +65,15 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         mLoplatBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                System.out.println("wowowowo1");
                 String packageName = intent.getPackage();
                 if (!packageName.equals(context.getPackageName())) {
                     return;
                 }
+                System.out.println("wowowowo2");
 
                 String action = intent.getAction();
-                if(action.equals("com.loplat.mode.response")) {
+                if(action.equals("com.loplat.sample.response")) {
                     try {
                         if (mProgressDialog!=null&&mProgressDialog.isShowing()) {
                             mProgressDialog.dismiss();
@@ -92,8 +93,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
                     if(type.equals("error")) {
                         String response = intent.getStringExtra("response");
                         tv_result.setText(response);
-                    }
-                    else {
+                    } else {
                         if (type.equals("placeinfo")) {
                             String response = intent.getStringExtra("response");
                             tv_result.setText(response);
@@ -107,8 +107,8 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
             }
         };
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("com.loplat.mode.response");
-        LocalBroadcastManager.getInstance(this).registerReceiver(mLoplatBroadcastReceiver, intentFilter);
+        intentFilter.addAction("com.loplat.sample.response");
+        registerReceiver(mLoplatBroadcastReceiver, intentFilter);
     }
 
     @Override
@@ -116,7 +116,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         super.onDestroy();
 
         if (mLoplatBroadcastReceiver != null) {
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(mLoplatBroadcastReceiver);
+            unregisterReceiver(mLoplatBroadcastReceiver);
             mLoplatBroadcastReceiver = null;
         }
     }
