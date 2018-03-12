@@ -28,7 +28,7 @@
  - 앱 build.gradle (Gradle 3.0 이상)
 
 	```gradle	
-	implementation 'com.loplat:placeengine:1.8.6'
+	implementation 'com.loplat:placeengine:1.8.8'
 	```
  
 - 앱 build.gradle (Gradle 3.0 미만)
