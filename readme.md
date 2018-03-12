@@ -213,12 +213,12 @@
 			* Queries per day : 8,640,000
 			* Queries per 100 seconds per user : 1000
 		* **하루 한도 사용량이 초과하더라도 Adavanced Tracker 동작에는 지장이 없음 (사용량 초과시 Tracker 모드와 동일하게 동작)**
-	* 모드 설정은 다음과 같이 선언을 합니다.  (Recognizer, Tracker,  Advanced Tracker중 하나 선택)
-	
+	- 모드 설정은 다음과 같이 선언을 합니다.  (Recognizer, Tracker,  Advanced Tracker중 하나 선택)
+
 	```java
-	  Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.STAY);  //Recognizer mode
-	  Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.TRACKING);  //Tracker mode
-	  Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.ADV_TRACKING);  //Tracker mode
+	Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.STAY); // Recognizer mode
+	Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.TRACKING); // Tracker mode
+	Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.ADV_TRACKING); // Tracker mode
 	```
 
 * Advanced Tracker를 사용하기 위해서는 Android API Key 등록 및 설정이 필요 합니다.
