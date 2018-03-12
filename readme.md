@@ -192,6 +192,7 @@
 	```java
 	Plengi.getInstance(this).init(clientId,clientSecret,uniqueuserId);  
 	```
+	
 - init을 위해 clientid, clientsecret, uniqueUserId를 인자값으로 전달해주셔야합니다.  
 	* clientid & clientsecret: loplat server로 접근하기 위한 ID와 PW입니다.  
 	* test를 원하시는 분은 clientid: loplatdemo, clientsecret: loplatdemokey 사용하세요.  
@@ -215,10 +216,11 @@
 	* 모드 설정은 다음과 같이 선언을 합니다.  (Recognizer, Tracker,  Advanced Tracker중 하나 선택)
 	
 	```java
-	Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.STAY);  //Recognizer mode
-	Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.TRACKING);  //Tracker mode
-	Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.ADV_TRACKING);  //Tracker mode
+	  Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.STAY);  //Recognizer mode
+	  Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.TRACKING);  //Tracker mode
+	  Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.ADV_TRACKING);  //Tracker mode
 	```
+
 * Advanced Tracker를 사용하기 위해서는 Android API Key 등록 및 설정이 필요 합니다.
 	* [API Key 가져오기](https://developers.google.com/awareness/android-api/get-a-key#get_an_api_key_from_the_console_name) 페이지로  이동하여 아래의 그림 'GET A KEY' 버튼을 눌러 API KEY를 발급
 
@@ -227,13 +229,13 @@
 	- 발급 받은 API Key를 아래의 샘플코드와 같이 YOUR_API_KEY란에 API key를 입력하여 AndroidManifest에 추가
 
 	```xml
-	<application>
-		<!-- 중간 생략 -->
-		<meta-data
-			android:name="com.google.android.awareness.API_KEY"
-			android:value="YOUR_API_KEY" />
-		<!-- 이하 생략 -->
-	</application>
+	  <application>
+		  <!-- 중간 생략 -->
+		  <meta-data
+			  android:name="com.google.android.awareness.API_KEY"
+			  android:value="YOUR_API_KEY" />
+		  <!-- 이하 생략 -->
+	  </application>
 	```	
 
 	* Awareness API 설명 및 API Key 등록과 관련 사항은 [Awareness API 설정](https://github.com/loplat/loplat-sdk-android/wiki/Advanced-Tracker-%EC%84%A4%EC%A0%95#advanced-tracker-setting) 페이지 참고부탁드립니다.
@@ -249,14 +251,14 @@
 			- 4분이하의 분으로 주기 설정시 default 값인 4분으로 설정이 됩니다.
 
 	```java
-	Plengi.getInstance(this).setScanPeriod(3*60*1000, 6*60*1000);  // move: 3 mins, stay: 6 mins  
+	  Plengi.getInstance(this).setScanPeriod(3*60*1000, 6*60*1000);  // move: 3 mins, stay: 6 mins  
 	```
 	
 	* Tracker mode 일 경우 분 단위로 설정이 가능하며 default 값으로 2분이 설정되어 있습니다.  
 		- 1분이하의 분으로 주기 설정시 주기는 1분으로 설정이 됩니다. (최소 주기 값: 1분)
 
 	```java
-	Plengi.getInstance(this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
+	  Plengi.getInstance(this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
 	```
 	* Advanced Tracker mode 일 경우 move, stay에 대해 주기를 설정합니다. 
 		- move:  매장/장소를 인식하기 위한 기본 WFi scan 주기이며 default 값으로 1분 30초 설정되어 있습니다.  
@@ -265,7 +267,7 @@
 			- 2분 30초이하 주기 설정시 default 값이 4분으로 설정이 됩니다.
 
 	```java
-	Plengi.getInstance(this).setScanPeriodAdvTracking(90*1000, 150*1000 ); // move: 1 min 30 sec, stay: 2 mins 30 sec 
+	  Plengi.getInstance(this).setScanPeriodAdvTracking(90*1000, 150*1000 ); // move: 1 min 30 sec, stay: 2 mins 30 sec 
 	```
 
 #### 6. Gravity 연동하기
@@ -287,24 +289,21 @@
 -  모니터링 시작과 정지는 다음과 같이 선언합니다.  
 	
 	```java	
-	Plengi.getInstance(this).start(); //Monitoring Start  
-	Plengi.getInstance(this).stop(); //Monitoring Stop
+	  Plengi.getInstance(this).start(); //Monitoring Start  
+	  Plengi.getInstance(this).stop(); //Monitoring Stop
 	```
 
  - 모니터링 상태 확인은 Plengi.getEngineStatus를 통해서 확인 할 수 있습니다.
  	- 예시코드
-	
-		```java
-		int engineStatus = Plengi.getInstance(this).getEngineStatus();
-		if(engineStatus == PlaceEngine.EngineStatus.STARTED)
-		{
-		    //Monitoring On
-		}
-		else if(engineStatus == PlaceEngine.EngineStatus.STOPPED)
-		{
-			    //Monitoring Off			
-		}
-		```
+
+	```java
+	int engineStatus = Plengi.getInstance(this).getEngineStatus();
+	if (engineStatus == PlaceEngine.EngineStatus.STARTED) {
+		// Monitoring ON
+	} else if (engineStatus == PlaceEngine.EngineStatus.STOPPED) {
+		// Monitoring OFF
+	}
+	```
 		
 #### 8. 장소 인식 결과
 
@@ -321,22 +320,22 @@
 			- 그 외에 경우: 현재 위치 근처에 있는 경우 
 		
 		```java
-		public long loplatid;        // 장소 id
-		public String name;          // 장소 이름
-		public String tags;          // 장소와 관련된 tag
-		public int floor;            // 층 정보
-		public String category;      // 장소 유형
-		public String category_code; // 장소 유형 코드
-		public double lat;           // 인식된 장소의 위도
-		public double lng;	         // 인식된 장소의 경도
-		public float accuracy;       // 정확도
-		public float threshold;      // 한계치
-		public double lat_est;       // 예측된 위치의 위도~~ v1.8.6에서 삭제
-		public double lng_est;       // 예측된 위치의 경도, v1.8.6에서 삭제 
-		public String client_code;   // 클라이언트 코드
-		public String address;       // 장소 (구)주소
-		public String address_road;  // 장소 신 주소
-		public String post;           // 우편번호
+		  public long loplatid;        // 장소 id
+		  public String name;          // 장소 이름
+		  public String tags;          // 장소와 관련된 tag
+		  public int floor;            // 층 정보
+		  public String category;      // 장소 유형
+		  public String category_code; // 장소 유형 코드
+		  public double lat;           // 인식된 장소의 위도
+		  public double lng;	         // 인식된 장소의 경도
+		  public float accuracy;       // 정확도
+		  public float threshold;      // 한계치
+		  public double lat_est;       // 예측된 위치의 위도~~ v1.8.6에서 삭제
+		  public double lng_est;       // 예측된 위치의 경도, v1.8.6에서 삭제 
+		  public String client_code;   // 클라이언트 코드
+		  public String address;       // 장소 (구)주소
+		  public String address_road;  // 장소 신 주소
+		  public String post;           // 우편번호
 		```
 	
 	* 상권 정보 결과: **Area** (PlengiResponse.Area Class, response.area로 획득 가능)
@@ -347,11 +346,11 @@
 				2.  장소 인식 결과값이 없으면 -> device의 위도/경도
 	 
 		```java
-		public int id;         // Area ID
-		public String name;    // 상권 이름
-		public String tag;     // 상권 위치 [도, 시 단위 ex) 서울, 경기도, 인천]
-		public double lat;     // 위도 
-		public double lng;     // 경도
+		  public int id;         // Area ID
+		  public String name;    // 상권 이름
+		  public String tag;     // 상권 위치 [도, 시 단위 ex) 서울, 경기도, 인천]
+		  public double lat;     // 위도 
+		  public double lng;     // 경도
 		```
 		
 	* Complex 정보 결과: **Complex** (PlengiResponse.Complex Class, reponse.complex로 획득 가능)
@@ -359,11 +358,11 @@
 			* 인식된 장소가 복합몰 내인 경우 복합몰 정보도 함께 인식 결과에 포함되어 전달됩니다.
 
 		```java
-		public int id;         // Complex ID
-		public String name;    // 복합몰 이름
-		public String branch_name;     // 복합몰 지점명
-		public String category;     // 카테고리 
-		public String category_code;     // 카테고리 코드
+		  public int id;         // Complex ID
+		  public String name;    // 복합몰 이름
+		  public String branch_name;     // 복합몰 지점명
+		  public String category;     // 카테고리 
+		  public String category_code;     // 카테고리 코드
 		```
 		
 			        
