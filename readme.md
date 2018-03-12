@@ -257,12 +257,12 @@
 	
 	* Tracker mode 일 경우 분 단위로 설정이 가능하며 default 값으로 2분이 설정되어 있습니다.  
 		```java
-	  Plengi.getInstance(this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
+		Plengi.getInstance(this).setScanPeriodTracking(2*60*1000); // scanperiod: 2 mins 
 		```
 		- 1분이하의 분으로 주기 설정시 주기는 1분으로 설정이 됩니다. (최소 주기 값: 1분)
 	* Advanced Tracker mode 일 경우 move, stay에 대해 주기를 설정합니다. 
 		```java
-		  Plengi.getInstance(this).setScanPeriodAdvTracking(90*1000, 150*1000 ); // move: 1 min 30 sec, stay: 2 mins 30 sec 
+		Plengi.getInstance(this).setScanPeriodAdvTracking(90*1000, 150*1000 ); // move: 1 min 30 sec, stay: 2 mins 30 sec 
 		```
 		- move:  매장/장소를 인식하기 위한 기본 WFi scan 주기이며 default 값으로 1분 30초 설정되어 있습니다.  
 			- 1분 30초이하 주기 설정시 default 값이 1분 30초으로 설정이 됩니다.
@@ -338,11 +338,11 @@
 	
 	* 상권 정보 결과: **Area** (PlengiResponse.Area Class, response.area로 획득 가능)
 		```java
-		  public int id;         // Area ID
-		  public String name;    // 상권 이름
-		  public String tag;     // 상권 위치 [도, 시 단위 ex) 서울, 경기도, 인천]
-		  public double lat;     // 위도 
-		  public double lng;     // 경도
+		public int id;         // Area ID
+		public String name;    // 상권 이름
+		public String tag;     // 상권 위치 [도, 시 단위 ex) 서울, 경기도, 인천]
+		public double lat;     // 위도 
+		public double lng;     // 경도
 		```
 		* type: PlengiResponse.ResponseType.Area  
 			- 장소 위치 요청한 장소가 상권 안일 경우 상권 정보가 인식 결과에 함께 같이 전달됩니다.
@@ -352,11 +352,11 @@
 		
 	* Complex 정보 결과: **Complex** (PlengiResponse.Complex Class, reponse.complex로 획득 가능)
 		```java
-		  public int id;         // Complex ID
-		  public String name;    // 복합몰 이름
-		  public String branch_name;     // 복합몰 지점명
-		  public String category;     // 카테고리 
-		  public String category_code;     // 카테고리 코드
+		public int id;         // Complex ID
+		public String name;    // 복합몰 이름
+		public String branch_name;     // 복합몰 지점명
+		public String category;     // 카테고리 
+		public String category_code;     // 카테고리 코드
 		```
 		* type: PlengiResponse.ResponseType.Complex  
 			* 인식된 장소가 복합몰 내인 경우 복합몰 정보도 함께 인식 결과에 포함되어 전달됩니다.
