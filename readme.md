@@ -225,14 +225,17 @@
 	![get a key](https://storage.googleapis.com/loplat-storage/public/get_a_key.png)
 
 	- 발급 받은 API Key를 아래의 샘플코드와 같이 YOUR_API_KEY란에 API key를 입력하여 AndroidManifest에 추가
+
 	```xml
 	<application>
-		... 
-		<meta-data  
-		android:name="com.google.android.awareness.API_KEY"  
-		android:value="YOUR_API_KEY"/>  
+		<!-- 중간 생략 -->
+		<meta-data
+			android:name="com.google.android.awareness.API_KEY"
+			android:value="YOUR_API_KEY" />
+		<!-- 이하 생략 -->
 	</application>
-	```
+	```	
+
 	* Awareness API 설명 및 API Key 등록과 관련 사항은 [Awareness API 설정](https://github.com/loplat/loplat-sdk-android/wiki/Advanced-Tracker-%EC%84%A4%EC%A0%95#advanced-tracker-setting) 페이지 참고부탁드립니다.
 * **참고: 사용자 매장 방문 확인을 위해 기본으로 제공 되는 모드는 Recognizer 모드 입니다. Tracker/Advanced Tracker 모드를 사용하기 위해서는 협의가 필요 하오니 메일(yeddie@loplat.com)로 연락 바랍니다.** 
 
