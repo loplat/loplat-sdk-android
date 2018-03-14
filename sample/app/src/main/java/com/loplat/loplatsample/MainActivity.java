@@ -65,12 +65,10 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         mLoplatBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                System.out.println("wowowowo1");
                 String packageName = intent.getPackage();
                 if (!packageName.equals(context.getPackageName())) {
                     return;
                 }
-                System.out.println("wowowowo2");
 
                 String action = intent.getAction();
                 if(action.equals("com.loplat.sample.response")) {
