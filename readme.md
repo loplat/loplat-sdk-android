@@ -277,7 +277,8 @@
 
 	```java
 	Plengi.getInstance(this).enableAdNetwork(true);            // 푸쉬 메시지 설정 on
-	Plengi.getInstance(this).setAdNotiIcon(R.drawable.ic_launcher);  // 푸쉬 메세지 icon
+	Plengi.getInstance(this).setAdNotiSmallIcon([samll icon id]);  // 푸쉬 메세지 small icon
+	Plengi.getInstance(this).setAdNotiLargeIcon([large icon id]);  // 푸쉬 메세지 large icon
 	 ```
         
 #### 7. Start/Stop
