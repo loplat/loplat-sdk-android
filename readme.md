@@ -180,7 +180,7 @@
 #### 1. PlengiListener 생성
 * PlengiListener를 상속받은 listener class를 생성합니다.
 	- loplat서버로 부터 받은 모든 asynchronous Result는 모두 해당 리스너를 통해 전달됩니다.
-	- PLACE(Recognize a place), PLACE_EVENT(Enter/Leave/Nearby, Recognizer mode), PLACE_TRACKING(Tracker mode) 등의 Event에 따른 결과를 작성합니다. (LoplatPlengiListener.Java 참조 바람)
+	- PLACE(Recognize a place), PLACE_EVENT(Enter/Leave/Nearby, Recognizer mode), PLACE_TRACKING(Enter/Leave/Nearby, Tracker mode) 등의 Event에 따른 결과를 작성합니다. (LoplatPlengiListener.Java 참조 바람)
    
 #### 2. Plengi instance 생성 및 EventListener 등록
 - Application class 상속 받아 Plengi class 생성합니다. (LoplatSampleApplication.java 참고 바람)
