@@ -29,16 +29,16 @@
  - 앱 build.gradle (Gradle 3.0 이상)
 
 	```gradle	
-	implementation 'com.loplat:placeengine:1.8.8'
+	implementation 'com.loplat:placeengine:[version]'
 	```
  
 - 앱 build.gradle (Gradle 3.0 미만)
 
 	```gradle
-	compile 'com.loplat:placeengine:1.8.8'
+	compile 'com.loplat:placeengine:[version]'
 	```
 
-- **참고**: 현재 최신 버전 1.8.8
+- **참고**: 현재 최신 버전 1.8.9.4
 
 ## Contents
 1. SDK Specification
@@ -407,6 +407,38 @@
 * 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 장소 정보 가져오기](https://github.com/loplat/loplat-sdk-android/wiki/API#%ED%98%84%EC%9E%AC-%EC%9E%A5%EC%86%8C-%EC%A0%95%EB%B3%B4-%EA%B0%80%EC%A0%B8%EC%98%A4%EA%B8%B0)
 
 ## History
+* 2018.04.22
+	* loplat SDK version 1.8.9.4 release
+		* 광고 알림 시 모바일 기기 화면이 켜지도록 수정
+		* 광고 알림 시 sound profile대로 동작하도록 수정
+		* 광고 설정시 small, large icon 구분하여 입력 하도록 수정
+		* 일부 기능 개선
+
+* 20.18.04.18
+	* loplat SDK version 1.8.9.3 release
+		* 인식 성능 개선 및 버그 수정
+
+* 2018.04.10
+	* loplat SDK version 1.8.9.2 release
+		* 인식 성능 개선 및 버그 수정
+
+* 2018.04.06
+	* loplat SDK version 1.8.9.1 release
+		* 허용되지 않는 계정인 경우 SDK 동작이 정지하도록 조치
+
+* 2018.03.15
+	* loplat SDK version 1.8.9 release
+		* android 8.1(Oreo) 백그라운드 제약 사항 추가 대응
+		* 일부 기능 및 인식 성능 개선, 버그 수정
+
+* 2018.02.12
+	* loplat SDK version 1.8.8 release
+		* android 8.0(Oreo) 백그라운드 제약 사항 대응
+	
+* 2018.01.29
+	* loplat SDK version 1.8.7 release
+		* 인식 성능 개선 및 버그 수정
+
 * 2018.01.22
   - loplat SDK version 1.8.6 release
 	- Area, Complex 정보 추가
