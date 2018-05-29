@@ -38,8 +38,6 @@
 	compile 'com.loplat:placeengine:[version]'
 	```
 
-- **참고**: 현재 최신 버전 1.8.9.4
-
 ## Contents
 1. SDK Specification
 2. SDK Setup
