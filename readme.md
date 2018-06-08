@@ -210,7 +210,7 @@
 		* **참고사항**: Android System Framework에서 App의 배터리 소모를 관리 하므로 App의 배터리 소모량이 확인되지 않음
 		* 하루 한도 사용량(Quota)
 			* Queries per day : 8,640,000
-			* Queries per 100 seconds per user : 1000
+			* Max. QPS(Queries Per Second): 10
 		* **하루 한도 사용량이 초과하더라도 Adavanced Tracker 동작에는 지장이 없음 (사용량 초과시 Tracker 모드와 동일하게 동작)**
 	- 모드 설정은 다음과 같이 선언을 합니다.  (Recognizer, Tracker,  Advanced Tracker중 하나 선택)
 
