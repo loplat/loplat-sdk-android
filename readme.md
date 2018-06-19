@@ -175,11 +175,49 @@
 
 ### 4. SDK 초기화 및 시작하기
 
-#### 1. PlengiListener 생성
-* PlengiListener를 상속받은 listener class를 생성합니다.
+#### 1. PlengiListener 생성 
+* PlengiListener 인터페이스를 구현합니다.
 	- loplat서버로 부터 받은 모든 asynchronous Result는 모두 해당 리스너를 통해 전달됩니다.
 	- PLACE(Recognize a place), PLACE_EVENT(Enter/Leave/Nearby, Recognizer mode), PLACE_TRACKING(Enter/Leave/Nearby, Tracker mode) 등의 Event에 따른 결과를 작성합니다. (LoplatPlengiListener.Java 참조 바람)
-   
+```java
+	public class LoplatPlengiListener implements PlengiListener {
+		@Override
+		public void listen(PlengiResponse response) {
+			if(response.result == PlengiResponse.Result.SUCCESS) {
+				if(response.type == PlengiResponse.ResponseType.PLACE_EVENT 
+					|| response.type == PlengiResponse.ResponseType.PLACE_ADV_TRACKING 
+					|| response.type == PlengiResponse.ResponseType.PLACE_TRACKING) { //BACKGROUND
+					if (response.place != null) {
+						// response.place 값이 null이 아닌 경우만 response.placeEvent(ENTER/LEAVE/NEARBY) 값을 사용
+						int event = response.placeEvent;
+						if (event == PlengiResponse.PlaceEvent.ENTER) { 
+							// 사용자가 장소에 들어 왔을 때
+						} else if (event == PlengiResponse.PlaceEvent.LEAVE) {
+							// 사용자가 가장 최근에 머문 장소를 떠났을 때
+						} else if (event == PlengiResponse.PlaceEvent.NEARBY) {
+							// 사용자가 장소 주변(Nearby)을 방문 했을 때
+						} 
+					}
+					if (reponse.area != null) {
+						// 상권이 인식 되었을 때
+					}
+					if (response.complex != null) {
+						// 복합몰이 인식 되었을 때
+					}
+				} 
+			} else {
+				// 위치 획득 실패 및 에러
+				// response.errorReason 위치 획득 실패 혹은 에러 이유가 포함 되어 있음
+				// errorReason -> Location Acquisition Fail(위치 획득 실패), Network Fail(네트워크 연결 실패), Not Allowed Client(잘못된 client id, passwrod 입력), invalid scan results
+				if (response.result == PlengiResponse.Result.FAIL) {
+					// response.errorReason 확인
+				} else if (response.result == PlengiResponse.Result.ERROR_CLOUD_ACCESS) {
+					// response.errorReason 확인
+				}
+			}
+		}
+	}
+```
 #### 2. Plengi instance 생성 및 EventListener 등록
 - Application class 상속 받아 Plengi class 생성합니다. (LoplatSampleApplication.java 참고 바람)
 	- Plengi instance를 생성한 후, 1번에서 생성한 Listener를 등록합니다.
