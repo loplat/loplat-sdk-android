@@ -20,7 +20,7 @@ public class LoplatPlengiListener implements PlengiListener {
         Intent i = new Intent();
         i.setPackage(mContext.getPackageName());
         // handle cloud access error
-        if(response.result < PlengiResponse.Result.SUCCESS) {
+        if(response.result != PlengiResponse.Result.SUCCESS) {
             String errorReason = response.errorReason;
 
             sendLoplatResponseToApplication("error", errorReason);
