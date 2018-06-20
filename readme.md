@@ -47,16 +47,17 @@
 	- Library 적용하기
 	- Constraints 
 3. SDK 기능
-4. SDK 초기화 및 시작하기
+4. SDK 초기화
 	- PlengiListener 생성
 	- Plengi Instance 생성 및 EventListener 등록
 	-  Plengi Init
+5. SDK 구동하기
 	- Plengi 모드 설정
 	- WiFi 스캔 주기 설정
 	- Gravity 연동하기
 	- Start/Stop
 	- 장소 인식 결과
-5. API
+6. API
 	- 현재 위치 확인하기
 	- 현재 사용자 상태(Move/Stay) 확인하기 
 	- 현재 장소 정보 가져오기
@@ -173,12 +174,14 @@
 * Plengi.getInstance(Context context).getCurrentPlaceInfo()를 통해 사용자가 방문 중인 장소 정보 불러오기
 
 
-### 4. SDK 초기화 및 시작하기
+### 4. SDK 초기화
 
 #### 1. PlengiListener 생성 
 * PlengiListener 인터페이스를 구현합니다.
 	- loplat서버로 부터 받은 모든 asynchronous Result는 모두 해당 리스너를 통해 전달됩니다.
 	- PLACE(Recognize a place), PLACE_EVENT(Enter/Leave/Nearby, Recognizer mode), PLACE_TRACKING(Enter/Leave/Nearby, Tracker mode) 등의 Event에 따른 결과를 작성합니다. (LoplatPlengiListener.Java 참조 바람)
+
+- 예시코드
 
 ```java
 public class LoplatPlengiListener implements PlengiListener {
@@ -224,6 +227,7 @@ public class LoplatPlengiListener implements PlengiListener {
 	- Plengi instance를 생성한 후, 1번에서 생성한 Listener를 등록합니다.
 	
 #### 3. Plengi init (LoplatSampleApplication.java 참고 바람)
+- **주의: Android Oreo 버전부터 Application class에서 init을 선언하지 않으면 SDK가 동작하지 않습니다.** 
 - 사용자의 매장/장소 방문을 모니터링하기 위해 Plengi Engine을 초기화합니다.
 - **생성한 Application class(2번 항목 참조)에서 Plengi init을 다음과 같이 선언을 합니다.** 
 
@@ -233,12 +237,32 @@ public class LoplatPlengiListener implements PlengiListener {
 	
 - init을 위해 clientid, clientsecret, uniqueUserId를 인자값으로 전달해주셔야합니다.  
 	* clientid & clientsecret: loplat server로 접근하기 위한 ID와 PW입니다.  
-	* test를 원하시는 분은 clientid: loplatdemo, clientsecret: loplatdemokey 사용하세요.  
 	* 정식 id와 secret을 원하는 분은 아래에 기입 된 메일 주소로 연락 바랍니다.  
 	* uniqueUserId: App에서 사용자를 식별하기 위한 ID입니다. (ex, 광고id,id,....,etc.)
 		* 이메일, 폰번호와 같이 **개인정보와 관련된 정보**는 전달하지 않도록 주의해주시기 바랍니다.
 
-#### 4. Plengi 모드 설정  
+* 예시코드
+```java
+public class ModeApplication extends Application {
+	Plengi mPlengi = null;
+	private static ModeApplication instance;
+	public static Context getContext() {
+		return instance;
+	}  
+ 
+    @Override
+    public void onCreate() {
+	    super.onCreate();
+	    instance = this;
+	    mPlengi = Plengi.getInstance(this);
+	    mPlengi.setListener(new LoplatPlengiListener());
+		mPlengi.init("[CLIENT_ID]", "[CLIENT_SECRET]", "[UNIQUE_USER_ID]");
+  } 
+}
+```
+
+### 5. SDK 구동하기
+#### 1 . Plengi 모드 설정  
 * 매장/장소 방문을 확인하기 위한 모니터링 모드를 선택합니다.    
 * 사용자의 매장/장소 방문을 확인하기 위하여 아래와 같은 3가지 모드를 제공하고 있습니다.  
 	* Recognizer Mode: 일정시간동안(5분이상) 한 장소에 머무를 경우 사용자의 위치를 확인합니다.
@@ -279,7 +303,7 @@ public class LoplatPlengiListener implements PlengiListener {
 	* Awareness API 설명 및 API Key 등록과 관련 사항은 [Awareness API 설정](https://github.com/loplat/loplat-sdk-android/wiki/Advanced-Tracker-%EC%84%A4%EC%A0%95#advanced-tracker-setting) 페이지 참고부탁드립니다.
 * **참고: 사용자 매장 방문 확인을 위해 기본으로 제공 되는 모드는 Recognizer 모드 입니다. Tracker/Advanced Tracker 모드를 사용하기 위해서는 협의가 필요 하오니 메일(yeddie@loplat.com)로 연락 바랍니다.** 
 
-#### 5. WiFi 스캔 주기 설정
+#### 2. WiFi 스캔 주기 설정
 * 사용자의 매장/장소 방문 확인을 위한 WiFi Scan 주기를 설정합니다.
 * WiFi scan 주기는 다음과 같이 설정합니다.
 	```java
@@ -306,7 +330,7 @@ public class LoplatPlengiListener implements PlengiListener {
 		- stay: 매장/장소가 인식 된 후 WiFi scan 주기이며 default 값으로 2분 30초 설정되어 있습니다.  
 			- 2분 30초이하 주기 설정시 default 값이 4분으로 설정이 됩니다.
 
-#### 6. Gravity 연동하기
+#### 3. Gravity 연동하기
 * Gravity 연동은 **SDK version 1.8.6**부터 연동이 가능합니다.
 * **Gravity는 (필수항목) 위치 권한 허용, GPS on 상태에서 동작하오니 코드 작성시 유의하시기 바랍니다.**
 *  Gravity 사용을 위해서 구글 ADID가 필수 항목이오니 [Library 적용하기](https://github.com/loplat/loplat-sdk-android#library-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0) 참고 하여 라이브러리 설정  부탁드립니다.
@@ -318,7 +342,7 @@ public class LoplatPlengiListener implements PlengiListener {
 	Plengi.getInstance(this).setAdNotiLargeIcon([large icon id]);  // 푸쉬 메세지 large icon
 	 ```
         
-#### 7. Start/Stop
+#### 4. Start/Stop
 - 사용자 장소/매장 방문 모니터링을 시작하거나 정지 할 수 있습니다.
 - 설정된 주기마다 WiFi 신호를 스캔하여 사용자의 위치를 확인합니다.  
 - **[주의] 모니터링 시작 전에 위치권한, GPS 상태, WiFi scan 가능 여부 등을 확인하는 과정이 필요 합니다. 3가지 조건을 확인하는 방법은 샘플 코드내에 구현된 checkWiFiScanCondition api(in MainActivity.java) 참고 부탁드립니다.**
@@ -342,7 +366,7 @@ public class LoplatPlengiListener implements PlengiListener {
 		}
 		```
 		
-#### 8. 장소 인식 결과
+#### 5. 장소 인식 결과
 
 * **참고**:
 	1. SDK 1.7.5 이하 버전은 장소id는 loplatid(서버에 학습된 장소 id), placeid 둘 다 전달되며,  1.7.6 이상 버전 부터 장소 id는 loplatid로 통합되어 전달 됩니다.**
@@ -410,7 +434,7 @@ public class LoplatPlengiListener implements PlengiListener {
 	* result: PlengiResponse.Result.ERROR_CLOUD_ACCESS
 	* errorReason : Not Allowed Client
 
-### 5. API
+### 6. API
 #### 현재 위치 확인하기
 
 * 현재 사용자가 위치한 장소/매장 정보를 loplat 서버를 통해 확인할 수 있습니다.  
