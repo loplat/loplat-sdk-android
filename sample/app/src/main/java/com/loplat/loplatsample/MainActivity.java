@@ -162,7 +162,8 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         // gravity 설정하기
         if (getEnableAdNetwork(this)) {
             Plengi.getInstance(this).enableAdNetwork(true);
-            Plengi.getInstance(this).setAdNotiIcon(R.drawable.ic_launcher);
+            Plengi.getInstance(this).setAdNotiLargeIcon(R.drawable.ic_launcher);
+            Plengi.getInstance(this).setAdNotiSmallIcon(R.drawable.ic_launcher);
         }
 
     }
