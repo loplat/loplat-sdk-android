@@ -229,7 +229,7 @@ public class LoplatPlengiListener implements PlengiListener {
 #### 3. Plengi init (LoplatSampleApplication.java 참고 바람)
 
 ```loplat_caution
-Android Oreo 버전부터 Application class에서 init을 선언하지 않으면 SDK가 동작하지 않습니다.
+  Android Oreo 버전부터 Application class에서 init을 선언하지 않으면 SDK가 동작하지 않습니다.
 ```
 
 - 사용자의 매장/장소 방문을 모니터링하기 위해 Plengi Engine을 초기화합니다.
