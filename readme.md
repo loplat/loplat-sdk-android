@@ -227,7 +227,9 @@ public class LoplatPlengiListener implements PlengiListener {
 	- Plengi instance를 생성한 후, 1번에서 생성한 Listener를 등록합니다.
 	
 #### 3. Plengi init (LoplatSampleApplication.java 참고 바람)
-- **주의: Android Oreo 버전부터 Application class에서 init을 선언하지 않으면 SDK가 동작하지 않습니다.** 
+```loplat_caution
+Android Oreo 버전부터 Application class에서 init을 선언하지 않으면 SDK가 동작하지 않습니다.
+```
 - 사용자의 매장/장소 방문을 모니터링하기 위해 Plengi Engine을 초기화합니다.
 - **생성한 Application class(2번 항목 참조)에서 Plengi init을 다음과 같이 선언을 합니다.** 
 
@@ -257,7 +259,7 @@ public class ModeApplication extends Application {
 	    mPlengi = Plengi.getInstance(this);
 	    mPlengi.setListener(new LoplatPlengiListener());
 		mPlengi.init("[CLIENT_ID]", "[CLIENT_SECRET]", "[UNIQUE_USER_ID]");
-  } 
+	} 
 }
 ```
 
