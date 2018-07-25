@@ -130,18 +130,22 @@
 		```
 
 ##### Google Play Services library 적용하기
-
-- **(필수)효율적인 위치 정보 획득을 위해서** build.gradle의 dependency에 아래와 같이 google play service library 적용이 필요합니다. (**11.8.0 이상 버전**을 사용 해야 합니다.)
+- Google play services liabrary는 **11.8.0 이상 버전**을 사용 해야 합니다.
+- **(필수)효율적인 위치 정보 획득을 위해서** build.gradle의 dependency에 아래와 같이 google play service library 적용이 필요합니다. 
 	
 	```gradle
 	compile 'com.google.android.gms:play-services-location:11.8.0'
 	```
 
-
 - **Gravity를 사용하기 위해서** build.gradle의 dependency에 아래와 같이 google play service library 적용이 필요합니다.
 
 	```gradle
 	compile 'com.google.android.gms:play-services-ads:11.8.0'
+	```
+	
+- **참고)** 아래와 같이 통합 google play service library 사용하는 경우에는 위의 2가지 librarby 적용 하지 마십시오.
+	```gradle
+	compile 'com.google.android.gms:play-services:11.8.0'
 	```
 
 ##### Retrofit 및 GSON library 적용하기
