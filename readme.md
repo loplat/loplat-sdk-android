@@ -143,7 +143,7 @@
 	compile 'com.google.android.gms:play-services-ads:11.8.0'
 	```
 	
-- **참고)** 아래와 같이 통합 google play service library 사용하는 경우에는 위의 2가지 librarby 적용 하지 마십시오.
+- **참고)** 아래와 같이 통합 google play service library 사용하는 경우에는 위의 2가지 library 적용 하지 마십시오.
 	```gradle
 	compile 'com.google.android.gms:play-services:11.8.0'
 	```
