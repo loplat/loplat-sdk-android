@@ -129,13 +129,22 @@
 		compile 'com.android.support:appcompat-v7:26.1.0'
 		```
 
-##### Gravity 사용을 위한 Google Play Services library 적용하기
+##### Google Play Services library 적용하기
 
-- Gravity를 사용하기 위해서 build.gradle의 dependency에 아래와 같이 google play service library 적용이 필요합니다.
+- **(필수)효율적인 위치 정보 획득을 위해서** build.gradle의 dependency에 아래와 같이 google play service library 적용이 필요합니다.
+	- location library은 11.8.0 이상 버전을 사용 해야 합니다.
+
+	```gradle
+	compile 'com.google.android.gms:play-services-location:11.8.0'
+	```
+
+
+- **Gravity를 사용하기 위해서** build.gradle의 dependency에 아래와 같이 google play service library 적용이 필요합니다.
 
 	```gradle
 	compile 'com.google.android.gms:play-services-ads:11.8.0'
 	```
+
 ##### Retrofit 및 GSON library 적용하기
 
 - loplat SDK 1.7.10 이상 버전 부터 위치 확인 요청시 서버와의 통신을 위해 Retrofit 및 GSON library 사용합니다. Retrofit 및 GSON 라이브러리 적용을 위해서  Android Studio의 build.gradle에 다음과 같이 추가합니다.
