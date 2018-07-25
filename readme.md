@@ -131,9 +131,8 @@
 
 ##### Google Play Services library 적용하기
 
-- **(필수)효율적인 위치 정보 획득을 위해서** build.gradle의 dependency에 아래와 같이 google play service library 적용이 필요합니다.
-	- location library은 11.8.0 이상 버전을 사용 해야 합니다.
-
+- **(필수)효율적인 위치 정보 획득을 위해서** build.gradle의 dependency에 아래와 같이 google play service library 적용이 필요합니다. (**11.8.0 이상 버전**을 사용 해야 합니다.)
+	
 	```gradle
 	compile 'com.google.android.gms:play-services-location:11.8.0'
 	```
