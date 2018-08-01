@@ -58,7 +58,6 @@
 	- Start/Stop
 	- 장소 인식 결과
 6. API
-	- 현재 위치 확인하기
 	- 현재 사용자 상태(Move/Stay) 확인하기 
 	- 현재 장소 정보 가져오기
 
@@ -199,6 +198,7 @@
 public class LoplatPlengiListener implements PlengiListener {
 	@Override
 	public void listen(PlengiResponse response) {
+		String echoCode = response.echoCode; // init시 전달된 echo code
 		if(response.result == PlengiResponse.Result.SUCCESS) {
 			if(response.type == PlengiResponse.ResponseType.PLACE_EVENT 
 				|| response.type == PlengiResponse.ResponseType.PLACE_ADV_TRACKING 
@@ -249,15 +249,14 @@ public class LoplatPlengiListener implements PlengiListener {
 - **생성한 Application class(2번 항목 참조)에서 Plengi init을 다음과 같이 선언을 합니다.** 
 
 	```java
-	Plengi.getInstance(this).init(clientId,clientSecret,uniqueuserId);  
+	Plengi.getInstance(this).init(clientId,clientSecret,echo_code);  
 	```
 	
-- init을 위해 clientid, clientsecret, uniqueUserId를 인자값으로 전달해주셔야합니다.  
+- init을 위해 clientid, clientsecret, echo_code, useADID를 인자값으로 전달해주셔야합니다.  
 	* clientid & clientsecret: loplat server로 접근하기 위한 ID와 PW입니다.  
 	* 정식 id와 secret을 원하는 분은 아래에 기입 된 메일 주소로 연락 바랍니다.  
-	* uniqueUserId: App에서 사용자를 식별하기 위한 ID입니다. (ex, 광고id,id,....,etc.)
-		* 이메일, 폰번호와 같이 **개인정보와 관련된 정보**는 전달하지 않도록 주의해주시기 바랍니다.
-
+	* echo_code: App 사용자를 식별하기 위한 ID입니다. (ex, 광고id,id,....,etc.)
+		* 이메일, 폰번호와 같이 **개인정보와 관련된 정보**는 전달하지 마세요!
 * 예시코드
 ```java
 public class ModeApplication extends Application {
@@ -273,7 +272,7 @@ public class ModeApplication extends Application {
 	    instance = this;
 	    mPlengi = Plengi.getInstance(this);
 	    mPlengi.setListener(new LoplatPlengiListener());
-	    mPlengi.init("[CLIENT_ID]", "[CLIENT_SECRET]", "[UNIQUE_USER_ID]");
+		mPlengi.init("[CLIENT_ID]", "[CLIENT_SECRET]", "[ECHO_CODE]");
 	} 
 }
 ```
@@ -358,7 +357,10 @@ public class ModeApplication extends Application {
 	Plengi.getInstance(this).setAdNotiSmallIcon([samll icon id]);  // 푸쉬 메세지 small icon
 	Plengi.getInstance(this).setAdNotiLargeIcon([large icon id]);  // 푸쉬 메세지 large icon
 	 ```
-        
+ - Custom Notification을 사용을 원는 경우 아래의 예시 코드와 같이 설정하고, 광고 정보 값은 장소 인식 결과 내의 advertisement(response.advertisement)를 확인하면 됩니다.
+	```java
+	Plengi.getInstance(this).enableAdNetwork(enableAd, false);
+	```       
 #### 4. Start/Stop
 - 사용자 장소/매장 방문 모니터링을 시작하거나 정지 할 수 있습니다.
 - 설정된 주기마다 WiFi 신호를 스캔하여 사용자의 위치를 확인합니다.  
@@ -370,25 +372,15 @@ public class ModeApplication extends Application {
 	Plengi.getInstance(this).start(); //Monitoring Start  
 	Plengi.getInstance(this).stop(); //Monitoring Stop
 	```
-
- - 모니터링 상태 확인은 Plengi.getEngineStatus를 통해서 확인 할 수 있습니다.
- 	- 예시코드
-
-		```java
-		int engineStatus = Plengi.getInstance(this).getEngineStatus();
-		if (engineStatus == PlaceEngine.EngineStatus.STARTED) {
-			// Monitoring ON
-		} else if (engineStatus == PlaceEngine.EngineStatus.STOPPED) {
-			// Monitoring OFF
-		}
-		```
-		
 #### 5. 장소 인식 결과
 
 * **참고**:
 	1. SDK 1.7.5 이하 버전은 장소id는 loplatid(서버에 학습된 장소 id), placeid 둘 다 전달되며,  1.7.6 이상 버전 부터 장소 id는 loplatid로 통합되어 전달 됩니다.**
 	2. SDK 1.8.6부터 장소 인식시 인식된 장소 결과에 따라 area(상권정보), complex(복합몰) 정보가 추가로 전달됩니다. 상권만 인식 된 경우에는 place 정보가 null로 넘어가니 코드 작성시 주의 부탁드립니다.
 	3. SDK 1.8.6부터 lat_est, lng_est 항목은 삭제 되었습니다.
+
+* (**1.8.9.8 version 이상**) Echo Code ( response.echo_code )
+	*  init시 전달한 echo_code 값이 전달됩니다. (PlengiListener 예시를 참고 바랍니다)
 
 * 현재 위치가 인식 된 경우
 
@@ -452,19 +444,6 @@ public class ModeApplication extends Application {
 	* errorReason : Not Allowed Client
 
 ### 6. API
-#### 현재 위치 확인하기
-
-* 현재 사용자가 위치한 장소/매장 정보를 loplat 서버를 통해 확인할 수 있습니다.  
-* 현재 장소 정보를 서버에서 받아오고자 하는 경우 다음과 같은 선언을 합니다.
-
-	```java
-	Plengi.getInstance(this).refreshPlace();
-	```
-* WiFi AP들을 수집하여 loplat 서버에게 현재 사용자의 위치 정보를 요청합니다.
-* loplat 서버는 최적의 위치정보를  PlengiEventListener로 전달합니다.  
-
-* 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 위치 확인하기](https://github.com/loplat/loplat-sdk-android/wiki/API#%ED%98%84%EC%9E%AC%EC%9C%84%EC%B9%98-%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0)
-	
 #### 현재 사용자 상태 확인하기  (Stay or Move)
 -  현재 사용자가 이동(Move) 중인지 매장/장소에 머무르고(Stay) 있는지 확인할 수 있습니다.
 - 현재 사용자의 상태를 확인하기 위하여 다음과 같이 선언을 합니다. 
@@ -485,6 +464,22 @@ public class ModeApplication extends Application {
 * 자세한 사항은 API문서를 참조해주시기 바랍니다. [현재 장소 정보 가져오기](https://github.com/loplat/loplat-sdk-android/wiki/API#%ED%98%84%EC%9E%AC-%EC%9E%A5%EC%86%8C-%EC%A0%95%EB%B3%B4-%EA%B0%80%EC%A0%B8%EC%98%A4%EA%B8%B0)
 
 ## History
+* 2081.08.01
+	* loplat SDK version 1.8.9.8 release
+		* 일부 인식 성능 개선
+* 2018.07.13
+	* loplat SDK version 1.8.9.7 release
+		* Android OS 아이스크림 샌드위치(API 14) 미만 지원 중단 (동작 하지 않음)
+		* Custom Notification 지원
+		* 일부 인식 성능 개선
+* 2018.06.07
+	* loplat SDK version 1.8.9.6 release
+		* Notification big picture style일 때 large icon 무시 되는 현상 해결
+		* 일부 인식 성능 개선 
+* 2018.05.10
+	* loplat SDK version 1.8.9.5 release
+		* Network 연결 실패에 의한 결과 값을 PlengiResponse.Reuslt.FAIL로 처리 (기존 ERROR_CLOUD_ACCESS)
+		* 일부 성능 개선
 * 2018.04.22
 	* loplat SDK version 1.8.9.4 release
 		* 광고 알림 시 모바일 기기 화면이 켜지도록 수정
