@@ -359,7 +359,8 @@ public class ModeApplication extends Application {
  - Custom Notification을 사용을 원는 경우 아래의 예시 코드와 같이 설정하고, 광고 정보 값은 장소 인식 결과 내의 advertisement(response.advertisement)를 확인하면 됩니다.
 	```java
 	Plengi.getInstance(this).enableAdNetwork(enableAd, false);
-	```       
+	```      
+	
 #### 4. Start/Stop
 - 사용자 장소/매장 방문 모니터링을 시작하거나 정지 할 수 있습니다.
 - 설정된 주기마다 WiFi 신호를 스캔하여 사용자의 위치를 확인합니다.  
