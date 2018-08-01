@@ -193,7 +193,6 @@
 	- PLACE(Recognize a place), PLACE_EVENT(Enter/Leave/Nearby, Recognizer mode), PLACE_TRACKING(Enter/Leave/Nearby, Tracker mode) 등의 Event에 따른 결과를 작성합니다. (LoplatPlengiListener.Java 참조 바람)
 
 - 예시코드
-
 ```java
 public class LoplatPlengiListener implements PlengiListener {
 	@Override
