@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +42,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     ProgressDialog mProgressDialog=null;
 
     private static final String PREFS_NAME = MainActivity.class.getSimpleName();
+    private static final String TAG = PREFS_NAME;
 
     private static final int UPDATE_INTERVAL_MS = 1000;  // 1초
     private static final int FASTEST_UPDATE_INTERVAL_MS = 500; // 0.5초
@@ -217,25 +219,25 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
 
     public void onStartPlaceMonitoring(View view) {
         // request location to loplat engine
-        int status = Plengi.getInstance(this).isEngineWorkable();
+        int result = Plengi.getInstance(this).start();
 
-
-        if(status == PlengiResponse.Result.SUCCESS) {
-            // ok
-            Plengi.getInstance(this).start();
-        }
-        else if(status == PlengiResponse.Result.FAIL_INTERNET_UNAVAILABLE) {
-            // internet is not connected
-        }
-        else if(status == PlengiResponse.Result.FAIL_WIFI_SCAN_UNAVAILABLE) {
-            // wifi scan is not available
-            checkWiFiScanCondition();
+        if (result == PlengiResponse.Result.SUCCESS) {
+            Log.d(TAG, "PlaceEngine started");
+        } else if (result == PlengiResponse.Result.NOT_SUPPORTED_OS_VERSION) {
+            Log.d(TAG, "Not supported os version");
+        } else if (result == PlengiResponse.Result.FAIL) {
+            Log.d(TAG, "PlaceEngine is not initialized");
         }
     }
 
     public void onStopPlaceMonitoring(View view) {
         // request location to loplat engine
-        Plengi.getInstance(this).stop();
+
+        int result = Plengi.getInstance(this).stop();
+
+        if (result == PlengiResponse.Result.FAIL) {
+            Log.d(TAG, "PlaceEngine is already stopped");
+        }
     }
 
 
@@ -254,7 +256,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
                google play service(location) 사용하는 경우 -> dependency google-play-services 선언이 필요함
                compile 'com.google.android.gms:play-services:[latest version]'
             */
-            if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getApplicationContext()) == ConnectionResult.SUCCESS )
+            if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getApplicationContext()) == ConnectionResult.SUCCESS)
             {
                 if (isGoogleClientConnected()) {
                     turnGpsOnByGooglePlayService();

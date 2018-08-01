@@ -27,6 +27,8 @@ public class LoplatPlengiListener implements PlengiListener {
             return;
         }
 
+        String echo_code = response.echo_code;
+        i.putExtra("echo_code", echo_code);
         // get location information from loplat server (refreshPlace())
         if(response.type == PlengiResponse.ResponseType.PLACE) {
             String description = "";
