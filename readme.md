@@ -372,6 +372,7 @@ public class ModeApplication extends Application {
 	Plengi.getInstance(this).start(); //Monitoring Start  
 	Plengi.getInstance(this).stop(); //Monitoring Stop
 	```
+	
 #### 5. 장소 인식 결과
 
 * **참고**:
