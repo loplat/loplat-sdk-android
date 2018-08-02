@@ -254,7 +254,7 @@ public class LoplatPlengiListener implements PlengiListener {
 - init을 위해 clientid, clientsecret, echo_code, useADID를 인자값으로 전달해주셔야합니다.  
 	* clientid & clientsecret: loplat server로 접근하기 위한 ID와 PW입니다.  
 	* 정식 id와 secret을 원하는 분은 아래에 기입 된 메일 주소로 연락 바랍니다.  
-	* echo_code: App 사용자를 식별하기 위한 ID입니다. (ex, 광고id,id,....,etc.)
+	* echo_code: App 사용자 식별(관리용) 및 추적하기 위한  ID입니다(ex, 광고id,id,....,etc.). echo_code 관리를 원하지 않는 경우 null 값을 입력하면 됩니다.
 		* 이메일, 폰번호와 같이 **개인정보와 관련된 정보**는 전달하지 마세요!
 * 예시코드
 ```java
@@ -358,7 +358,7 @@ public class ModeApplication extends Application {
 	 ```
  - Custom Notification을 사용을 원는 경우 아래의 예시 코드와 같이 설정하고, 광고 정보 값은 장소 인식 결과 내의 advertisement(response.advertisement)를 확인하면 됩니다.
 	```java
-	Plengi.getInstance(this).enableAdNetwork(enableAd, false);
+	Plengi.getInstance(this).enableAdNetwork(true, false);
 	```      
 	
 #### 4. Start/Stop
@@ -376,7 +376,7 @@ public class ModeApplication extends Application {
 #### 5. 장소 인식 결과
 
 * **참고**:
-	1. SDK 1.7.5 이하 버전은 장소id는 loplatid(서버에 학습된 장소 id), placeid 둘 다 전달되며,  1.7.6 이상 버전 부터 장소 id는 loplatid로 통합되어 전달 됩니다.**
+	1. SDK 1.7.5 이하 버전은 장소id는 loplatid(서버에 학습된 장소 id), placeid 둘 다 전달되며,  1.7.6 이상 버전 부터 장소 id는 loplatid로 통합되어 전달 됩니다.
 	2. SDK 1.8.6부터 장소 인식시 인식된 장소 결과에 따라 area(상권정보), complex(복합몰) 정보가 추가로 전달됩니다. 상권만 인식 된 경우에는 place 정보가 null로 넘어가니 코드 작성시 주의 부탁드립니다.
 	3. SDK 1.8.6부터 lat_est, lng_est 항목은 삭제 되었습니다.
 
