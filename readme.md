@@ -219,11 +219,17 @@ public class LoplatPlengiListener implements PlengiListener {
 				if (response.complex != null) {
 					// 복합몰이 인식 되었을 때
 				}
+				if (response.advertisement != null) {
+					// Gravity 광고 정보가 있을 때
+					// loplat SDK 통한 광고 알림을 사용하지 않고 
+					// Custom Notification 혹은 직접 이벤트 처리 할 경우 해당 객체를 사용
+				}
 			} 
 		} else {
 			// 위치 획득 실패 및 에러
 			// response.errorReason 위치 획득 실패 혹은 에러 이유가 포함 되어 있음
-			// errorReason -> Location Acquisition Fail(위치 획득 실패), Network Fail(네트워크 연결 실패), Not Allowed Client(잘못된 client id, passwrod 입력), invalid scan results
+			// errorReason -> Location Acquisition Fail(위치 획득 실패), Network Fail(네트워크 연결 실패)
+			// Not Allowed Client(잘못된 client id, passwrod 입력), invalid scan results
 			if (response.result == PlengiResponse.Result.FAIL) {
 				// response.errorReason 확인
 			} else if (response.result == PlengiResponse.Result.ERROR_CLOUD_ACCESS) {
@@ -432,8 +438,21 @@ public class ModeApplication extends Application {
 		```
 		* type: PlengiResponse.ResponseType.Complex  
 			* 인식된 장소가 복합몰 내인 경우 복합몰 정보도 함께 인식 결과에 포함되어 전달됩니다.
-		
-			        
+
+	* 광고:  **Advertisement** (PlengiResponse.Advertisement Class, reponse.advertisement 결과 전달)
+		```java
+		private int campaign_id;	// Gravity 캠페인 ID
+		private int msg_id;			// Gravity 광고 ID
+		private String title;       // 광고 제목
+		private String body;    	// 광고 내용 
+		private String intent;     	// 광고 이벤트 타입 (In-App, url link)
+		private String target_pkg;	// 광고 대상 앱 패키지 명
+		private long delay;			// 광고 알림 delay time
+		private String delay_type;	// 광고 알림 delay type (enter, leave)
+		private String img; 		// 광고 이미지 URL
+		private String client_code;	// 광고에 대한 client code
+		```
+	    
 * 현재위치 획득 실패시
 	* type: PlengiResponse.ResponseType.PLACE
 	* result: PlengiResponse.Result.ERROR_CLOUD_ACCESS
