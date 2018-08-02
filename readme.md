@@ -71,10 +71,10 @@
 ### 2. SDK Setup
 
 #### 계정 만들기  
-* Plengi SDK를 사용하기 위해서는 clientid와 clientsecret 필요합니다.  
-	 > * clientid & clientsecret: loplat server로 접근하기 위한 ID와 PW  
-* test를 원하시는 분은 clientid: loplatdemo, clientsecret: loplatdemokey 사용하세요.  
-*  정식 clientid와 clientsecret을 원하는 분은 아래에 기입 된 메일 주소로 연락 바랍니다. 
+* Plengi SDK를 사용하기 위해서는 client id와 client secret 필요합니다.  
+	 > * client id & client secret: loplat server로 접근하기 위한 ID와 PW  
+* test를 원하시는 분은 client id: loplatdemo, client secret: loplatdemokey 사용하세요.  
+*  정식 client id와 client secret을 원하는 분은 yeddie@loplat.com으로 연락 바랍니다. 
  
 #### Permission
 * SDK를 적용하면 하기 권한이 자동으로 추가됩니다.  
