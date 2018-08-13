@@ -1,4 +1,4 @@
-﻿# Plengi SDK
+# Plengi SDK
 
 ## Installation
 
@@ -287,7 +287,7 @@ public class ModeApplication extends Application {
 * 매장/장소 방문을 확인하기 위한 모니터링 모드를 선택합니다.    
 * 사용자의 매장/장소 방문을 확인하기 위하여 아래와 같은 3가지 모드를 제공하고 있습니다.  
 	* Recognizer Mode: 일정시간동안(5분이상) 한 장소에 머무를 경우 사용자의 위치를 확인합니다.
-	* Tracker Mode: 사용자의 위치를 일정주기마다 확인합니다.
+	* Tracker Mode: Recognizer보다 비교적 짧은 주기로 사용자가 한 장소에 머무르고 있거나, 보행 중인 경우 사용자의 위치를 확인합니다.
 	* Advanced Tracker Mode: Android에서 제공하는 awareness api를 이용하여 효율적으로 사용자의 위치를 확인합니다.
 		* Awareness API는 Google Play Service를 제공하는 API이며, 여러가지 센서를 통해 Applicaition이 사용자의 상황(ex. 걷고있음, 이어폰을 연결함 등)을 인지할 수 있도록 제공하는 API
 		* Awareness API는 Android System Framework을 이용하여  효율적으로 배터리 소모량을 관리함 
@@ -332,9 +332,9 @@ public class ModeApplication extends Application {
 	```
 		
 	* Recognizer mode 일 경우  move, stay에 대해 주기를 설정합니다. 
-		- move:  매장/장소를 인식하기 위한 기본 WFi scan 주기이며 default 값으로 3분이 설정되어 있습니다.  
-			- 3분이하의 분으로 주기 설정시 default 값인 3분으로 설정이 됩니다.
-		- stay: 매장/장소가 인식 된 후 WiFi scan 주기이며 default 값으로 2분이 설정되어 있습니다.  
+		- move:  매장/장소를 인식하기 위한 기본 WFi scan 주기이며 default 값으로 2분이 설정되어 있습니다.  
+			-2분이하의 분으로 주기 설정시 default 값인 3분으로 설정이 됩니다.
+		- stay: 매장/장소가 인식 된 후 WiFi scan 주기이며 default 값으로 4분이 설정되어 있습니다.  
 			- 4분이하의 분으로 주기 설정시 default 값인 4분으로 설정이 됩니다.
 	
 	* Tracker mode 일 경우 분 단위로 설정이 가능하며 default 값으로 2분이 설정되어 있습니다.  
