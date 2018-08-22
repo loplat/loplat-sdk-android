@@ -194,24 +194,18 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
 
     public void onRequestLocationInfo(View view) {
         // request location to loplat engine
-        int status = Plengi.getInstance(this).isEngineWorkable();
+        int result = Plengi.getInstance(this).refreshPlace();
 
-        if(status == PlengiResponse.Result.SUCCESS) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mProgressDialog = new ProgressDialog(MainActivity.this);
-                    mProgressDialog.setMessage("I'm scanning wifi. Please wait...");
-                    mProgressDialog.setCancelable(true);
-                    mProgressDialog.show();
-                }
-            });
-            Plengi.getInstance(this).refreshPlace();
+        if(result == PlengiResponse.Result.SUCCESS) {
+            mProgressDialog = new ProgressDialog(MainActivity.this);
+            mProgressDialog.setMessage("I'm scanning wifi. Please wait...");
+            mProgressDialog.setCancelable(true);
+            mProgressDialog.show();
         }
-        else if(status == PlengiResponse.Result.FAIL_INTERNET_UNAVAILABLE) {
+        else if(result == PlengiResponse.Result.FAIL_INTERNET_UNAVAILABLE) {
             // internet is not connected
         }
-        else if(status == PlengiResponse.Result.FAIL_WIFI_SCAN_UNAVAILABLE) {
+        else if(result == PlengiResponse.Result.FAIL_WIFI_SCAN_UNAVAILABLE) {
             // wifi scan is not available
             checkWiFiScanCondition();
         }
