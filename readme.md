@@ -403,7 +403,7 @@ Gravity는 (필수항목) 위치 권한 허용, GPS on 상태에서 동작하오
 			private long gfid; 			// 지오펜스 관리 ID
 			private float dist;	// 거리; 중심 좌표와 사용자 위치 간 거리 (optional - 중심 좌표가 있는 경우만 속성값 존재)
 			private String name; 		// 이름
-			private String custom_code; //고객사 측 관리 ID
+			private String clientCode; //고객사 측 관리 ID
 		}
 		```
 	    
