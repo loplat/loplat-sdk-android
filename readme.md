@@ -423,9 +423,6 @@ Gravity는 (필수항목) 위치 권한 허용, GPS on 상태에서 동작하오
 
 
 ## History
-* 2018.09.04
-	* loplat SDK version 2.0.3 release
-		* 일부 기능 개선 및 안정화
 * 2018.08.30
 	* loplat SDK version 2.0.2 release
 		* 일부 기능 개선 및 SDK 안정화
