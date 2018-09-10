@@ -1,4 +1,4 @@
-# Plengi SDK
+﻿# Plengi SDK
 
 ## 시작하기
 
@@ -423,7 +423,21 @@ Gravity는 (필수항목) 위치 권한 허용, GPS on 상태에서 동작하오
 
 
 ## History
-* 2081.08.01
+* 2018.09.04
+	* loplat SDK version 2.0.3 release
+		* 일부 기능 개선 및 안정화
+* 2018.08.30
+	* loplat SDK version 2.0.2 release
+		* 일부 기능 개선 및 SDK 안정화
+* 2018.08.23
+	* loplat SDK version 2.0.1 release
+		* 일부 기능 개선
+* 2018.08.22
+	* loplat SDK version 2.0 release
+		* Geofence 추가
+		*  remote SDK configuration 추가
+		* 일부 기능 개선
+* 2018.08.01
 	* loplat SDK version 1.8.9.8 release
 		* 일부 인식 성능 개선
 * 2018.07.13
