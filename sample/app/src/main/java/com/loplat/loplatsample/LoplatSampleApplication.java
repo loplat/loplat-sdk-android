@@ -37,13 +37,14 @@ public class LoplatSampleApplication extends MultiDexApplication {
         Plengi.getInstance(this).setListener(new LoplatPlengiListener());
         Plengi.getInstance(this).init(clientId, clientSecret, uniqueUserId);
 
+        // 기존 마케팅 동의 여부 체크
         if (isMarketingServiceAgreed(this)) {
             Plengi.getInstance(this).enableAdNetwork(true);
             // 직접 광고를 하는 경우
             //Plengi.getInstance(this).enableAdNetwork(true, false);
         }
 
-        if (isLocationServiceStarted(this)) {
+        if (isLocationServiceAgreed(this)) {
             Plengi.getInstance(this).start();
         }
     }
@@ -70,23 +71,23 @@ public class LoplatSampleApplication extends MultiDexApplication {
         return enableAdNetwork;
     }
 
-    // 위치 기반 서비스 동의 설정
-    public static void enableLocationService(Context context, boolean start) {
+    // 위치 기반 약관 동의 설정
+    public static void setLocationServiceAgreement(Context context, boolean start) {
         try {
             SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("location_service", start);
+            editor.putBoolean("location_agreement", start);
             editor.commit();
         } catch (Exception e) {
         }
     }
 
-    // 위치 기반 서비스 동의 여부 확인
-    public static boolean isLocationServiceStarted(Context context) {
+    // 위치 기반 약관 동의 여부 확인
+    public static boolean isLocationServiceAgreed(Context context) {
         boolean enableAdNetwork = false;
         try {
             SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
-            enableAdNetwork = settings.getBoolean("location_service", false);
+            enableAdNetwork = settings.getBoolean("location_agreement", false);
         } catch (Exception e) {
         }
         return enableAdNetwork;

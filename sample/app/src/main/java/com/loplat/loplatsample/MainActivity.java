@@ -181,7 +181,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         int stayScanPeriod = 6 * 60000; // 6 mins (milliseconds)
         Plengi.getInstance(this).setScanPeriod(moveScanPeriod, stayScanPeriod);
 
-        // Gravity 연동하기
+        /*
+        / Gravity 연동하기
+        / 마케팅 혹은 push 알림 서비스 동의를 받은 후에 동작을 원하시는 경우 아래의 샘플코드(onMarketingServiceAgreement 참고)와 같이 별도로 구현하셔도 됩니다
+         */
         Plengi.getInstance(this).enableAdNetwork(true);
         Plengi.getInstance(this).setAdNotiLargeIcon(R.drawable.ic_launcher);
         Plengi.getInstance(this).setAdNotiSmallIcon(R.drawable.ic_launcher);
@@ -280,7 +283,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         // 1. wifi scan 가능한지 여부 확인 -> 가능 -> loplat SDK start
                         if (checkWiFiScanCondition()) {
                             Plengi.getInstance(MainActivity.this).start();
-                            LoplatSampleApplication.enableLocationService(MainActivity.this, true);
+                            LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, true);
                             tv_status.setText("Monitoring on");
                         }
                     }
@@ -290,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     public void onClick(DialogInterface dialog, int which) {
                         // loplat SDK stop, 동의 거부
                         Plengi.getInstance(MainActivity.this).stop();
-                        LoplatSampleApplication.enableLocationService(MainActivity.this, false);
+                        LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, false);
                         tv_status.setText("Monitoring off");
                     }
                 });
@@ -396,6 +399,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
             boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             if(!isNetworkEnabled && !isGPSEnabled) {
+                //
                 // please turn on location settings
                 return false;
             }
