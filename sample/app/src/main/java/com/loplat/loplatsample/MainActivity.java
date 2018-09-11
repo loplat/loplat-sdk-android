@@ -1,13 +1,13 @@
 package com.loplat.loplatsample;
 
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.wifi.WifiManager;
@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -36,7 +37,7 @@ import com.loplat.placeengine.Plengi;
 import com.loplat.placeengine.PlengiResponse;
 
 
-public class MainActivity extends Activity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     BroadcastReceiver  mLoplatBroadcastReceiver;
     ProgressDialog mProgressDialog=null;
@@ -161,13 +162,14 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
                 break;
         }
 
-        // gravity 설정하기
-        if (getEnableAdNetwork(this)) {
+        // gravity 설정하기, 광고 마케팅 동의 한 경우
+        if (LoplatSampleApplication.isMarketingServiceAgreed(this)) {
             Plengi.getInstance(this).enableAdNetwork(true);
+            // 직접 푸쉬 메세지 사용하는 경우
+            //Plengi.getInstance(this).enableAdNetwork(true, false);
             Plengi.getInstance(this).setAdNotiLargeIcon(R.drawable.ic_launcher);
             Plengi.getInstance(this).setAdNotiSmallIcon(R.drawable.ic_launcher);
         }
-
     }
 
 
@@ -183,8 +185,6 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         Plengi.getInstance(this).enableAdNetwork(true);
         Plengi.getInstance(this).setAdNotiLargeIcon(R.drawable.ic_launcher);
         Plengi.getInstance(this).setAdNotiSmallIcon(R.drawable.ic_launcher);
-        // App 내 gravity 연동 설정
-        setEnableAdNetwork(this, true);
 
         //if you want to use Tracker mode
 //        Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.TRACKING);
@@ -234,13 +234,78 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         }
     }
 
+    /**
+     * Note: 아래의 코드는 Gravity 사용을 이용한 마케팅 동의 서비스 예제입니다.
+     * @param view
+     */
+    public void onMarketServiceAgreement(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("마케팅 서비스 동의?")
+                .setMessage("마케팅 서비스 동의 하시겠습니까?")
+                .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // loplat gravity service off
+                        Plengi.getInstance(MainActivity.this).enableAdNetwork(true);
+                        // 직접 광고(푸시 메세지) 하는 경우
+                        // Plengi.getInstance(MainActivity.this).enableAdNetwork(true, false);
+                        // 앱 내 flag 저장
+                        LoplatSampleApplication.setMarketingServiceAgreement(MainActivity.this, true);
+                    }
+                })
+                .setNegativeButton("no", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // loplat gravity service off
+                        Plengi.getInstance(MainActivity.this).enableAdNetwork(false);
+                        // 앱 내 flag 저장
+                        LoplatSampleApplication.setMarketingServiceAgreement(MainActivity.this, false);
+                    }
+                });
+        builder.show();
+    }
+
+    /**
+     * Note: 아래의 코드는 loplat SDK 구동(start)를 이용한 위치기반 서비스 예제입니다.
+     * @param view
+     */
+    public void onLocationBasedServiceAgreement(View view) {
+        final TextView tv_status = (TextView)findViewById(R.id.tv_status);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("위치기반 서비스 동의?")
+                .setMessage("위치기반 서비스 하시겠습니까?")
+                .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 1. wifi scan 가능한지 여부 확인 -> 가능 -> loplat SDK start
+                        if (checkWiFiScanCondition()) {
+                            Plengi.getInstance(MainActivity.this).start();
+                            LoplatSampleApplication.enableLocationService(MainActivity.this, true);
+                            tv_status.setText("Monitoring on");
+                        }
+                    }
+                })
+                .setNegativeButton("no", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // loplat SDK stop, 동의 거부
+                        Plengi.getInstance(MainActivity.this).stop();
+                        LoplatSampleApplication.enableLocationService(MainActivity.this, false);
+                        tv_status.setText("Monitoring off");
+                    }
+                });
+        builder.show();
+    }
+
 
     // Sample code for checking WiFi Scanning Condition
-    private void checkWiFiScanCondition() {
-
+    private boolean checkWiFiScanCondition() {
+        boolean available = true;
         if (!checkLocationPermissionIfNeeded()) {
+            available = false;
             Toast.makeText(this, "Please grant a location permission", Toast.LENGTH_SHORT).show();
         } else if (!checkGpsStatus()) {
+            available = false;
             Toast.makeText(this, "Please turn on GPS", Toast.LENGTH_SHORT).show();
 
             /* GPS 켜는 방법은 google play service를 통해 앱내에서 직접 설정, GPS 설정화면 이용 등 2가지 방법이 있음
@@ -265,6 +330,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
             startActivity(intent);*/
 
         } else if (!checkWifiScanIsAvailable()) {
+            available = false;
             // 안드로이드 4.3 이상 버전은 background wifi scan 설정이 켜져있으면 됨
             // [참고: https://developer.android.com/reference/android/net/wifi/WifiManager.html#isScanAlwaysAvailable()]
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -277,6 +343,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
                 Toast.makeText(this, "turn on WiFi", Toast.LENGTH_SHORT).show();
             }
         }
+        return available;
     }
 
     private void turnGpsOnByGooglePlayService(){
@@ -387,27 +454,6 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         return false;
     }
 
-    // App에서 광고 연동 여부 설정
-    private void setEnableAdNetwork(Context context, boolean enableAdNetwork) {
-        try {
-            SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("ad_network", enableAdNetwork);
-            editor.commit();
-        } catch (Exception e) {
-        }
-    }
-
-    // App에서 광고 연동 여부 확인
-    private boolean getEnableAdNetwork(Context context) {
-        boolean enableAdNetwork = false;
-        try {
-            SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
-            enableAdNetwork = settings.getBoolean("ad_network", false);
-        } catch (Exception e) {
-        }
-        return enableAdNetwork;
-    }
 
 
     @Override
