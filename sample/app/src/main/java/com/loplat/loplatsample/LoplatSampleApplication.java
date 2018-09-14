@@ -5,9 +5,6 @@ import android.content.SharedPreferences;
 import android.support.multidex.MultiDexApplication;
 
 import com.loplat.placeengine.Plengi;
-import com.loplat.placeengine.utils.LoplatLogger;
-
-
 
 
 public class LoplatSampleApplication extends MultiDexApplication {
@@ -15,7 +12,6 @@ public class LoplatSampleApplication extends MultiDexApplication {
     private static LoplatSampleApplication instance;
 
     private static final String PREFS_NAME = LoplatSampleApplication.class.getSimpleName();
-    private static final String TAG = PREFS_NAME;
 
     public static Context getContext(){
         return instance;
@@ -26,73 +22,104 @@ public class LoplatSampleApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        LoplatLogger.i("LoplatApplication created ---------------");
+        loplatSdkConfiguration();
+    }
 
+    public void loplatSdkConfiguration() {
         instance = this;
-        // do init
-        String clientId = "loplatdemo";
-        String clientSecret = "loplatdemokey";
-        /* Please be careful not to input any personal information such as email, phone number. */
-        String uniqueUserId = "loplat_12345";
-        Plengi.getInstance(this).setListener(new LoplatPlengiListener());
-        Plengi.getInstance(this).init(clientId, clientSecret, uniqueUserId);
-
-        // 기존 마케팅 동의 여부 체크
-        if (isMarketingServiceAgreed(this)) {
-            Plengi.getInstance(this).enableAdNetwork(true);
-            // 직접 광고를 하는 경우
-            //Plengi.getInstance(this).enableAdNetwork(true, false);
-        }
-
-        if (isLocationServiceAgreed(this)) {
-            Plengi.getInstance(this).start();
+        Context context = this;
+        Plengi plengi = Plengi.getInstance(this);
+        // 위치 서비스 약관 동의 여부 체크
+        if (isLocationServiceAgreed(context)) {
+            // 마케팅 동의 여부 체크
+            if (isMarketingServiceAgreed(context)) {
+                // 마케팅 수신에 동의한 user에 대해서 로플랫 켐페인 설정
+                // 고객사가 직접 푸시 메세지 광고를 하는 경우
+                plengi.enableAdNetwork(true, false);
+                // 로플랫 SDK 에 푸시 메세지 광고를 맡기는 경우
+                // Plengi.getInstance(this).enableAdNetwork(true);
+                // Plengi.getInstance(this).setAdNotiLargeIcon(R.drawable.ic_launcher);
+                // Plengi.getInstance(this).setAdNotiSmallIcon(R.drawable.ic_launcher);
+            } else {
+                // 마케팅 동의 거부한 user에 대해서 로플랫 켐페인 설정 중단
+                plengi.enableAdNetwork(false);
+            }
+            // 고객사에 발급한 로플랫 SDK client ID/PW 입력
+            String clientId = "loplatdemo";
+            String clientSecret = "loplatdemokey";
+            plengi.setListener(new LoplatPlengiListener());
+            plengi.init(clientId, clientSecret, getEchoCode(context));
+            plengi.start();
+        } else {
+            // 위치 서비스 약관 동의 거부한 user에 대해서 SDK stop
+            plengi.stop();
         }
     }
 
-    // App에서 광고 연동 여부 설정
-    public static void setMarketingServiceAgreement(Context context, boolean enableAdNetwork) {
+    // 마케팅 수신 동의 여부 저장
+    public static void setMarketingServiceAgreement(Context context, boolean agree) {
         try {
             SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("marketing_agreement", enableAdNetwork);
+            editor.putBoolean("marketing_agreement", agree);
             editor.commit();
         } catch (Exception e) {
         }
     }
 
-    // App에서 광고 연동 여부 확인
+    // 마케팅 수신 동의 여부 확인
     public static boolean isMarketingServiceAgreed(Context context) {
-        boolean enableAdNetwork = false;
+        boolean isMarketingServiceAgreed = false;
         try {
             SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
-            enableAdNetwork = settings.getBoolean("marketing_agreement", false);
+            isMarketingServiceAgreed = settings.getBoolean("marketing_agreement", false);
         } catch (Exception e) {
         }
-        return enableAdNetwork;
+        return isMarketingServiceAgreed;
     }
 
-    // 위치 기반 약관 동의 설정
-    public static void setLocationServiceAgreement(Context context, boolean start) {
+    // 위치 기반 서비스 약관 동의 여부 저장
+    public static void setLocationServiceAgreement(Context context, boolean agree) {
         try {
             SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("location_agreement", start);
+            editor.putBoolean("location_agreement", agree);
             editor.commit();
         } catch (Exception e) {
         }
     }
 
-    // 위치 기반 약관 동의 여부 확인
+    // 위치 기반 서비스 약관 동의 여부 확인
     public static boolean isLocationServiceAgreed(Context context) {
-        boolean enableAdNetwork = false;
+        boolean isLocationServiceAgreed = false;
         try {
             SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
-            enableAdNetwork = settings.getBoolean("location_agreement", false);
+            isLocationServiceAgreed = settings.getBoolean("location_agreement", false);
         } catch (Exception e) {
         }
-        return enableAdNetwork;
+        return isLocationServiceAgreed;
     }
 
+    // 회원 번호 저장
+    // 이메일, 전화번호와 같은 개인정보 제외
+    public static void setEchoCode(Context context, String member_code) {
+        try {
+            SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString("member_code", member_code);
+            editor.commit();
+        } catch (Exception e) {
+        }
+    }
 
-
+    // 저장된 회원 번호 가져옴
+    public static String getEchoCode(Context context) {
+        String echo_code = "";
+        try {
+            SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+            echo_code = settings.getString("member_code", "");
+        } catch (Exception e) {
+        }
+        return echo_code;
+    }
 }

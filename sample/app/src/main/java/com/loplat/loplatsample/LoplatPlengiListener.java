@@ -127,15 +127,6 @@ public class LoplatPlengiListener implements PlengiListener {
 
             System.out.println(description);
             sendLoplatResponseToApplication("placeevent", description);
-        } else if(response.type == PlengiResponse.ResponseType.NEARBY_DEVICE) {
-            String colocateInfo = "";
-
-            List<PlengiResponse.Person> persons = response.persons;
-            for(PlengiResponse.Person person: persons) {
-                colocateInfo += person.uniqueUserId + " ";
-            }
-
-            sendLoplatResponseToApplication("nearby", colocateInfo);
         }
     }
 

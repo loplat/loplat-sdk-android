@@ -62,6 +62,33 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        // 로그인 성공 시점이라 가정
+        // 로그인 후 회원번호, 위치서비스 약관 동의 여부, 마케팅 수신동의 여부를 각각 저장
+        String memberCodeFromServer = "member_code";
+        boolean isMarketingServiceAgreedFromServer = true;
+        boolean isLocationServiceAgreedFromServer = true;
+
+        Context context = this;
+        LoplatSampleApplication.setMarketingServiceAgreement(context, isMarketingServiceAgreedFromServer);
+        LoplatSampleApplication.setLocationServiceAgreement(context, isLocationServiceAgreedFromServer);
+        if (!LoplatSampleApplication.getEchoCode(context).equals(memberCodeFromServer)) {
+            // App 최초 설치 후 로그인, 다른 ID로 로그인하여 회원번호가 변경된 경우
+            LoplatSampleApplication.setEchoCode(context, memberCodeFromServer);
+            ((LoplatSampleApplication)getApplicationContext()).loplatSdkConfiguration();
+
+        }
+
+        // gravity 설정하기, 광고 마케팅 동의 한 경우
+        if (isMarketingServiceAgreedFromServer) {
+            Plengi.getInstance(this).enableAdNetwork(true);
+            // 직접 푸쉬 메세지 사용하는 경우
+            //Plengi.getInstance(this).enableAdNetwork(true, false);
+            Plengi.getInstance(this).setAdNotiLargeIcon(R.drawable.ic_launcher);
+            Plengi.getInstance(this).setAdNotiSmallIcon(R.drawable.ic_launcher);
+        }
+
+
         final TextView tv_result = (TextView)findViewById(R.id.tv_result);
 
         // receive response from loplat listener
