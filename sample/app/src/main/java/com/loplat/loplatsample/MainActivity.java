@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -191,35 +190,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         // gravity 설정하기, 광고 마케팅 동의 한 경우
         if (LoplatSampleApplication.isMarketingServiceAgreed(this)) {
-            Plengi.getInstance(this).enableAdNetwork(true);
-            // 직접 푸쉬 메세지 사용하는 경우
-            //Plengi.getInstance(this).enableAdNetwork(true, false);
-            Plengi.getInstance(this).setAdNotiLargeIcon(R.drawable.ic_launcher);
-            Plengi.getInstance(this).setAdNotiSmallIcon(R.drawable.ic_launcher);
+            // 마케팅 수신에 동의한 user에 대해서 로플랫 켐페인 설정
+            // 고객사가 직접 푸시 메세지 광고를 하는 경우
+            Plengi.getInstance(this).enableAdNetwork(true, false);
+            // 로플랫 SDK 에 푸시 메세지 광고를 맡기는 경우
+            // Plengi.getInstance(this).enableAdNetwork(true);
+            // Plengi.getInstance(this).setAdNotiLargeIcon(R.drawable.ic_launcher);
+            // Plengi.getInstance(this).setAdNotiSmallIcon(R.drawable.ic_launcher);
         }
-    }
-
-
-    public void onInitPlaceEngine(View view) {
-        //if you want to use Recognizer mode
-        Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.STAY);
-        // set scan period (optional)
-        int moveScanPeriod = 3 * 60000; // 3 mins (milliseconds)
-        int stayScanPeriod = 6 * 60000; // 6 mins (milliseconds)
-        Plengi.getInstance(this).setScanPeriod(moveScanPeriod, stayScanPeriod);
-
-        /*
-        / Gravity 연동하기
-        / 마케팅 혹은 push 알림 서비스 동의를 받은 후에 동작을 원하시는 경우 아래의 샘플코드(onMarketingServiceAgreement 참고)와 같이 별도로 구현하셔도 됩니다
-         */
-        Plengi.getInstance(this).enableAdNetwork(true);
-        Plengi.getInstance(this).setAdNotiLargeIcon(R.drawable.ic_launcher);
-        Plengi.getInstance(this).setAdNotiSmallIcon(R.drawable.ic_launcher);
-
-        //if you want to use Tracker mode
-//        Plengi.getInstance(this).setMonitoringType(PlengiResponse.MonitoringType.TRACKING);
-//        Plengi.getInstance(this).setScanPeriodTracking(2 * 60000);
-
     }
 
     public void onRequestLocationInfo(View view) {
@@ -241,29 +219,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
-    public void onStartPlaceMonitoring(View view) {
-        // request location to loplat engine
-        int result = Plengi.getInstance(this).start();
-
-        if (result == PlengiResponse.Result.SUCCESS) {
-            Log.d(TAG, "PlaceEngine started");
-        } else if (result == PlengiResponse.Result.NOT_SUPPORTED_OS_VERSION) {
-            Log.d(TAG, "Not supported os version");
-        } else if (result == PlengiResponse.Result.FAIL) {
-            Log.d(TAG, "PlaceEngine is not initialized");
-        }
-    }
-
-    public void onStopPlaceMonitoring(View view) {
-        // request location to loplat engine
-
-        int result = Plengi.getInstance(this).stop();
-
-        if (result == PlengiResponse.Result.FAIL) {
-            Log.d(TAG, "PlaceEngine is already stopped");
-        }
-    }
-
     /**
      * Note: 아래의 코드는 Gravity 사용을 이용한 마케팅 동의 서비스 예제입니다.
      * @param view
@@ -281,6 +236,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         // Plengi.getInstance(MainActivity.this).enableAdNetwork(true, false);
                         // 앱 내 flag 저장
                         LoplatSampleApplication.setMarketingServiceAgreement(MainActivity.this, true);
+                        Toast.makeText(getApplicationContext(), "푸시 알림 마케팅 수신에 동의 하였습니다", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("no", new DialogInterface.OnClickListener() {
@@ -290,6 +246,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         Plengi.getInstance(MainActivity.this).enableAdNetwork(false);
                         // 앱 내 flag 저장
                         LoplatSampleApplication.setMarketingServiceAgreement(MainActivity.this, false);
+                        Toast.makeText(getApplicationContext(), "푸시 알림 마케팅 수신을 취소 하였습니다", Toast.LENGTH_SHORT).show();
                     }
                 });
         builder.show();
@@ -312,6 +269,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                             Plengi.getInstance(MainActivity.this).start();
                             LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, true);
                             tv_status.setText("Monitoring on");
+                            Toast.makeText(getApplicationContext(), "loplat 위치 기반 서비스 이용에 동의 하였습니다", Toast.LENGTH_SHORT).show();
                         }
                     }
                 })
@@ -322,6 +280,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         Plengi.getInstance(MainActivity.this).stop();
                         LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, false);
                         tv_status.setText("Monitoring off");
+                        Toast.makeText(getApplicationContext(), "loplat 위치 기반 서비스 이용을 취소 하였습니다", Toast.LENGTH_SHORT).show();
                     }
                 });
         builder.show();
