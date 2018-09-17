@@ -22,14 +22,13 @@ public class LoplatSampleApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
         loplatSdkConfiguration();
     }
 
     public void loplatSdkConfiguration() {
-        instance = this;
         Context context = this;
         Plengi plengi = Plengi.getInstance(this);
-        plengi.setListener(new LoplatPlengiListener());
         // 위치 서비스 약관 동의 여부 체크
         if (isLocationServiceAgreed(context)) {
             // 마케팅 동의 여부 체크
@@ -48,6 +47,7 @@ public class LoplatSampleApplication extends MultiDexApplication {
             // 고객사에 발급한 로플랫 SDK client ID/PW 입력
             String clientId = "loplatdemo";
             String clientSecret = "loplatdemokey";
+            plengi.setListener(new LoplatPlengiListener());
             plengi.init(clientId, clientSecret, getEchoCode(context));
             plengi.start();
         } else {
@@ -114,10 +114,10 @@ public class LoplatSampleApplication extends MultiDexApplication {
 
     // 저장된 회원 번호 가져옴
     public static String getEchoCode(Context context) {
-        String echo_code = "";
+        String echo_code = null;
         try {
             SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
-            echo_code = settings.getString("member_code", "");
+            echo_code = settings.getString("member_code", null);
         } catch (Exception e) {
         }
         return echo_code;

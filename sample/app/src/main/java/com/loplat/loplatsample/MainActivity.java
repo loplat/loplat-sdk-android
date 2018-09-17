@@ -72,21 +72,27 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        // 로그인 성공 시점이라 가정
-        // 로그인 후 회원번호, 위치서비스 약관 동의 여부, 마케팅 수신동의 여부를 각각 저장
-        String memberCodeFromServer = "member_code";
+        /**
+         * 로그인 성공 시점이라 가정
+         * 로그인 후 1)위치서비스 약관 동의 여부, 2)마케팅 수신 동의 여부 3)회원번호 를 각각 저장
+         * 저장된 3가지 정보는 Background 동작 시 사용
+         */
+        String memberCodeFromServer = "18497358207";
         boolean isMarketingServiceAgreedFromServer = true;
         boolean isLocationServiceAgreedFromServer = true;
 
         Context context = this;
         LoplatSampleApplication.setMarketingServiceAgreement(context, isMarketingServiceAgreedFromServer);
         LoplatSampleApplication.setLocationServiceAgreement(context, isLocationServiceAgreedFromServer);
-        if (!LoplatSampleApplication.getEchoCode(context).equals(memberCodeFromServer)) {
-            // App 최초 설치 후 로그인, 다른 ID로 로그인하여 회원번호가 변경된 경우
-            LoplatSampleApplication.setEchoCode(context, memberCodeFromServer);
-            ((LoplatSampleApplication)getApplicationContext()).loplatSdkConfiguration();
-
+        if (isMarketingServiceAgreedFromServer) {
+            /**
+             * 하기 코드는 회원번호를 사용하는 경우만 활용
+             * 회원번호가 변경된 경우 저장
+             */
+            if (!LoplatSampleApplication.getEchoCode(context).equals(memberCodeFromServer)) {
+                LoplatSampleApplication.setEchoCode(context, memberCodeFromServer);
+            }
+            ((LoplatSampleApplication) getApplicationContext()).loplatSdkConfiguration();
         }
 
         // gravity 설정하기, 광고 마케팅 동의 한 경우
@@ -110,17 +116,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     return;
                 }
 
-                try {
-                    if (mProgressDialog!=null&&mProgressDialog.isShowing()) {
-                        mProgressDialog.dismiss();
-                    }
-                }
-                catch ( Exception e ) {
-                    e.printStackTrace();
-                }
-
                 String action = intent.getAction();
                 if(action.equals("com.loplat.sample.response")) {
+                    try {
+                        if (mProgressDialog!=null&&mProgressDialog.isShowing()) {
+                            mProgressDialog.dismiss();
+                        }
+                    }
+                    catch ( Exception e ) {
+                        e.printStackTrace();
+                    }
+
                     String type = intent.getStringExtra("type");
                     if(type == null) {
                         return;
