@@ -29,6 +29,7 @@ public class LoplatSampleApplication extends MultiDexApplication {
         instance = this;
         Context context = this;
         Plengi plengi = Plengi.getInstance(this);
+        plengi.setListener(new LoplatPlengiListener());
         // 위치 서비스 약관 동의 여부 체크
         if (isLocationServiceAgreed(context)) {
             // 마케팅 동의 여부 체크
@@ -47,7 +48,6 @@ public class LoplatSampleApplication extends MultiDexApplication {
             // 고객사에 발급한 로플랫 SDK client ID/PW 입력
             String clientId = "loplatdemo";
             String clientSecret = "loplatdemokey";
-            plengi.setListener(new LoplatPlengiListener());
             plengi.init(clientId, clientSecret, getEchoCode(context));
             plengi.start();
         } else {

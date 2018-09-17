@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private static final int FASTEST_UPDATE_INTERVAL_MS = 500; // 0.5초
     private static final int REQUEST_LOCATION_PERMISSION = 10000;
     private static final int REQUEST_LOCATION_STATUS = 10001;
+    private static final int REQUEST_WIFI_STATUS = 10002;
 
     GoogleApiClient mGoogleApiClient;
 
@@ -55,6 +56,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
             .setInterval(UPDATE_INTERVAL_MS)
             .setFastestInterval(FASTEST_UPDATE_INTERVAL_MS);
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_WIFI_STATUS || requestCode == REQUEST_LOCATION_STATUS) {
+                startLoplatPlaceEngineService();
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,17 +110,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     return;
                 }
 
+                try {
+                    if (mProgressDialog!=null&&mProgressDialog.isShowing()) {
+                        mProgressDialog.dismiss();
+                    }
+                }
+                catch ( Exception e ) {
+                    e.printStackTrace();
+                }
+
                 String action = intent.getAction();
                 if(action.equals("com.loplat.sample.response")) {
-                    try {
-                        if (mProgressDialog!=null&&mProgressDialog.isShowing()) {
-                            mProgressDialog.dismiss();
-                        }
-                    }
-                    catch ( Exception e ) {
-                        e.printStackTrace();
-                    }
-
                     String type = intent.getStringExtra("type");
                     if(type == null) {
                         return;
@@ -161,9 +172,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         if(engineStatus == PlaceEngine.EngineStatus.STARTED)
         {
             tv_status.setText("Monitoring On");
-        }
-        else if(engineStatus == PlaceEngine.EngineStatus.STOPPED)
-        {
+        } else {
             tv_status.setText("Monitoring off");
         }
 
@@ -197,6 +206,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             // Plengi.getInstance(this).enableAdNetwork(true);
             // Plengi.getInstance(this).setAdNotiLargeIcon(R.drawable.ic_launcher);
             // Plengi.getInstance(this).setAdNotiSmallIcon(R.drawable.ic_launcher);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED
+                || grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+            startLoplatPlaceEngineService();
         }
     }
 
@@ -264,13 +282,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 .setPositiveButton("yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // 1. wifi scan 가능한지 여부 확인 -> 가능 -> loplat SDK start
-                        if (checkWiFiScanCondition()) {
-                            Plengi.getInstance(MainActivity.this).start();
-                            LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, true);
-                            tv_status.setText("Monitoring on");
-                            Toast.makeText(getApplicationContext(), "loplat 위치 기반 서비스 이용에 동의 하였습니다", Toast.LENGTH_SHORT).show();
-                        }
+                        // loplat sdk init
+                        ((LoplatSampleApplication)getApplicationContext()).loplatSdkConfiguration();
+
+                        LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, true);
+
+                        startLoplatPlaceEngineService();
+
                     }
                 })
                 .setNegativeButton("no", new DialogInterface.OnClickListener() {
@@ -284,6 +302,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     }
                 });
         builder.show();
+    }
+
+    public void startLoplatPlaceEngineService() {
+        // 1. wifi scan 가능한지 여부 확인 -> 가능 -> loplat SDK start
+        if (checkWiFiScanCondition()) {
+            Plengi.getInstance(MainActivity.this).start();
+            TextView tv_status = (TextView) findViewById(R.id.tv_status);
+            tv_status.setText("Monitoring on");
+            Toast.makeText(getApplicationContext(), "loplat 위치 기반 서비스 이용에 동의 하였습니다", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -324,12 +352,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             // [참고: https://developer.android.com/reference/android/net/wifi/WifiManager.html#isScanAlwaysAvailable()]
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 Intent intent = new Intent(WifiManager.ACTION_REQUEST_SCAN_ALWAYS_AVAILABLE);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_WIFI_STATUS);
             } else {
                 // 안드로이드 4.2 이하 버전은 WiFi가 켜져있어야 wifi scanning 가능함
                 WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                 wifiManager.setWifiEnabled(true);
-                Toast.makeText(this, "turn on WiFi", Toast.LENGTH_SHORT).show();
+                startLoplatPlaceEngineService();
             }
         }
         return available;
@@ -339,7 +367,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
         builder.addLocationRequest(locationRequest);
         builder.setAlwaysShow(true);
-
 
         PendingResult<LocationSettingsResult> result =
                 LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
@@ -405,7 +432,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
                 // Should we show an explanation?
                 if (shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_FINE_LOCATION)
-                        || shouldShowRequestPermissionRationale(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         || shouldShowRequestPermissionRationale(android.Manifest.permission.GET_ACCOUNTS)){
                     //shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION) ) {
                     // Explain to the user why we need to write the permission.

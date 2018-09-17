@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <TextView
-                    android:text="loplat SDK 기본 동작 예제"
+                    android:text="현재 위치 확인\n (테스트시에만 사용하세요)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
