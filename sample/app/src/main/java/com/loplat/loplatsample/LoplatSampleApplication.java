@@ -23,6 +23,8 @@ public class LoplatSampleApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
+
+        // loplatSdkConfiguration(): 백그라운드 동작과 위치 서비스 약관 동의, 마케팅 동의를 미리 받아 둔 사용자를 위해 반드시 필요
         loplatSdkConfiguration();
     }
 
@@ -45,8 +47,8 @@ public class LoplatSampleApplication extends MultiDexApplication {
                 plengi.enableAdNetwork(false);
             }
             // 고객사에 발급한 로플랫 SDK client ID/PW 입력
-            String clientId = "loplatdemo";
-            String clientSecret = "loplatdemokey";
+            String clientId = "loplatdemo"; // Test ID
+            String clientSecret = "loplatdemokey";  // Test PW
             plengi.setListener(new LoplatPlengiListener());
             plengi.init(clientId, clientSecret, getEchoCode(context));
             plengi.start();

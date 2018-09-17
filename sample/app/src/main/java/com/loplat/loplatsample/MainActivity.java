@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -38,7 +39,7 @@ import com.loplat.placeengine.PlengiResponse;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    BroadcastReceiver  mLoplatBroadcastReceiver;
+    BroadcastReceiver mSampleUIReceiver;
     ProgressDialog mProgressDialog=null;
 
     private static final String PREFS_NAME = MainActivity.class.getSimpleName();
@@ -71,44 +72,36 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Context context = this;
         /**
          * 로그인 성공 시점이라 가정
-         * 로그인 후 1)위치서비스 약관 동의 여부, 2)마케팅 수신 동의 여부 3)회원번호 를 각각 저장
+         * 로그인 후 1)위치서비스 약관 동의 여부, 2)마케팅 수신 동의 여부 3)회원번호(optional) 를 각각 저장
          * 저장된 3가지 정보는 Background 동작 시 사용
          */
+
+        // 로그인 후 서버로 부터 받은 값을 local에 저장
         String memberCodeFromServer = "18497358207";
         boolean isMarketingServiceAgreedFromServer = true;
         boolean isLocationServiceAgreedFromServer = true;
 
-        Context context = this;
         LoplatSampleApplication.setMarketingServiceAgreement(context, isMarketingServiceAgreedFromServer);
         LoplatSampleApplication.setLocationServiceAgreement(context, isLocationServiceAgreedFromServer);
-        if (isMarketingServiceAgreedFromServer) {
+        if (isLocationServiceAgreedFromServer) {
             /**
              * 하기 코드는 회원번호를 사용하는 경우만 활용
              * 회원번호가 변경된 경우 저장
              */
-            if (!LoplatSampleApplication.getEchoCode(context).equals(memberCodeFromServer)) {
+            if (memberCodeFromServer != null
+                    && !memberCodeFromServer.equals(LoplatSampleApplication.getEchoCode(context))) {
                 LoplatSampleApplication.setEchoCode(context, memberCodeFromServer);
             }
             ((LoplatSampleApplication) getApplicationContext()).loplatSdkConfiguration();
         }
 
-        // gravity 설정하기, 광고 마케팅 동의 한 경우
-        if (isMarketingServiceAgreedFromServer) {
-            Plengi.getInstance(this).enableAdNetwork(true);
-            // 직접 푸쉬 메세지 사용하는 경우
-            //Plengi.getInstance(this).enableAdNetwork(true, false);
-            Plengi.getInstance(this).setAdNotiLargeIcon(R.drawable.ic_launcher);
-            Plengi.getInstance(this).setAdNotiSmallIcon(R.drawable.ic_launcher);
-        }
-
-
         final TextView tv_result = (TextView)findViewById(R.id.tv_result);
 
         // receive response from loplat listener
-        mLoplatBroadcastReceiver = new BroadcastReceiver() {
+        mSampleUIReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String packageName = intent.getPackage();
@@ -132,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         return;
                     }
 
-                    System.out.println("mLoplatBroadcastReceiver: " + type);
+                    System.out.println("mSampleUIReceiver: " + type);
 
                     if(type.equals("error")) {
                         String response = intent.getStringExtra("response");
@@ -152,16 +145,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         };
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.loplat.sample.response");
-        registerReceiver(mLoplatBroadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mSampleUIReceiver, intentFilter);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        if (mLoplatBroadcastReceiver != null) {
-            unregisterReceiver(mLoplatBroadcastReceiver);
-            mLoplatBroadcastReceiver = null;
+        if (mSampleUIReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mSampleUIReceiver);
+            mSampleUIReceiver = null;
         }
     }
 
@@ -174,12 +167,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         //Monitoring 상태 확인하기
         int engineStatus = Plengi.getInstance(this).getEngineStatus();
-
         if(engineStatus == PlaceEngine.EngineStatus.STARTED)
         {
-            tv_status.setText("Monitoring On");
+            tv_status.setText("SDK Started");
         } else {
-            tv_status.setText("Monitoring off");
+            tv_status.setText("SDK Stopped");
         }
 
         int currentPlaceStatus = Plengi.getInstance(this).getCurrentPlaceStatus();
@@ -201,17 +193,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     tv_result.setText("" + info);
                 }
                 break;
-        }
-
-        // gravity 설정하기, 광고 마케팅 동의 한 경우
-        if (LoplatSampleApplication.isMarketingServiceAgreed(this)) {
-            // 마케팅 수신에 동의한 user에 대해서 로플랫 켐페인 설정
-            // 고객사가 직접 푸시 메세지 광고를 하는 경우
-            Plengi.getInstance(this).enableAdNetwork(true, false);
-            // 로플랫 SDK 에 푸시 메세지 광고를 맡기는 경우
-            // Plengi.getInstance(this).enableAdNetwork(true);
-            // Plengi.getInstance(this).setAdNotiLargeIcon(R.drawable.ic_launcher);
-            // Plengi.getInstance(this).setAdNotiSmallIcon(R.drawable.ic_launcher);
         }
     }
 
@@ -251,19 +232,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("마케팅 서비스 동의?")
                 .setMessage("마케팅 서비스 동의 하시겠습니까?")
-                .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // loplat gravity service off
-                        Plengi.getInstance(MainActivity.this).enableAdNetwork(true);
                         // 직접 광고(푸시 메세지) 하는 경우
-                        // Plengi.getInstance(MainActivity.this).enableAdNetwork(true, false);
+                        Plengi.getInstance(MainActivity.this).enableAdNetwork(true, false);
+                        // loplat SDK의 (푸시 메세지) 활용하는 경우
+                        // Plengi.getInstance(getApplicationContext()).enableAdNetwork(true);
+                        // Plengi.getInstance(getApplicationContext()).setAdNotiLargeIcon(R.drawable.ic_launcher);
+                        // Plengi.getInstance(getApplicationContext()).setAdNotiSmallIcon(R.drawable.ic_launcher);
+
                         // 앱 내 flag 저장
                         LoplatSampleApplication.setMarketingServiceAgreement(MainActivity.this, true);
                         Toast.makeText(getApplicationContext(), "푸시 알림 마케팅 수신에 동의 하였습니다", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .setNegativeButton("no", new DialogInterface.OnClickListener() {
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // loplat gravity service off
@@ -285,19 +269,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("위치기반 서비스 동의?")
                 .setMessage("위치기반 서비스 하시겠습니까?")
-                .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // loplat sdk init
-                        ((LoplatSampleApplication)getApplicationContext()).loplatSdkConfiguration();
+
 
                         LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, true);
+                        // loplat sdk init
+                        ((LoplatSampleApplication)getApplicationContext()).loplatSdkConfiguration();
 
                         startLoplatPlaceEngineService();
 
                     }
                 })
-                .setNegativeButton("no", new DialogInterface.OnClickListener() {
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // loplat SDK stop, 동의 거부
