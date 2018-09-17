@@ -95,6 +95,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 LoplatSampleApplication.setEchoCode(context, memberCodeFromServer);
             }
             ((LoplatSampleApplication) getApplicationContext()).loplatSdkConfiguration();
+            /**
+             * 위치서비스를 동의한 사용자인 경우 wifi scan 환경을 확인하는 것 권장합니다.
+             */
+            checkWiFiScanCondition();
         }
 
         final TextView tv_result = (TextView)findViewById(R.id.tv_result);
@@ -327,8 +331,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         } else if (!checkWifiScanIsAvailable()) {
             available = false;
-            // 안드로이드 4.3 이상 버전은 background wifi scan 설정이 켜져있으면 됨
-            // [참고: https://developer.android.com/reference/android/net/wifi/WifiManager.html#isScanAlwaysAvailable()]
+            /**
+             * 안드로이드 4.3 이상 버전은 background wifi scan 설정이 켜져있으면 됨
+             * 확인 방법
+             * 1. 삼성 계열 폰:
+             *  - [설정] -> [연결] -> [위치] -> [정확도 향상] -> WiFi 찾기 On
+             *  - [설정] -> [개인정보 보호 및 안전] -> [위치] -> [정확도 향상] -> WiFi 찾기 On
+             * 2. LG 계열 폰: [설정] -> [잠금화면 및 보안] -> [프라이버시, 위치정보] -> [고급 검색] -> WiFi 찾기 On
+             * 공장 초기화 기준 해당 옵션의 default 값은 On 입니다
+             * [참고: https://developer.android.com/reference/android/net/wifi/WifiManager.html#isScanAlwaysAvailable()]
+             */
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 Intent intent = new Intent(WifiManager.ACTION_REQUEST_SCAN_ALWAYS_AVAILABLE);
                 startActivityForResult(intent, REQUEST_WIFI_STATUS);
