@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_WIFI_STATUS || requestCode == REQUEST_LOCATION_STATUS) {
-                startLoplatPlaceEngineService();
             }
         }
     }
@@ -104,11 +103,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         mSampleUIReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                String packageName = intent.getPackage();
-                if (!packageName.equals(context.getPackageName())) {
-                    return;
-                }
-
                 String action = intent.getAction();
                 if(action.equals("com.loplat.sample.response")) {
                     try {
@@ -201,7 +195,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED
                 || grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-            startLoplatPlaceEngineService();
         }
     }
 
@@ -273,40 +266,35 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-
+                        Toast.makeText(getApplicationContext(), "loplat 위치 기반 서비스 이용에 동의 하였습니다", Toast.LENGTH_SHORT).show();
                         LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, true);
                         // loplat sdk init
                         ((LoplatSampleApplication)getApplicationContext()).loplatSdkConfiguration();
+                        tv_status.setText("SDK Started");
 
-                        startLoplatPlaceEngineService();
-
+                        /**
+                         * loplat SDK는 위치 permission, GPS setting가 WiFi scan을 할 수 없더라도 start된 상태를 유지하고
+                         * 위치 permission, GPS setting에 따라 WiFi scan이 가능한 상황이 되면 실제 동작.
+                         * 앱에 로플랫 SDK 적용시 약관의 위치서비스 동의한 사용자에게 설정 변경을 쉽게 할 수 있도록 checkWiFiScanCondition 활용해주세요.
+                         */
+                        checkWiFiScanCondition();
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // loplat SDK stop, 동의 거부
-                        Plengi.getInstance(MainActivity.this).stop();
-                        LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, false);
-                        tv_status.setText("Monitoring off");
                         Toast.makeText(getApplicationContext(), "loplat 위치 기반 서비스 이용을 취소 하였습니다", Toast.LENGTH_SHORT).show();
+                        LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, false);
+                        ((LoplatSampleApplication)getApplicationContext()).loplatSdkConfiguration();
+                        tv_status.setText("SDK Stopped");
+
                     }
                 });
         builder.show();
     }
 
-    public void startLoplatPlaceEngineService() {
-        // 1. wifi scan 가능한지 여부 확인 -> 가능 -> loplat SDK start
-        if (checkWiFiScanCondition()) {
-            Plengi.getInstance(MainActivity.this).start();
-            TextView tv_status = (TextView) findViewById(R.id.tv_status);
-            tv_status.setText("Monitoring on");
-            Toast.makeText(getApplicationContext(), "loplat 위치 기반 서비스 이용에 동의 하였습니다", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-    // Sample code for checking WiFi Scanning Condition
+    // WiFi Scan을 할 수 있는 상태인지 체크 하는 샘플 코드
     private boolean checkWiFiScanCondition() {
         boolean available = true;
         if (!checkLocationPermissionIfNeeded()) {
@@ -348,7 +336,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 // 안드로이드 4.2 이하 버전은 WiFi가 켜져있어야 wifi scanning 가능함
                 WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                 wifiManager.setWifiEnabled(true);
-                startLoplatPlaceEngineService();
             }
         }
         return available;

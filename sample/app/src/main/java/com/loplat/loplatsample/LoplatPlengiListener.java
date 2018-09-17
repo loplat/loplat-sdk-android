@@ -2,6 +2,7 @@ package com.loplat.loplatsample;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.loplat.placeengine.PlengiListener;
 import com.loplat.placeengine.PlengiResponse;
@@ -133,10 +134,9 @@ public class LoplatPlengiListener implements PlengiListener {
 
     private void sendLoplatResponseToApplication(String type, String response) {
         Intent i = new Intent();
-        i.setPackage(LoplatSampleApplication.getContext().getPackageName());
         i.setAction("com.loplat.sample.response");
         i.putExtra("type", type);
         i.putExtra("response", response);
-        LoplatSampleApplication.getContext().sendBroadcast(i);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(i);
     }
 }

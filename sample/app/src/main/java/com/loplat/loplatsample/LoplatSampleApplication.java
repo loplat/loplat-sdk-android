@@ -28,6 +28,7 @@ public class LoplatSampleApplication extends MultiDexApplication {
         loplatSdkConfiguration();
     }
 
+    // init(), start()가 여러 번 호출되도 상관 없음
     public void loplatSdkConfiguration() {
         Context context = this;
         Plengi plengi = Plengi.getInstance(this);
