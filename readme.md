@@ -1,4 +1,4 @@
-﻿# Plengi SDK
+# Plengi SDK
 Android용 loplat plengi 라이브러리
 
 ## Installation
@@ -9,7 +9,7 @@ Android용 loplat plengi 라이브러리
 - 프로젝트 내, 최상위 `build.gradle` 에 아래의 코드를 추가하세요.
 	
 	```groovy
-	maven { url "http://maven.loplat.com/artifactory/plengi"}
+	maven { url "https://maven.loplat.com/artifactory/plengi"}
 	```
 
 	모듈의 `build.gradle` 에 아래의 코드를 추가하세요.
@@ -19,7 +19,7 @@ Android용 loplat plengi 라이브러리
 		repositories {
 	        jcenter()
 			mavenCentral()
-			maven { url "http://maven.loplat.com/artifactory/plengi"}
+			maven { url "https://maven.loplat.com/artifactory/plengi"}
 	        google()
 		}
 	}
