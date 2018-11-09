@@ -2,7 +2,7 @@
 Android용 loplat plengi 라이브러리
 
 ## Installation
-- 상세한 내용은 [로플랫 개발자](https://developers.loplat.com) 페이지 참고 바랍니다.
+- 상세한 내용은 [로플랫 개발자](https://developers.loplat.com/#/documentation/android) 페이지 참고 바랍니다.
 
 ## How to import
 
