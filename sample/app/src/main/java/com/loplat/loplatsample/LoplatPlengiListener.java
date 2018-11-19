@@ -31,52 +31,7 @@ public class LoplatPlengiListener implements PlengiListener {
         String echo_code = response.echo_code;
         i.putExtra("echo_code", echo_code);
         // get location information from loplat server (refreshPlace())
-        if(response.type == PlengiResponse.ResponseType.PLACE) {
-            String description = "";
-            if (response.place != null) {
-                String name = response.place.name;  // detected place name
-                String branch = (response.place.tags == null) ? "": response.place.tags;
-                int floor = response.place.floor;   // detected place's floor info
-                String client_code = response.place.client_code;    // client_code
-
-                float accuracy = response.place.accuracy;
-                float threshold = response.place.threshold;
-
-                description = "[PLACE]"+ name + ": " + branch + ", " + floor + ", " +
-                        String.format("%.3f", accuracy) + "/" + String.format("%.3f", threshold);
-
-                if(accuracy > threshold) {
-                    // device is within the detected place
-                    description += " (In)";
-                } else {
-                    // device is outside the detected place
-                    description += " (Nearby)";
-                }
-
-                if(client_code != null && !client_code.isEmpty()) {
-                    description += ", client_code: " + client_code;
-                }
-            }
-
-            if (response.area != null) {
-                if (response.place != null) {
-                    description += "\n    ";
-                }
-                description += "[" + response.area.id + "]" + response.area.name + ","
-                        + response.area.tag + "(" + response.area.lat + "," + response.area.lng + ")";
-            }
-
-            if (response.complex != null) {
-                if (response.place != null) {
-                    description += "\n   ";
-                }
-                description += "[" + response.complex.id + "]" + response.complex.name + ","
-                        + response.complex.branch_name + "," + response.complex.category;
-            }
-
-            System.out.println(description);
-            sendLoplatResponseToApplication("placeinfo", description);
-        } else if(response.type == PlengiResponse.ResponseType.PLACE_EVENT
+        if(response.type == PlengiResponse.ResponseType.PLACE_EVENT
                 || response.type == PlengiResponse.ResponseType.PLACE_TRACKING
                 || response.type == PlengiResponse.ResponseType.PLACE_ADV_TRACKING) {
             // get events (place enter or place leave)

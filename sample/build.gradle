@@ -16,7 +16,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-        maven { url "http://maven.loplat.com/artifactory/plengi"}
+        maven { url "https://maven.loplat.com/artifactory/plengi"}
         google()
     }
 }

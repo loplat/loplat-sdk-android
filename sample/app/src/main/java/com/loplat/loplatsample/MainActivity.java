@@ -32,6 +32,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.loplat.placeengine.OnPlengiListener;
 import com.loplat.placeengine.PlaceEngine;
 import com.loplat.placeengine.Plengi;
 import com.loplat.placeengine.PlengiResponse;
@@ -129,14 +130,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         String response = intent.getStringExtra("response");
                         tv_result.setText(response);
                     } else {
-                        if (type.equals("placeinfo")) {
+                       if(type.equals("placeevent")) {
                             String response = intent.getStringExtra("response");
                             tv_result.setText(response);
-                        }
-                        else if(type.equals("placeevent")) {
-                            String response = intent.getStringExtra("response");
-                            tv_result.setText(response);
-                        }
+                       }
                     }
                 }
             }
@@ -204,7 +201,70 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     public void onRequestLocationInfo(View view) {
         // request location to loplat engine
-        int result = Plengi.getInstance(this).refreshPlace();
+        final TextView tv_result = (TextView)findViewById(R.id.tv_result);
+        int result = Plengi.getInstance(this).manual_refreshPlace_foreground(new OnPlengiListener() {
+            @Override
+            public void onSuccess(PlengiResponse response) {
+                if (mProgressDialog!=null&&mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
+
+                String description = "";
+                if (response.place != null) {
+                    String name = response.place.name;  // detected place name
+                    String branch = (response.place.tags == null) ? "": response.place.tags;
+                    int floor = response.place.floor;   // detected place's floor info
+                    String client_code = response.place.client_code;    // client_code
+
+                    float accuracy = response.place.accuracy;
+                    float threshold = response.place.threshold;
+
+                    description = "[PLACE]"+ name + ": " + branch + ", " + floor + ", " +
+                            String.format("%.3f", accuracy) + "/" + String.format("%.3f", threshold);
+
+                    if(accuracy > threshold) {
+                        // device is within the detected place
+                        description += " (In)";
+                    } else {
+                        // device is outside the detected place
+                        description += " (Nearby)";
+                    }
+
+                    if(client_code != null && !client_code.isEmpty()) {
+                        description += ", client_code: " + client_code;
+                    }
+                }
+
+                if (response.area != null) {
+                    if (response.place != null) {
+                        description += "\n    ";
+                    }
+                    description += "[" + response.area.id + "]" + response.area.name + ","
+                            + response.area.tag + "(" + response.area.lat + "," + response.area.lng + ")";
+                }
+
+                if (response.complex != null) {
+                    if (response.place != null) {
+                        description += "\n   ";
+                    }
+                    description += "[" + response.complex.id + "]" + response.complex.name + ","
+                            + response.complex.branch_name + "," + response.complex.category;
+                }
+
+                System.out.println(description);
+                tv_result.setText(description);
+            }
+
+            @Override
+            public void onFail(PlengiResponse plengiResponse) {
+                if (mProgressDialog!=null&&mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
+                if (plengiResponse.errorReason != null) {
+                    tv_result.setText(plengiResponse.errorReason);
+                }
+            }
+        });
 
         if(result == PlengiResponse.Result.SUCCESS) {
             mProgressDialog = new ProgressDialog(MainActivity.this);
