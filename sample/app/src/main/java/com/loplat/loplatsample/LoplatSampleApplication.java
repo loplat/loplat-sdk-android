@@ -1,13 +1,13 @@
 package com.loplat.loplatsample;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.multidex.MultiDexApplication;
 
 import com.loplat.placeengine.Plengi;
 
 
-public class LoplatSampleApplication extends MultiDexApplication {
+public class LoplatSampleApplication extends Application {
 
     private static LoplatSampleApplication instance;
 
