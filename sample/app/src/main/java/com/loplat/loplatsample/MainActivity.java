@@ -126,14 +126,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
                     System.out.println("mSampleUIReceiver: " + type);
 
-                    if(type.equals("error")) {
+                    if (type.equals("error") || type.equals("placeevent")) {
                         String response = intent.getStringExtra("response");
                         tv_result.setText(response);
-                    } else {
-                       if(type.equals("placeevent")) {
-                            String response = intent.getStringExtra("response");
-                            tv_result.setText(response);
-                       }
                     }
                 }
             }
@@ -202,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onRequestLocationInfo(View view) {
         // request location to loplat engine
         final TextView tv_result = (TextView)findViewById(R.id.tv_result);
-        int result = Plengi.getInstance(this).manual_refreshPlace_foreground(new OnPlengiListener() {
+        int result = Plengi.getInstance(this).TEST_refreshPlace_foreground(new OnPlengiListener() {
             @Override
             public void onSuccess(PlengiResponse response) {
                 if (mProgressDialog!=null&&mProgressDialog.isShowing()) {
@@ -282,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     /**
-     * Note: 아래의 코드는 Gravity 사용을 이용한 마케팅 동의 서비스 예제입니다.
+     * Note: 아래의 코드는 loplat X 사용을 이용한 마케팅 동의 서비스 예제입니다.
      * @param view
      */
     public void onMarketServiceAgreement(View view) {
@@ -307,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // loplat gravity service off
+                        // loplat X service off
                         Plengi.getInstance(MainActivity.this).enableAdNetwork(false);
                         // 앱 내 flag 저장
                         LoplatSampleApplication.setMarketingServiceAgreement(MainActivity.this, false);
