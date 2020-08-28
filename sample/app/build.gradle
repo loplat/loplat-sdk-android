@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion '29.0.2'
+    buildToolsVersion '29.0.3'
 
     defaultConfig {
         applicationId "com.loplat.loplatsample"
@@ -27,9 +27,10 @@ android {
 }*/
 
 dependencies {
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     //implementation 'com.android.support:multidex:1.0.1'
 
-    // Loplat SDK
+    // Loplat SDKz
     implementation 'com.loplat:placeengine:2.0.9.3'
 
     implementation 'com.google.code.gson:gson:2.8.5'
