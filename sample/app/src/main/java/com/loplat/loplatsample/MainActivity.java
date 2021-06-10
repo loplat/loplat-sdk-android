@@ -35,6 +35,7 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.loplat.placeengine.OnPlengiListener;
 import com.loplat.placeengine.PlaceEngine;
+import com.loplat.placeengine.PlaceEngineBase;
 import com.loplat.placeengine.Plengi;
 import com.loplat.placeengine.PlengiResponse;
 
@@ -158,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         //Monitoring 상태 확인하기
         int engineStatus = Plengi.getInstance(this).getEngineStatus();
-        if(engineStatus == PlaceEngine.EngineStatus.STARTED)
+        if(engineStatus == PlaceEngineBase.EngineStatus.STARTED)
         {
             tv_status.setText("SDK Started");
         } else {
