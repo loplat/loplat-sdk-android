@@ -326,9 +326,7 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
 
                google play service(location) 사용하는 경우 -> dependency google-play-services 선언이 필요함
                compile 'com.google.android.gms:play-services:[latest version]'
-            */if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(
-                    applicationContext
-                ) === ConnectionResult.SUCCESS) {
+            */if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(applicationContext) === ConnectionResult.SUCCESS) {
                 if (isGoogleClientConnected) {
                     turnGpsOnByGooglePlayService()
                 } else {
@@ -414,8 +412,6 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
     private fun checkLocationPermissionIfNeeded(): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED
-                    || checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
 
                 // Should we show an explanation?
@@ -428,7 +424,6 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
                 requestPermissions(
                     arrayOf(
                         Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
                     ), REQUEST_LOCATION_PERMISSION
                 )
                 // MY_PERMISSION is an
@@ -454,7 +449,7 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
     private val isGoogleClientConnected: Boolean
         private get() {
             if (mGoogleApiClient != null) {
-                if (mGoogleApiClient!!.isConnected() || mGoogleApiClient!!.isConnecting()) {
+                if (mGoogleApiClient!!.isConnected || mGoogleApiClient!!.isConnecting) {
                     return true
                 }
             }

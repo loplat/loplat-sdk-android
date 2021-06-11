@@ -68,12 +68,12 @@
                     android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Marketing Service Agreement"
-                    android:onClick="onMarketServiceAgreement"
-                    />
+
+                <Switch
+                    android:id="@+id/switch_marketing"
+                    android:gravity="left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
                 <TextView
                     android:text="2. 위치 기반 서비스 동의"
@@ -81,12 +81,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Location-based service agreement"
-                    android:onClick="onLocationBasedServiceAgreement"
-                    />
+                <Switch
+                    android:id="@+id/switch_location"
+                    android:gravity="left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
         </LinearLayout>
 

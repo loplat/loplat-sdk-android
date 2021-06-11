@@ -3,6 +3,8 @@ package com.loplat.loplatsample;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
+import android.util.Log;
 
 import com.loplat.placeengine.Plengi;
 
@@ -30,6 +32,7 @@ public class LoplatSampleApplication extends Application {
 
     // init(), start()가 여러 번 호출되도 상관 없음
     public void loplatSdkConfiguration() {
+        Log.d("LOGTAG/APPLICATION", "loplatSdkConfiguration");
         Context context = this;
         Plengi plengi = Plengi.getInstance(this);
         // 위치 서비스 약관 동의 여부 체크
@@ -51,9 +54,22 @@ public class LoplatSampleApplication extends Application {
             String clientId = "loplatdemo"; // Test ID
             String clientSecret = "loplatdemokey";  // Test PW
             plengi.setListener(new LoplatPlengiListener());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                plengi.setBackgroundLocationAccessDialogLayout(R.layout.dialog_background_location_info);
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                plengi.setDefaultNotificationChannel(R.string.foreground_service_noti_channel_name,0);
+                plengi.setDefaultNotificationInfo(
+                        R.drawable.ic_launcher,
+                        0,
+                        0);
+            }
+            Log.d("LOGTAG/APPLICATION", "init");
             plengi.init(clientId, clientSecret, getEchoCode(context));
             plengi.start();
         } else {
+            Log.d("LOGTAG/APPLICATION", "stop");
             // 위치 서비스 약관 동의 거부한 user에 대해서 SDK stop
             plengi.stop();
         }

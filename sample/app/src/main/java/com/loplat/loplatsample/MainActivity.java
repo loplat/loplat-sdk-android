@@ -1,5 +1,6 @@
 package com.loplat.loplatsample;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -10,16 +11,22 @@ import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -34,16 +41,19 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.loplat.placeengine.OnPlengiListener;
-import com.loplat.placeengine.PlaceEngine;
 import com.loplat.placeengine.PlaceEngineBase;
 import com.loplat.placeengine.Plengi;
 import com.loplat.placeengine.PlengiResponse;
-
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     BroadcastReceiver mSampleUIReceiver;
     ProgressDialog mProgressDialog=null;
+
+    private TextView tv_status;
+    private TextView tv_result;
+    private Switch switchMarketing;
+    private Switch switchLocation;
 
     private static final String PREFS_NAME = MainActivity.class.getSimpleName();
     private static final String TAG = PREFS_NAME;
@@ -53,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private static final int REQUEST_LOCATION_PERMISSION = 10000;
     private static final int REQUEST_LOCATION_STATUS = 10001;
     private static final int REQUEST_WIFI_STATUS = 10002;
+    private static final int REQUEST_FINE_LOCATION_PERMISSION = 10003;
 
     GoogleApiClient mGoogleApiClient;
 
@@ -64,10 +75,60 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_LOCATION_PERMISSION){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                    locationPermissionGranted();
+                }else if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED){
+                    locationPermissionDenied();
+                }
+            }
+        }
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_WIFI_STATUS || requestCode == REQUEST_LOCATION_STATUS) {
             }
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == REQUEST_LOCATION_PERMISSION){
+            Log.d("LOGTAG/grantResults[0]", String.valueOf(grantResults[0]));
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                locationPermissionGranted();
+            }else if(grantResults[0] == PackageManager.PERMISSION_DENIED){
+                locationPermissionDenied();
+            }
+        }else if(grantResults[0] == PackageManager.PERMISSION_GRANTED
+                || grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+        }
+    }
+
+    private void locationPermissionGranted(){
+
+        Toast.makeText(getApplicationContext(), "loplat 위치 기반 서비스 이용에 동의 하였습니다", Toast.LENGTH_SHORT).show();
+        LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, true);
+        // loplat sdk init
+        ((LoplatSampleApplication)getApplicationContext()).loplatSdkConfiguration();
+
+        /**
+         * loplat SDK는 위치 permission, GPS setting가 WiFi scan을 할 수 없더라도 start된 상태를 유지하고
+         * 위치 permission, GPS setting에 따라 WiFi scan이 가능한 상황이 되면 실제 동작.
+         * 앱에 로플랫 SDK 적용시 약관의 위치서비스 동의한 사용자에게 설정 변경을 쉽게 할 수 있도록 checkWiFiScanCondition 활용해주세요.
+         */
+        checkWiFiScanCondition();
+        tv_status.setText("SDK Started");
+        switchLocation.setChecked(true);
+    }
+
+    private void locationPermissionDenied(){
+        // loplat SDK stop, 동의 거부
+        Toast.makeText(getApplicationContext(), "loplat 위치 기반 서비스 이용을 취소 하였습니다", Toast.LENGTH_SHORT).show();
+        LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, false);
+        ((LoplatSampleApplication)getApplicationContext()).loplatSdkConfiguration();
+        tv_status.setText("SDK Stopped");
+        switchLocation.setChecked(false);
     }
 
     @Override
@@ -83,8 +144,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         // 로그인 후 서버로 부터 받은 값을 local에 저장
         String memberCodeFromServer = "18497358207";
-        boolean isMarketingServiceAgreedFromServer = true;
-        boolean isLocationServiceAgreedFromServer = true;
+        boolean isMarketingServiceAgreedFromServer = false;
+        boolean isLocationServiceAgreedFromServer = false;
 
         LoplatSampleApplication.setMarketingServiceAgreement(context, isMarketingServiceAgreedFromServer);
         LoplatSampleApplication.setLocationServiceAgreement(context, isLocationServiceAgreedFromServer);
@@ -104,7 +165,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             checkWiFiScanCondition();
         }
 
-        final TextView tv_result = (TextView)findViewById(R.id.tv_result);
+        tv_status = findViewById(R.id.tv_status);
+        tv_result = findViewById(R.id.tv_result);
+        switchMarketing = (Switch)findViewById(R.id.switch_marketing);
+        switchLocation = (Switch)findViewById(R.id.switch_location);
+
+        switchMarketing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onMarketServiceAgreement();
+            }
+        });
+
+        switchLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onLocationBasedServiceAgreement();
+            }
+        });
 
         // receive response from loplat listener
         mSampleUIReceiver = new BroadcastReceiver() {
@@ -153,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onResume() {
         super.onResume();
-
+        Log.d("LOGTAG/","onResume");
         final TextView tv_status = (TextView)findViewById(R.id.tv_status);
         final TextView tv_result = (TextView)findViewById(R.id.tv_result);
 
@@ -165,7 +243,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         } else {
             tv_status.setText("SDK Stopped");
         }
-
         int currentPlaceStatus = Plengi.getInstance(this).getCurrentPlaceStatus();
 
         switch (currentPlaceStatus) {
@@ -188,171 +265,184 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED
-                || grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-        }
-    }
-
     public void onRequestLocationInfo(View view) {
         // request location to loplat engine
-        final TextView tv_result = (TextView)findViewById(R.id.tv_result);
-        int result = Plengi.getInstance(this).TEST_refreshPlace_foreground(new OnPlengiListener() {
-            @Override
-            public void onSuccess(PlengiResponse response) {
-                if (mProgressDialog!=null&&mProgressDialog.isShowing()) {
-                    mProgressDialog.dismiss();
-                }
-
-                String description = "";
-                if (response.place != null) {
-                    String name = response.place.name;  // detected place name
-                    String branch = (response.place.tags == null) ? "": response.place.tags;
-                    int floor = response.place.floor;   // detected place's floor info
-                    String client_code = response.place.client_code;    // client_code
-
-                    float accuracy = response.place.accuracy;
-                    float threshold = response.place.threshold;
-
-                    description = "[PLACE]"+ name + ": " + branch + ", " + floor + ", " +
-                            String.format("%.3f", accuracy) + "/" + String.format("%.3f", threshold);
-
-                    if(accuracy > threshold) {
-                        // device is within the detected place
-                        description += " (In)";
-                    } else {
-                        // device is outside the detected place
-                        description += " (Nearby)";
+        Log.d("LOGTAG/onRequest", String.valueOf(LoplatSampleApplication.isLocationServiceAgreed(this)));
+        if(LoplatSampleApplication.isLocationServiceAgreed(this)){
+            Log.d("LOGTAG/onRequestLocationInfo", "start");
+            int result = Plengi.getInstance(this).TEST_refreshPlace_foreground(new OnPlengiListener() {
+                @Override
+                public void onSuccess(PlengiResponse response) {
+                    Log.d("LOGTAG/onRequestLocationInfo", "onSuccess");
+                    if (mProgressDialog!=null&&mProgressDialog.isShowing()) {
+                        mProgressDialog.dismiss();
                     }
 
-                    if(client_code != null && !client_code.isEmpty()) {
-                        description += ", client_code: " + client_code;
-                    }
-                }
-
-                if (response.area != null) {
+                    String description = "";
                     if (response.place != null) {
-                        description += "\n    ";
+                        String name = response.place.name;  // detected place name
+                        String branch = (response.place.tags == null) ? "": response.place.tags;
+                        int floor = response.place.floor;   // detected place's floor info
+                        String client_code = response.place.client_code;    // client_code
+
+                        float accuracy = response.place.accuracy;
+                        float threshold = response.place.threshold;
+
+                        description = "[PLACE]"+ name + ": " + branch + ", " + floor + ", " +
+                                String.format("%.3f", accuracy) + "/" + String.format("%.3f", threshold);
+
+                        if(accuracy > threshold) {
+                            // device is within the detected place
+                            description += " (In)";
+                        } else {
+                            // device is outside the detected place
+                            description += " (Nearby)";
+                        }
+
+                        if(client_code != null && !client_code.isEmpty()) {
+                            description += ", client_code: " + client_code;
+                        }
                     }
-                    description += "[" + response.area.id + "]" + response.area.name + ","
-                            + response.area.tag + "(" + response.area.lat + "," + response.area.lng + ")";
-                }
 
-                if (response.complex != null) {
-                    if (response.place != null) {
-                        description += "\n   ";
+                    if (response.area != null) {
+                        if (response.place != null) {
+                            description += "\n    ";
+                        }
+                        description += "[" + response.area.id + "]" + response.area.name + ","
+                                + response.area.tag + "(" + response.area.lat + "," + response.area.lng + ")";
                     }
-                    description += "[" + response.complex.id + "]" + response.complex.name + ","
-                            + response.complex.branch_name + "," + response.complex.category;
+
+                    if (response.complex != null) {
+                        if (response.place != null) {
+                            description += "\n   ";
+                        }
+                        description += "[" + response.complex.id + "]" + response.complex.name + ","
+                                + response.complex.branch_name + "," + response.complex.category;
+                    }
+
+                    System.out.println(description);
+                    tv_result.setText(description);
                 }
 
-                System.out.println(description);
-                tv_result.setText(description);
+                @Override
+                public void onFail(PlengiResponse plengiResponse) {
+                    Log.d("LOGTAG/onRequestLocationInfo", "onFail");
+                    if (mProgressDialog!=null&&mProgressDialog.isShowing()) {
+                        mProgressDialog.dismiss();
+                    }
+                    if (plengiResponse.errorReason != null) {
+                        tv_result.setText(plengiResponse.errorReason);
+                    }
+                }
+            });
+
+            Log.d("LOGTAG/onRequestLocationInfo", "check1");
+            if(result == PlengiResponse.Result.SUCCESS) {
+                Log.d("LOGTAG/onRequestLocationInfo", "check2");
+                mProgressDialog = new ProgressDialog(MainActivity.this);
+                mProgressDialog.setMessage("I'm scanning wifi. Please wait...");
+                mProgressDialog.setCancelable(true);
+                mProgressDialog.show();
             }
-
-            @Override
-            public void onFail(PlengiResponse plengiResponse) {
-                if (mProgressDialog!=null&&mProgressDialog.isShowing()) {
-                    mProgressDialog.dismiss();
-                }
-                if (plengiResponse.errorReason != null) {
-                    tv_result.setText(plengiResponse.errorReason);
-                }
+            else if(result == PlengiResponse.Result.FAIL_INTERNET_UNAVAILABLE) {
+                Log.d("LOGTAG/onRequestLocationInfo", "check3");
+                // internet is not connected
             }
-        });
-
-        if(result == PlengiResponse.Result.SUCCESS) {
-            mProgressDialog = new ProgressDialog(MainActivity.this);
-            mProgressDialog.setMessage("I'm scanning wifi. Please wait...");
-            mProgressDialog.setCancelable(true);
-            mProgressDialog.show();
-        }
-        else if(result == PlengiResponse.Result.FAIL_INTERNET_UNAVAILABLE) {
-            // internet is not connected
-        }
-        else if(result == PlengiResponse.Result.FAIL_WIFI_SCAN_UNAVAILABLE) {
-            // wifi scan is not available
-            checkWiFiScanCondition();
+            else if(result == PlengiResponse.Result.FAIL_WIFI_SCAN_UNAVAILABLE) {
+                Log.d("LOGTAG/onRequestLocationInfo", "check4");
+                // wifi scan is not available
+                checkWiFiScanCondition();
+            }else{
+                Log.d("LOGTAG/onRequestLocationInfo", String.valueOf(result));
+            }
+            Log.d("LOGTAG/onRequestLocationInfo", "check5");
+        }else{
+            Toast.makeText(getApplicationContext(), "loplat 위치 기반 서비스 이용에 동의 해야합니다.", Toast.LENGTH_SHORT).show();
         }
     }
 
     /**
      * Note: 아래의 코드는 loplat X 사용을 이용한 마케팅 동의 서비스 예제입니다.
-     * @param view
      */
-    public void onMarketServiceAgreement(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("마케팅 서비스 동의?")
-                .setMessage("마케팅 서비스 동의 하시겠습니까?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // 직접 광고(푸시 메세지) 하는 경우
-                        Plengi.getInstance(MainActivity.this).enableAdNetwork(true, false);
-                        // loplat SDK의 (푸시 메세지) 활용하는 경우
-                        // Plengi.getInstance(getApplicationContext()).enableAdNetwork(true);
-                        // Plengi.getInstance(getApplicationContext()).setAdNotiLargeIcon(R.drawable.ic_launcher);
-                        // Plengi.getInstance(getApplicationContext()).setAdNotiSmallIcon(R.drawable.ic_launcher);
 
-                        // 앱 내 flag 저장
-                        LoplatSampleApplication.setMarketingServiceAgreement(MainActivity.this, true);
-                        Toast.makeText(getApplicationContext(), "푸시 알림 마케팅 수신에 동의 하였습니다", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // loplat X service off
-                        Plengi.getInstance(MainActivity.this).enableAdNetwork(false);
-                        // 앱 내 flag 저장
-                        LoplatSampleApplication.setMarketingServiceAgreement(MainActivity.this, false);
-                        Toast.makeText(getApplicationContext(), "푸시 알림 마케팅 수신을 취소 하였습니다", Toast.LENGTH_SHORT).show();
-                    }
-                });
+    public void onMarketServiceAgreement() {
+        String title = "마케팅 서비스 동의";
+        String message = "마케팅 서비스에";
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if(switchMarketing.isChecked()){
+            message = "마케팅 서비스 동의 하시겠습니까?";
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // 직접 광고(푸시 메세지) 하는 경우
+                    Plengi.getInstance(MainActivity.this).enableAdNetwork(true, false);
+                    // loplat SDK의 (푸시 메세지) 활용하는 경우
+                    // Plengi.getInstance(getApplicationContext()).enableAdNetwork(true);
+                    // Plengi.getInstance(getApplicationContext()).setAdNotiLargeIcon(R.drawable.ic_launcher);
+                    // Plengi.getInstance(getApplicationContext()).setAdNotiSmallIcon(R.drawable.ic_launcher);
+
+                    // 앱 내 flag 저장
+                    LoplatSampleApplication.setMarketingServiceAgreement(MainActivity.this, true);
+                    Toast.makeText(getApplicationContext(), "푸시 알림 마케팅 수신에 동의 하였습니다", Toast.LENGTH_SHORT).show();
+                    switchMarketing.setChecked(true);
+                }
+            });
+        }else{
+            message = "마케팅 서비스 동의를 취소하시겠습니까?";
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Plengi.getInstance(MainActivity.this).enableAdNetwork(false);
+                    // 앱 내 flag 저장
+                    LoplatSampleApplication.setMarketingServiceAgreement(MainActivity.this, false);
+                    Toast.makeText(getApplicationContext(), "푸시 알림 마케팅 수신을 취소 하였습니다", Toast.LENGTH_SHORT).show();
+                    switchMarketing.setChecked(false);
+                }
+            });
+        }
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switchMarketing.setChecked(!switchMarketing.isChecked());
+            }
+        });
         builder.show();
     }
 
     /**
      * Note: 아래의 코드는 loplat SDK 구동(start)를 이용한 위치기반 서비스 예제입니다.
-     * @param view
      */
-    public void onLocationBasedServiceAgreement(View view) {
-        final TextView tv_status = (TextView)findViewById(R.id.tv_status);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("위치기반 서비스 동의?")
-                .setMessage("위치기반 서비스 하시겠습니까?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+    public void onLocationBasedServiceAgreement() {
+        if(switchLocation.isChecked()){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
+            }else{
 
-                        Toast.makeText(getApplicationContext(), "loplat 위치 기반 서비스 이용에 동의 하였습니다", Toast.LENGTH_SHORT).show();
-                        LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, true);
-                        // loplat sdk init
-                        ((LoplatSampleApplication)getApplicationContext()).loplatSdkConfiguration();
-                        tv_status.setText("SDK Started");
-
-                        /**
-                         * loplat SDK는 위치 permission, GPS setting가 WiFi scan을 할 수 없더라도 start된 상태를 유지하고
-                         * 위치 permission, GPS setting에 따라 WiFi scan이 가능한 상황이 되면 실제 동작.
-                         * 앱에 로플랫 SDK 적용시 약관의 위치서비스 동의한 사용자에게 설정 변경을 쉽게 할 수 있도록 checkWiFiScanCondition 활용해주세요.
-                         */
-                        checkWiFiScanCondition();
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // loplat SDK stop, 동의 거부
-                        Toast.makeText(getApplicationContext(), "loplat 위치 기반 서비스 이용을 취소 하였습니다", Toast.LENGTH_SHORT).show();
-                        LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, false);
-                        ((LoplatSampleApplication)getApplicationContext()).loplatSdkConfiguration();
-                        tv_status.setText("SDK Stopped");
-
-                    }
-                });
-        builder.show();
+            }
+        }else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("위치 기반 서비스 동의 취소");
+            builder.setMessage("위치 기반 서비스 동의를 취소하시겠습니까?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    Uri uri = Uri.fromParts("package", getPackageName(), null);
+                    intent.setData(uri);
+                    startActivityForResult(intent, REQUEST_LOCATION_PERMISSION);
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switchLocation.setChecked(!switchMarketing.isChecked());
+                }
+            });
+            builder.show();
+        }
     }
 
     // WiFi Scan을 할 수 있는 상태인지 체크 하는 샘플 코드
@@ -486,7 +576,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 }
 
 
-                requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
                 // MY_PERMISSION is an
                 // app-defined int constant
                 //}
