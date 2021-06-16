@@ -7,10 +7,14 @@ import android.content.*
 import android.content.IntentSender.SendIntentException
 import android.content.pm.PackageManager
 import android.location.LocationManager
+import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.view.View
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,27 +22,83 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.location.*
-import com.google.android.gms.common.api.PendingResult
-import com.google.android.gms.common.api.ResultCallback
-import com.google.android.gms.common.api.Status
-import com.loplat.placeengine.*
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationSettingsStatusCodes
+import com.loplat.placeengine.OnPlengiListener
+import com.loplat.placeengine.PlaceEngineBase
+import com.loplat.placeengine.Plengi
+import com.loplat.placeengine.PlengiResponse
 
-class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+class MainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFailedListener {
     var mSampleUIReceiver: BroadcastReceiver? = null
     var mProgressDialog: ProgressDialog? = null
+    private var tv_status: TextView? = null
+    private var tv_result: TextView? = null
+    private var switchMarketing: Switch? = null
+    private var switchLocation: Switch? = null
     var mGoogleApiClient: GoogleApiClient? = null
-    var locationRequest: LocationRequest = LocationRequest()
+    var locationRequest = LocationRequest()
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
             .setInterval(UPDATE_INTERVAL_MS.toLong())
             .setFastestInterval(FASTEST_UPDATE_INTERVAL_MS.toLong())
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    locationPermissionGranted()
+                } else if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+                    locationPermissionDenied()
+                }
+            }
+        }
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_WIFI_STATUS || requestCode == REQUEST_LOCATION_STATUS) {
             }
         }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            Log.d("LOGTAG/grantResults[0]", grantResults[0].toString())
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                locationPermissionGranted()
+            } else if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                locationPermissionDenied()
+            }
+        } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED
+                || grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+        }
+    }
+
+    private fun locationPermissionGranted() {
+        Toast.makeText(applicationContext, "loplat 위치 기반 서비스 이용에 동의 하였습니다", Toast.LENGTH_SHORT).show()
+        LoplatSampleApplication.setLocationServiceAgreement(this@MainActivity, true)
+        // loplat sdk init
+        (applicationContext as LoplatSampleApplication).loplatSdkConfiguration()
+        /**
+         * loplat SDK는 위치 permission, GPS setting가 WiFi scan을 할 수 없더라도 start된 상태를 유지하고
+         * 위치 permission, GPS setting에 따라 WiFi scan이 가능한 상황이 되면 실제 동작.
+         * 앱에 로플랫 SDK 적용시 약관의 위치서비스 동의한 사용자에게 설정 변경을 쉽게 할 수 있도록 checkWiFiScanCondition 활용해주세요.
+         */
+        checkWiFiScanCondition()
+        tv_status!!.text = "SDK Started"
+        switchLocation!!.isChecked = true
+    }
+
+    private fun locationPermissionDenied() {
+        // loplat SDK stop, 동의 거부
+        Toast.makeText(applicationContext, "loplat 위치 기반 서비스 이용을 취소 하였습니다", Toast.LENGTH_SHORT).show()
+        LoplatSampleApplication.setLocationServiceAgreement(this@MainActivity, false)
+        (applicationContext as LoplatSampleApplication).loplatSdkConfiguration()
+        tv_status!!.text = "SDK Stopped"
+        switchLocation!!.isChecked = false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,16 +114,10 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
 
         // 로그인 후 서버로 부터 받은 값을 local에 저장
         val memberCodeFromServer = "18497358207"
-        val isMarketingServiceAgreedFromServer = true
-        val isLocationServiceAgreedFromServer = true
-        LoplatSampleApplication.setMarketingServiceAgreement(
-            context,
-            isMarketingServiceAgreedFromServer
-        )
-        LoplatSampleApplication.setLocationServiceAgreement(
-            context,
-            isLocationServiceAgreedFromServer
-        )
+        val isMarketingServiceAgreedFromServer = false
+        val isLocationServiceAgreedFromServer = false
+        LoplatSampleApplication.setMarketingServiceAgreement(context, isMarketingServiceAgreedFromServer)
+        LoplatSampleApplication.setLocationServiceAgreement(context, isLocationServiceAgreedFromServer)
         if (isLocationServiceAgreedFromServer) {
             /**
              * 하기 코드는 회원번호를 사용하는 경우만 활용
@@ -79,7 +133,12 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
              */
             checkWiFiScanCondition()
         }
-        val tv_result = findViewById<View>(R.id.tv_result) as TextView
+        tv_status = findViewById(R.id.tv_status)
+        tv_result = findViewById(R.id.tv_result)
+        switchMarketing = findViewById<View>(R.id.switch_marketing) as Switch
+        switchLocation = findViewById<View>(R.id.switch_location) as Switch
+        switchMarketing!!.setOnClickListener { onMarketServiceAgreement() }
+        switchLocation!!.setOnClickListener { onLocationBasedServiceAgreement() }
 
         // receive response from loplat listener
         mSampleUIReceiver = object : BroadcastReceiver() {
@@ -97,7 +156,7 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
                     println("mSampleUIReceiver: $type")
                     if (type == "error" || type == "placeevent") {
                         val response = intent.getStringExtra("response")
-                        tv_result.text = response
+                        tv_result!!.text = response
                     }
                 }
             }
@@ -117,28 +176,28 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
 
     override fun onResume() {
         super.onResume()
+        Log.d("LOGTAG/", "onResume")
         val tv_status = findViewById<View>(R.id.tv_status) as TextView
         val tv_result = findViewById<View>(R.id.tv_result) as TextView
 
         //Monitoring 상태 확인하기
-        val engineStatus: Int = Plengi.getInstance(this).engineStatus
+        val engineStatus = Plengi.getInstance(this).engineStatus
         if (engineStatus == PlaceEngineBase.EngineStatus.STARTED) {
             tv_status.text = "SDK Started"
         } else {
             tv_status.text = "SDK Stopped"
         }
-        val currentPlaceStatus: Int = Plengi.getInstance(this).getCurrentPlaceStatus()
+        val currentPlaceStatus = Plengi.getInstance(this).currentPlaceStatus
         when (currentPlaceStatus) {
             PlengiResponse.PlaceStatus.MOVE -> {
             }
             PlengiResponse.PlaceStatus.STAY -> {
-                val currentPlace: PlengiResponse.Place =
-                    Plengi.getInstance(this).getCurrentPlaceInfo()
+                val currentPlace = Plengi.getInstance(this).currentPlaceInfo
                 if (currentPlace != null) {
-                    val name: String = currentPlace.name
-                    val tags: String? = currentPlace.tags
-                    val category: String = currentPlace.category
-                    val floor: Int = currentPlace.floor
+                    val name = currentPlace.name
+                    val tags = currentPlace.tags
+                    val category = currentPlace.category
+                    val floor = currentPlace.floor
                     val info = """
                         $name, $tags, $category, ${floor}F
                         
@@ -149,165 +208,148 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED
-                || grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-        }
-    }
-
     fun onRequestLocationInfo(view: View?) {
         // request location to loplat engine
-        val tv_result = findViewById<View>(R.id.tv_result) as TextView
-        val result: Int = Plengi.getInstance(this).TEST_refreshPlace_foreground(object :
-            OnPlengiListener {
-            override fun onSuccess(response: PlengiResponse) {
-                if (mProgressDialog != null && mProgressDialog!!.isShowing) {
-                    mProgressDialog!!.dismiss()
-                }
-                var description = ""
-                if (response.place != null) {
-                    val name: String = response.place.name // detected place name
-                    val branch = if (response.place.tags == null) "" else response.place.tags
-                    val floor: Int = response.place.floor // detected place's floor info
-                    val client_code: String? = response.place.client_code // client_code
-                    val accuracy: Float = response.place.accuracy
-                    val threshold: Float = response.place.threshold
-                    description =
-                        "[PLACE]" + name + ": " + branch + ", " + floor + ", " + String.format(
-                            "%.3f",
-                            accuracy
-                        ) + "/" + String.format("%.3f", threshold)
-                    description += if (accuracy > threshold) {
-                        // device is within the detected place
-                        " (In)"
-                    } else {
-                        // device is outside the detected place
-                        " (Nearby)"
+        Log.d("LOGTAG/onRequest", java.lang.String.valueOf(LoplatSampleApplication.isLocationServiceAgreed(this)))
+        if (LoplatSampleApplication.isLocationServiceAgreed(this)) {
+            Log.d("LOGTAG/onRequestLocationInfo", "start")
+            val result = Plengi.getInstance(this).TEST_refreshPlace_foreground(object : OnPlengiListener {
+                override fun onSuccess(response: PlengiResponse) {
+                    Log.d("LOGTAG/onRequestLocationInfo", "onSuccess")
+                    if (mProgressDialog != null && mProgressDialog!!.isShowing) {
+                        mProgressDialog!!.dismiss()
                     }
-                    if (client_code != null && !client_code.isEmpty()) {
-                        description += ", client_code: $client_code"
-                    }
-                }
-                if (response.area != null) {
+                    var description = ""
                     if (response.place != null) {
-                        description += "\n    "
+                        val name = response.place.name // detected place name
+                        val branch = if (response.place.tags == null) "" else response.place.tags
+                        val floor = response.place.floor // detected place's floor info
+                        val client_code = response.place.client_code // client_code
+                        val accuracy = response.place.accuracy
+                        val threshold = response.place.threshold
+                        description = "[PLACE]" + name + ": " + branch + ", " + floor + ", " + String.format("%.3f", accuracy) + "/" + String.format("%.3f", threshold)
+                        description += if (accuracy > threshold) {
+                            // device is within the detected place
+                            " (In)"
+                        } else {
+                            // device is outside the detected place
+                            " (Nearby)"
+                        }
+                        if (client_code != null && !client_code.isEmpty()) {
+                            description += ", client_code: $client_code"
+                        }
                     }
-                    description += ("[" + response.area.id.toString() + "]" + response.area.name.toString() + ","
-                            + response.area.tag.toString() + "(" + response.area.lat.toString() + "," + response.area.lng.toString() + ")")
-                }
-                if (response.complex != null) {
-                    if (response.place != null) {
-                        description += "\n   "
+                    if (response.area != null) {
+                        if (response.place != null) {
+                            description += "\n    "
+                        }
+                        description += ("[" + response.area.id + "]" + response.area.name + ","
+                                + response.area.tag + "(" + response.area.lat + "," + response.area.lng + ")")
                     }
-                    description += ("[" + response.complex.id.toString() + "]" + response.complex.name.toString() + ","
-                            + response.complex.branch_name.toString()
-                            + "," + response.complex.category)
+                    if (response.complex != null) {
+                        if (response.place != null) {
+                            description += "\n   "
+                        }
+                        description += ("[" + response.complex.id + "]" + response.complex.name + ","
+                                + response.complex.branch_name + "," + response.complex.category)
+                    }
+                    println(description)
+                    tv_result!!.text = description
                 }
-                println(description)
-                tv_result.text = description
-            }
 
-            override fun onFail(plengiResponse: PlengiResponse) {
-                if (mProgressDialog != null && mProgressDialog!!.isShowing) {
-                    mProgressDialog!!.dismiss()
+                override fun onFail(plengiResponse: PlengiResponse) {
+                    Log.d("LOGTAG/onRequestLocationInfo", "onFail")
+                    if (mProgressDialog != null && mProgressDialog!!.isShowing) {
+                        mProgressDialog!!.dismiss()
+                    }
+                    if (plengiResponse.errorReason != null) {
+                        tv_result!!.text = plengiResponse.errorReason
+                    }
                 }
-                if (plengiResponse.errorReason != null) {
-                    tv_result.setText(plengiResponse.errorReason)
-                }
-            }
-        })
-        when (result) {
-            PlengiResponse.Result.SUCCESS -> {
+            })
+            Log.d("LOGTAG/onRequestLocationInfo", "check1")
+            if (result == PlengiResponse.Result.SUCCESS) {
+                Log.d("LOGTAG/onRequestLocationInfo", "check2")
                 mProgressDialog = ProgressDialog(this@MainActivity)
                 mProgressDialog!!.setMessage("I'm scanning wifi. Please wait...")
                 mProgressDialog!!.setCancelable(true)
                 mProgressDialog!!.show()
-            }
-            PlengiResponse.Result.FAIL_INTERNET_UNAVAILABLE -> {
+            } else if (result == PlengiResponse.Result.FAIL_INTERNET_UNAVAILABLE) {
+                Log.d("LOGTAG/onRequestLocationInfo", "check3")
                 // internet is not connected
-            }
-            PlengiResponse.Result.FAIL_WIFI_SCAN_UNAVAILABLE -> {
+            } else if (result == PlengiResponse.Result.FAIL_WIFI_SCAN_UNAVAILABLE) {
+                Log.d("LOGTAG/onRequestLocationInfo", "check4")
                 // wifi scan is not available
                 checkWiFiScanCondition()
+            } else {
+                Log.d("LOGTAG/onRequestLocationInfo", result.toString())
             }
+            Log.d("LOGTAG/onRequestLocationInfo", "check5")
+        } else {
+            Toast.makeText(applicationContext, "loplat 위치 기반 서비스 이용에 동의 해야합니다.", Toast.LENGTH_SHORT).show()
         }
     }
 
     /**
      * Note: 아래의 코드는 loplat X 사용을 이용한 마케팅 동의 서비스 예제입니다.
-     * @param view
      */
-    fun onMarketServiceAgreement(view: View?) {
+    fun onMarketServiceAgreement() {
+        val title = "마케팅 서비스 동의"
+        var message = "마케팅 서비스에"
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("마케팅 서비스 동의?")
-                .setMessage("마케팅 서비스 동의 하시겠습니까?")
-                .setPositiveButton("Yes") { dialog, which -> // 직접 광고(푸시 메세지) 하는 경우
-                    Plengi.getInstance(this@MainActivity).enableAdNetwork(true, false)
-                    // loplat SDK의 (푸시 메세지) 활용하는 경우
-                    // Plengi.getInstance(getApplicationContext()).enableAdNetwork(true);
-                    // Plengi.getInstance(getApplicationContext()).setAdNotiLargeIcon(R.drawable.ic_launcher);
-                    // Plengi.getInstance(getApplicationContext()).setAdNotiSmallIcon(R.drawable.ic_launcher);
+        if (switchMarketing!!.isChecked) {
+            message = "마케팅 서비스 동의 하시겠습니까?"
+            builder.setPositiveButton("Yes") { dialog, which -> // 직접 광고(푸시 메세지) 하는 경우
+                Plengi.getInstance(this@MainActivity).enableAdNetwork(true, false)
+                // loplat SDK의 (푸시 메세지) 활용하는 경우
+                // Plengi.getInstance(getApplicationContext()).enableAdNetwork(true);
+                // Plengi.getInstance(getApplicationContext()).setAdNotiLargeIcon(R.drawable.ic_launcher);
+                // Plengi.getInstance(getApplicationContext()).setAdNotiSmallIcon(R.drawable.ic_launcher);
 
-                    // 앱 내 flag 저장
-                    LoplatSampleApplication.setMarketingServiceAgreement(this@MainActivity, true)
-                    Toast.makeText(applicationContext, "푸시 알림 마케팅 수신에 동의 하였습니다", Toast.LENGTH_SHORT).show()
-                }
-                .setNegativeButton("No") { dialog, which -> // loplat X service off
-                    Plengi.getInstance(this@MainActivity).enableAdNetwork(false)
-                    // 앱 내 flag 저장
-                    LoplatSampleApplication.setMarketingServiceAgreement(this@MainActivity, false)
-                    Toast.makeText(applicationContext, "푸시 알림 마케팅 수신을 취소 하였습니다", Toast.LENGTH_SHORT).show()
-                }
+                // 앱 내 flag 저장
+                LoplatSampleApplication.setMarketingServiceAgreement(this@MainActivity, true)
+                Toast.makeText(applicationContext, "푸시 알림 마케팅 수신에 동의 하였습니다", Toast.LENGTH_SHORT).show()
+                switchMarketing!!.isChecked = true
+            }
+        } else {
+            message = "마케팅 서비스 동의를 취소하시겠습니까?"
+            builder.setPositiveButton("Yes") { dialog, which ->
+                Plengi.getInstance(this@MainActivity).enableAdNetwork(false)
+                // 앱 내 flag 저장
+                LoplatSampleApplication.setMarketingServiceAgreement(this@MainActivity, false)
+                Toast.makeText(applicationContext, "푸시 알림 마케팅 수신을 취소 하였습니다", Toast.LENGTH_SHORT).show()
+                switchMarketing!!.isChecked = false
+            }
+        }
+        builder.setTitle(title)
+        builder.setMessage(message)
+        builder.setNegativeButton("No") { dialog, which -> switchMarketing!!.isChecked = !switchMarketing!!.isChecked }
         builder.show()
     }
 
     /**
      * Note: 아래의 코드는 loplat SDK 구동(start)를 이용한 위치기반 서비스 예제입니다.
-     * @param view
      */
-    fun onLocationBasedServiceAgreement(view: View?) {
-        val tv_status = findViewById<View>(R.id.tv_status) as TextView
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("위치기반 서비스 동의?")
-                .setMessage("위치기반 서비스 하시겠습니까?")
-                .setPositiveButton("Yes") { dialog, which ->
-                    Toast.makeText(
-                        applicationContext,
-                        "loplat 위치 기반 서비스 이용에 동의 하였습니다",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    LoplatSampleApplication.setLocationServiceAgreement(this@MainActivity, true)
-                    // loplat sdk init
-                    (applicationContext as LoplatSampleApplication).loplatSdkConfiguration()
-                    tv_status.text = "SDK Started"
-                    /**
-                     * loplat SDK는 위치 permission, GPS setting가 WiFi scan을 할 수 없더라도 start된 상태를 유지하고
-                     * 위치 permission, GPS setting에 따라 WiFi scan이 가능한 상황이 되면 실제 동작.
-                     * 앱에 로플랫 SDK 적용시 약관의 위치서비스 동의한 사용자에게 설정 변경을 쉽게 할 수 있도록 checkWiFiScanCondition 활용해주세요.
-                     */
-                    /**
-                     * loplat SDK는 위치 permission, GPS setting가 WiFi scan을 할 수 없더라도 start된 상태를 유지하고
-                     * 위치 permission, GPS setting에 따라 WiFi scan이 가능한 상황이 되면 실제 동작.
-                     * 앱에 로플랫 SDK 적용시 약관의 위치서비스 동의한 사용자에게 설정 변경을 쉽게 할 수 있도록 checkWiFiScanCondition 활용해주세요.
-                     */
-                    checkWiFiScanCondition()
-                }
-                .setNegativeButton("No") { dialog, which -> // loplat SDK stop, 동의 거부
-                    Toast.makeText(
-                        applicationContext,
-                        "loplat 위치 기반 서비스 이용을 취소 하였습니다",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    LoplatSampleApplication.setLocationServiceAgreement(this@MainActivity, false)
-                    (applicationContext as LoplatSampleApplication).loplatSdkConfiguration()
-                    tv_status.text = "SDK Stopped"
-                }
-        builder.show()
+    fun onLocationBasedServiceAgreement() {
+        if (switchLocation!!.isChecked) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_LOCATION_PERMISSION)
+            } else {
+            }
+        } else {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("위치 기반 서비스 동의 취소")
+            builder.setMessage("위치 기반 서비스 동의를 취소하시겠습니까?")
+            builder.setPositiveButton("Yes") { dialog, which ->
+                val intent = Intent()
+                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                val uri = Uri.fromParts("package", packageName, null)
+                intent.data = uri
+                startActivityForResult(intent, REQUEST_LOCATION_PERMISSION)
+            }
+            builder.setNegativeButton("No") { dialog, which -> switchLocation!!.isChecked = !switchMarketing!!.isChecked }
+            builder.show()
+        }
     }
 
     // WiFi Scan을 할 수 있는 상태인지 체크 하는 샘플 코드
@@ -326,7 +368,7 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
 
                google play service(location) 사용하는 경우 -> dependency google-play-services 선언이 필요함
                compile 'com.google.android.gms:play-services:[latest version]'
-            */if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(applicationContext) === ConnectionResult.SUCCESS) {
+            */if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(applicationContext) == ConnectionResult.SUCCESS) {
                 if (isGoogleClientConnected) {
                     turnGpsOnByGooglePlayService()
                 } else {
@@ -366,12 +408,9 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
         val builder: LocationSettingsRequest.Builder = LocationSettingsRequest.Builder()
         builder.addLocationRequest(locationRequest)
         builder.setAlwaysShow(true)
-        val result: PendingResult<LocationSettingsResult> = LocationServices.SettingsApi.checkLocationSettings(
-            mGoogleApiClient,
-            builder.build()
-        )
+        val result = LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build())
         result.setResultCallback { result ->
-            val status: Status = result.getStatus()
+            val status = result.status
             when (status.statusCode) {
                 LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> try {
                     // Show the dialog by calling startResolutionForResult(),
@@ -390,7 +429,7 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             wifiScanEnabled = wifiManager.isScanAlwaysAvailable
         }
-        return wifiManager.isWifiEnabled || wifiScanEnabled
+        return !(!wifiManager.isWifiEnabled && !wifiScanEnabled)
     }
 
     // check if gps is on
@@ -447,7 +486,7 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
     }
 
     private val isGoogleClientConnected: Boolean
-        private get() {
+        get() {
             if (mGoogleApiClient != null) {
                 if (mGoogleApiClient!!.isConnected || mGoogleApiClient!!.isConnecting) {
                     return true

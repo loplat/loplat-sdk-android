@@ -5,56 +5,39 @@ import android.content.Intent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.loplat.placeengine.PlengiListener
 import com.loplat.placeengine.PlengiResponse
-import com.loplat.placeengine.cloud.ResponseMessage
 
 class LoplatPlengiListener : PlengiListener {
     var mContext: Context = LoplatSampleApplication.context!!
     override fun listen(response: PlengiResponse) {
-        System.out.println("LoplatPlengiListener: " + response.type)
-        val echo_code: String = response.echo_code // init시 전달된 echo code
+        println("LoplatPlengiListener: " + response.type)
+        val echo_code = response.echo_code // init시 전달된 echo code
 
         // handle cloud access error
-        if (response.result === PlengiResponse.Result.SUCCESS) {
+        if (response.result == PlengiResponse.Result.SUCCESS) {
 
             // get location information from loplat server (refreshPlace())
-            if (response.type === PlengiResponse.ResponseType.PLACE_EVENT
-                || response.type === PlengiResponse.ResponseType.PLACE_TRACKING
-            ) {
+            if (response.type == PlengiResponse.ResponseType.PLACE_EVENT
+                    || response.type == PlengiResponse.ResponseType.PLACE_TRACKING) {
                 var description = """
-                type: ${response.type.toString()}
+                type: ${response.type}
                 
                 """.trimIndent()
 
                 // get events (place enter or place leave)
-                val event: Int = response.placeEvent
+                val event = response.placeEvent
                 if (response.place != null) {
                     val branch = if (response.place.tags == null) "" else response.place.tags
-                    val clientCode: String? =
-                        if (response.place.client_code == null || !response.place.client_code.isEmpty()) null else response.place.client_code
+                    val clientCode = if (response.place.client_code == null || !response.place.client_code.isEmpty()) null else response.place.client_code
                     description += if (event == PlengiResponse.PlaceEvent.ENTER) {
                         //Plengi.getInstance(null).startNearbySession();
-                        ("   [ENTER]" + response.place.name.toString() + "," + branch + "(" + response.place.loplatid.toString() + "), "
-                                + response.place.floor.toString() + "F, " + java.lang.String.format(
-                            "%.3f",
-                            response.place.accuracy
-                        )
-                            .toString() + "/" + java.lang.String.format(
-                            "%.3f",
-                            response.place.threshold
-                        ))
+                        ("   [ENTER]" + response.place.name + "," + branch + "(" + response.place.loplatid + "), "
+                                + response.place.floor + "F, " + String.format("%.3f", response.place.accuracy) + "/" + String.format("%.3f", response.place.threshold))
                     } else if (event == PlengiResponse.PlaceEvent.LEAVE) {
                         //Plengi.getInstance(null).stopNearbySession();
-                        "   [LEAVE]" + response.place.name.toString() + "," + branch + "(" + response.place.loplatid.toString() + ")"
+                        "   [LEAVE]" + response.place.name + "," + branch + "(" + response.place.loplatid + ")"
                     } else if (event == PlengiResponse.PlaceEvent.NEARBY) {
-                        ("   [NEARBY]" + response.place.name.toString() + "," + branch + "(" + response.place.loplatid.toString() + "), "
-                                + response.place.floor.toString() + "F, " + java.lang.String.format(
-                            "%.3f",
-                            response.place.accuracy
-                        )
-                            .toString() + "/" + java.lang.String.format(
-                            "%.3f",
-                            response.place.threshold
-                        ))
+                        ("   [NEARBY]" + response.place.name + "," + branch + "(" + response.place.loplatid + "), "
+                                + response.place.floor + "F, " + String.format("%.3f", response.place.accuracy) + "/" + String.format("%.3f", response.place.threshold))
                     } else {
                         ("   [" + event + "]" + response.place.name + "," + branch + "(" + response.place.loplatid + "), "
                                 + response.place.floor + "F")
@@ -67,24 +50,23 @@ class LoplatPlengiListener : PlengiListener {
                 // 상권이 인식 되었을 때
                 if (response.area != null) {
                     description += "\n   "
-                    description += ("[AREA] " + response.area.id.toString() + ", " + response.area.name.toString() + ","
-                            + response.area.tag.toString() + "(" + response.area.lat.toString() + "," + response.area.lng.toString() + ")")
+                    description += ("[AREA] " + response.area.id + ", " + response.area.name + ","
+                            + response.area.tag + "(" + response.area.lat + "," + response.area.lng + ")")
                 }
 
                 // 복합몰이 인식 되었을 때
                 if (response.complex != null) {
                     description += "\n   "
-                    description += ("[COMPLEX] " + response.complex.id.toString() + "]" + response.complex.name.toString() + ","
-                            + response.complex.branch_name.toString() + "," + response.complex.category)
+                    description += ("[COMPLEX] " + response.complex.id + "]" + response.complex.name + ","
+                            + response.complex.branch_name + "," + response.complex.category)
                 }
 
                 // GeoFence 정보
                 if (response.geoFence != null) {
                     description += "\n   "
-                    description += "[GEOFENCE] " + response.geoFence.getFences().size
-                        .toString() + "개"
-                    for (i in 0 until response.geoFence.getFences().size) {
-                        val fence: ResponseMessage.Fence = response.geoFence.getFences().get(i)
+                    description += "[GEOFENCE] " + response.geoFence.getFences().size + "개"
+                    for (i in response.geoFence.getFences().indices) {
+                        val fence = response.geoFence.getFences()[i]
                         description += """
       [${i + 1}] ${fence.getGfId()}, ${fence.getName()}, ${fence.getDist()}"""
                     }
@@ -93,7 +75,7 @@ class LoplatPlengiListener : PlengiListener {
                 // Device 위경도
                 if (response.location != null) {
                     description += "\n   "
-                    description += "[DEVICE] (" + response.location.lat.toString() + ", " + response.location.lng.toString() + ")"
+                    description += "[DEVICE] (" + response.location.lat + ", " + response.location.lng + ")"
                 }
 
                 // 행정구역
@@ -103,12 +85,12 @@ class LoplatPlengiListener : PlengiListener {
 
                     // 행정구역을 활용할 때에는 행정구역 자체의 위경도가 없기 떄문에 Device의 위경도를 사용.
                     if (response.location != null) {
-                        description += "(" + response.location.lat.toString() + ", " + response.location.lng.toString() + ") "
+                        description += "(" + response.location.lat + ", " + response.location.lng + ") "
                     }
-                    description += "lv0=" + response.district.lv0Code
-                        .toString() + ", lv1=" + response.district.lv1Code.toString() + "_" + response.district.lv1Name
-                        .toString() + ", lv2=" + response.district.lv2Code.toString() + "_" + response.district.lv2Name
-                        .toString() + ", lv3=" + response.district.lv3Code.toString() + "_" + response.district.lv3Name
+                    description += ("lv0=" + response.district.lv0Code
+                            + ", lv1=" + response.district.lv1Code + "_" + response.district.lv1Name
+                            + ", lv2=" + response.district.lv2Code + "_" + response.district.lv2Name
+                            + ", lv3=" + response.district.lv3Code + "_" + response.district.lv3Name)
                 }
                 if (response.advertisement != null) {
                     // loplat X 광고 정보가 있을 때
@@ -118,26 +100,23 @@ class LoplatPlengiListener : PlengiListener {
                 println(description)
                 sendLoplatResponseToApplication("placeevent", description)
             }
-        } else if (response.result === PlengiResponse.Result.FAIL && response.errorReason.equals(
-                PlengiResponse.LOCATION_ACQUISITION_FAIL
-            )
-        ) {
-            var description = "[" + response.errorReason.toString() + "]"
+        } else if (response.result == PlengiResponse.Result.FAIL && response.errorReason == PlengiResponse.LOCATION_ACQUISITION_FAIL) {
+            var description = "[" + response.errorReason + "]"
             // Device 위경도
             if (response.location != null) {
                 description += "\n   "
-                description += "[DEVICE] (" + response.location.lat.toString() + ", " + response.location.lng.toString() + ")"
+                description += "[DEVICE] (" + response.location.lat + ", " + response.location.lng + ")"
             }
             sendLoplatResponseToApplication("placeevent", description)
         } else {
-            val errorReason: String = response.errorReason
+            val errorReason = response.errorReason
             sendLoplatResponseToApplication("error", errorReason)
         }
     }
 
     private fun sendLoplatResponseToApplication(type: String, response: String?) {
         val i = Intent()
-        i.setAction("com.loplat.sample.response")
+        i.action = "com.loplat.sample.response"
         i.putExtra("type", type)
         i.putExtra("response", response)
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(i)

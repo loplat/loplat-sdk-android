@@ -2,7 +2,8 @@ package com.example.sample_kotlin
 
 import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
+import android.os.Build
+import android.util.Log
 import com.loplat.placeengine.Plengi
 
 class LoplatSampleApplication : Application() {
@@ -16,8 +17,9 @@ class LoplatSampleApplication : Application() {
 
     // init(), start()가 여러 번 호출되도 상관 없음
     fun loplatSdkConfiguration() {
+        Log.d("LOGTAG/APPLICATION", "loplatSdkConfiguration")
         val context: Context = this
-        val plengi: Plengi = Plengi.getInstance(this)
+        val plengi = Plengi.getInstance(this)
         // 위치 서비스 약관 동의 여부 체크
         if (isLocationServiceAgreed(context)) {
             // 마케팅 동의 여부 체크
@@ -36,10 +38,22 @@ class LoplatSampleApplication : Application() {
             // 고객사에 발급한 로플랫 SDK client ID/PW 입력
             val clientId = "loplatdemo" // Test ID
             val clientSecret = "loplatdemokey" // Test PW
-            plengi.setListener(LoplatPlengiListener())
+            plengi.listener = LoplatPlengiListener()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                plengi.setBackgroundLocationAccessDialogLayout(R.layout.dialog_background_location_info)
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                plengi.setDefaultNotificationChannel(R.string.foreground_service_noti_channel_name, 0)
+                plengi.setDefaultNotificationInfo(
+                        R.drawable.ic_launcher,
+                        0,
+                        0)
+            }
+            Log.d("LOGTAG/APPLICATION", "init")
             plengi.init(clientId, clientSecret, getEchoCode(context))
             plengi.start()
         } else {
+            Log.d("LOGTAG/APPLICATION", "stop")
             // 위치 서비스 약관 동의 거부한 user에 대해서 SDK stop
             plengi.stop()
         }
@@ -52,13 +66,13 @@ class LoplatSampleApplication : Application() {
         // or return instance.getApplicationContext();
         val context: Context?
             get() = instance
-
         // or return instance.getApplicationContext();
+
         // 마케팅 수신 동의 여부 저장
         fun setMarketingServiceAgreement(context: Context, agree: Boolean) {
             try {
-                val settings: SharedPreferences = context.getSharedPreferences(PREFS_NAME, 0)
-                val editor: SharedPreferences.Editor = settings.edit()
+                val settings = context.getSharedPreferences(PREFS_NAME, 0)
+                val editor = settings.edit()
                 editor.putBoolean("marketing_agreement", agree)
                 editor.commit()
             } catch (e: Exception) {
@@ -69,7 +83,7 @@ class LoplatSampleApplication : Application() {
         fun isMarketingServiceAgreed(context: Context): Boolean {
             var isMarketingServiceAgreed = false
             try {
-                val settings: SharedPreferences = context.getSharedPreferences(PREFS_NAME, 0)
+                val settings = context.getSharedPreferences(PREFS_NAME, 0)
                 isMarketingServiceAgreed = settings.getBoolean("marketing_agreement", false)
             } catch (e: Exception) {
             }
@@ -79,8 +93,8 @@ class LoplatSampleApplication : Application() {
         // 위치 기반 서비스 약관 동의 여부 저장
         fun setLocationServiceAgreement(context: Context, agree: Boolean) {
             try {
-                val settings: SharedPreferences = context.getSharedPreferences(PREFS_NAME, 0)
-                val editor: SharedPreferences.Editor = settings.edit()
+                val settings = context.getSharedPreferences(PREFS_NAME, 0)
+                val editor = settings.edit()
                 editor.putBoolean("location_agreement", agree)
                 editor.commit()
             } catch (e: Exception) {
@@ -91,7 +105,7 @@ class LoplatSampleApplication : Application() {
         fun isLocationServiceAgreed(context: Context): Boolean {
             var isLocationServiceAgreed = false
             try {
-                val settings: SharedPreferences = context.getSharedPreferences(PREFS_NAME, 0)
+                val settings = context.getSharedPreferences(PREFS_NAME, 0)
                 isLocationServiceAgreed = settings.getBoolean("location_agreement", false)
             } catch (e: Exception) {
             }
@@ -102,8 +116,8 @@ class LoplatSampleApplication : Application() {
         // 이메일, 전화번호와 같은 개인정보 제외
         fun setEchoCode(context: Context, member_code: String?) {
             try {
-                val settings: SharedPreferences = context.getSharedPreferences(PREFS_NAME, 0)
-                val editor: SharedPreferences.Editor = settings.edit()
+                val settings = context.getSharedPreferences(PREFS_NAME, 0)
+                val editor = settings.edit()
                 editor.putString("member_code", member_code)
                 editor.commit()
             } catch (e: Exception) {
@@ -114,7 +128,7 @@ class LoplatSampleApplication : Application() {
         fun getEchoCode(context: Context): String? {
             var echo_code: String? = null
             try {
-                val settings: SharedPreferences = context.getSharedPreferences(PREFS_NAME, 0)
+                val settings = context.getSharedPreferences(PREFS_NAME, 0)
                 echo_code = settings.getString("member_code", null)
             } catch (e: Exception) {
             }
