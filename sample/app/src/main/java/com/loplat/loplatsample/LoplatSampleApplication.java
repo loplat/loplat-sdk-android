@@ -32,9 +32,16 @@ public class LoplatSampleApplication extends Application {
 
     // init(), start()가 여러 번 호출되도 상관 없음
     public void loplatSdkConfiguration() {
-        Log.d("LOGTAG/APPLICATION", "loplatSdkConfiguration");
         Context context = this;
         Plengi plengi = Plengi.getInstance(this);
+
+        // 고객사에 발급한 로플랫 SDK client ID/PW 입력
+        String clientId = "loplatdemo"; // Test ID
+        String clientSecret = "loplatdemokey";  // Test PW
+
+        // Plengi init 하는 부분은 위치권한허용과 관계 없이 실행
+        plengi.init(clientId, clientSecret, getEchoCode(context));
+
         // 위치 서비스 약관 동의 여부 체크
         if (isLocationServiceAgreed(context)) {
             // 마케팅 동의 여부 체크
@@ -50,9 +57,6 @@ public class LoplatSampleApplication extends Application {
                 // 마케팅 동의 거부한 user에 대해서 로플랫 켐페인 설정 중단
                 plengi.enableAdNetwork(false);
             }
-            // 고객사에 발급한 로플랫 SDK client ID/PW 입력
-            String clientId = "loplatdemo"; // Test ID
-            String clientSecret = "loplatdemokey";  // Test PW
             plengi.setListener(new LoplatPlengiListener());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 plengi.setBackgroundLocationAccessDialogLayout(R.layout.dialog_background_location_info);
@@ -65,11 +69,8 @@ public class LoplatSampleApplication extends Application {
                         0,
                         0);
             }
-            Log.d("LOGTAG/APPLICATION", "init");
-            plengi.init(clientId, clientSecret, getEchoCode(context));
             plengi.start();
         } else {
-            Log.d("LOGTAG/APPLICATION", "stop");
             // 위치 서비스 약관 동의 거부한 user에 대해서 SDK stop
             plengi.stop();
         }

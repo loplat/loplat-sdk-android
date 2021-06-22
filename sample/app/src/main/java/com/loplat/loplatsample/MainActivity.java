@@ -45,6 +45,9 @@ import com.loplat.placeengine.PlaceEngineBase;
 import com.loplat.placeengine.Plengi;
 import com.loplat.placeengine.PlengiResponse;
 
+import static com.loplat.loplatsample.LoplatSampleApplication.isLocationServiceAgreed;
+import static com.loplat.loplatsample.LoplatSampleApplication.isMarketingServiceAgreed;
+
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     BroadcastReceiver mSampleUIReceiver;
@@ -94,7 +97,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode == REQUEST_LOCATION_PERMISSION){
-            Log.d("LOGTAG/grantResults[0]", String.valueOf(grantResults[0]));
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 locationPermissionGranted();
             }else if(grantResults[0] == PackageManager.PERMISSION_DENIED){
@@ -106,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     private void locationPermissionGranted(){
-
         Toast.makeText(getApplicationContext(), "loplat 위치 기반 서비스 이용에 동의 하였습니다", Toast.LENGTH_SHORT).show();
         LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, true);
         // loplat sdk init
@@ -144,8 +145,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         // 로그인 후 서버로 부터 받은 값을 local에 저장
         String memberCodeFromServer = "18497358207";
-        boolean isMarketingServiceAgreedFromServer = false;
-        boolean isLocationServiceAgreedFromServer = false;
+
+        // 테스트를 위해 간단하게 로컬에 저장한 값을 그대로 불러오는 과정. 실제로 각 유저들의 데이터는 서버로부터 받길 권장
+        boolean isMarketingServiceAgreedFromServer = isMarketingServiceAgreed(this);
+        boolean isLocationServiceAgreedFromServer = isLocationServiceAgreed(this);
 
         LoplatSampleApplication.setMarketingServiceAgreement(context, isMarketingServiceAgreedFromServer);
         LoplatSampleApplication.setLocationServiceAgreement(context, isLocationServiceAgreedFromServer);
@@ -231,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("LOGTAG/","onResume");
         final TextView tv_status = (TextView)findViewById(R.id.tv_status);
         final TextView tv_result = (TextView)findViewById(R.id.tv_result);
 
@@ -267,13 +269,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     public void onRequestLocationInfo(View view) {
         // request location to loplat engine
-        Log.d("LOGTAG/onRequest", String.valueOf(LoplatSampleApplication.isLocationServiceAgreed(this)));
         if(LoplatSampleApplication.isLocationServiceAgreed(this)){
-            Log.d("LOGTAG/onRequestLocationInfo", "start");
             int result = Plengi.getInstance(this).TEST_refreshPlace_foreground(new OnPlengiListener() {
                 @Override
                 public void onSuccess(PlengiResponse response) {
-                    Log.d("LOGTAG/onRequestLocationInfo", "onSuccess");
                     if (mProgressDialog!=null&&mProgressDialog.isShowing()) {
                         mProgressDialog.dismiss();
                     }
@@ -326,7 +325,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
                 @Override
                 public void onFail(PlengiResponse plengiResponse) {
-                    Log.d("LOGTAG/onRequestLocationInfo", "onFail");
                     if (mProgressDialog!=null&&mProgressDialog.isShowing()) {
                         mProgressDialog.dismiss();
                     }
@@ -336,26 +334,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 }
             });
 
-            Log.d("LOGTAG/onRequestLocationInfo", "check1");
             if(result == PlengiResponse.Result.SUCCESS) {
-                Log.d("LOGTAG/onRequestLocationInfo", "check2");
                 mProgressDialog = new ProgressDialog(MainActivity.this);
                 mProgressDialog.setMessage("I'm scanning wifi. Please wait...");
                 mProgressDialog.setCancelable(true);
                 mProgressDialog.show();
             }
             else if(result == PlengiResponse.Result.FAIL_INTERNET_UNAVAILABLE) {
-                Log.d("LOGTAG/onRequestLocationInfo", "check3");
                 // internet is not connected
             }
             else if(result == PlengiResponse.Result.FAIL_WIFI_SCAN_UNAVAILABLE) {
-                Log.d("LOGTAG/onRequestLocationInfo", "check4");
                 // wifi scan is not available
                 checkWiFiScanCondition();
             }else{
-                Log.d("LOGTAG/onRequestLocationInfo", String.valueOf(result));
+                // result is -1
+                Toast.makeText(getApplicationContext(), "UNAVAILABLE", Toast.LENGTH_SHORT).show();
             }
-            Log.d("LOGTAG/onRequestLocationInfo", "check5");
         }else{
             Toast.makeText(getApplicationContext(), "loplat 위치 기반 서비스 이용에 동의 해야합니다.", Toast.LENGTH_SHORT).show();
         }
