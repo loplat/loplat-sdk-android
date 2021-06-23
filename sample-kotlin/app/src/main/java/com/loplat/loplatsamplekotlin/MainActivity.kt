@@ -18,14 +18,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.loplat.loplatsamplekotlin.LoplatSampleApplication.Companion.isLocationServiceAgreed
-import com.loplat.loplatsamplekotlin.LoplatSampleApplication.Companion.isMarketingServiceAgreed
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener
 import com.google.android.gms.location.*
+import com.loplat.loplatsamplekotlin.LoplatSampleApplication.Companion.isLocationServiceAgreed
+import com.loplat.loplatsamplekotlin.LoplatSampleApplication.Companion.isMarketingServiceAgreed
 import com.loplat.placeengine.OnPlengiListener
 import com.loplat.placeengine.PlaceEngineBase
 import com.loplat.placeengine.Plengi
@@ -267,12 +267,14 @@ class MainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFaile
                 mProgressDialog!!.show()
             } else if (result == PlengiResponse.Result.FAIL_INTERNET_UNAVAILABLE) {
                 // internet is not connected
+                Toast.makeText(applicationContext, "FAIL_INTERNET_UNAVAILABLE", Toast.LENGTH_SHORT).show()
             } else if (result == PlengiResponse.Result.FAIL_WIFI_SCAN_UNAVAILABLE) {
                 // wifi scan is not available
+                Toast.makeText(applicationContext, "WiFi Scan is unavailable", Toast.LENGTH_SHORT).show()
                 checkWiFiScanCondition()
             } else {
                 // result is -1
-                Toast.makeText(applicationContext, "UNAVAILABLE", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "FAIL", Toast.LENGTH_SHORT).show()
             }
         } else {
             Toast.makeText(applicationContext, "loplat 위치 기반 서비스 이용에 동의 해야합니다.", Toast.LENGTH_SHORT).show()

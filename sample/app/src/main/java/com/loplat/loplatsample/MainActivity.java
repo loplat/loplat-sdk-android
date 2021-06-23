@@ -341,13 +341,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
             else if(result == PlengiResponse.Result.FAIL_INTERNET_UNAVAILABLE) {
                 // internet is not connected
+                Toast.makeText(getApplicationContext(), "FAIL_INTERNET_UNAVAILABLE", Toast.LENGTH_SHORT).show();
             }
             else if(result == PlengiResponse.Result.FAIL_WIFI_SCAN_UNAVAILABLE) {
                 // wifi scan is not available
+                Toast.makeText(getApplicationContext(), "WiFi Scan is unavailable", Toast.LENGTH_SHORT).show();
                 checkWiFiScanCondition();
             }else{
                 // result is -1
-                Toast.makeText(getApplicationContext(), "UNAVAILABLE", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "FAIL", Toast.LENGTH_SHORT).show();
             }
         }else{
             Toast.makeText(getApplicationContext(), "loplat 위치 기반 서비스 이용에 동의 해야합니다.", Toast.LENGTH_SHORT).show();
