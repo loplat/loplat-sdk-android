@@ -1,9 +1,8 @@
-package com.example.sample_kotlin
+package com.loplat.loplatsamplekotlin
 
 import android.app.Application
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import com.loplat.placeengine.Plengi
 
 class LoplatSampleApplication : Application() {
@@ -17,9 +16,16 @@ class LoplatSampleApplication : Application() {
 
     // init(), start()가 여러 번 호출되도 상관 없음
     fun loplatSdkConfiguration() {
-        Log.d("LOGTAG/APPLICATION", "loplatSdkConfiguration")
         val context: Context = this
         val plengi = Plengi.getInstance(this)
+
+        // 고객사에 발급한 로플랫 SDK client ID/PW 입력
+        val clientId = "loplatdemo" // Test ID
+        val clientSecret = "loplatdemokey" // Test PW
+
+        // Plengi init 하는 부분은 위치권한허용과 관계 없이 실행
+        plengi.init(clientId, clientSecret, getEchoCode(context))
+
         // 위치 서비스 약관 동의 여부 체크
         if (isLocationServiceAgreed(context)) {
             // 마케팅 동의 여부 체크
@@ -35,9 +41,6 @@ class LoplatSampleApplication : Application() {
                 // 마케팅 동의 거부한 user에 대해서 로플랫 켐페인 설정 중단
                 plengi.enableAdNetwork(false)
             }
-            // 고객사에 발급한 로플랫 SDK client ID/PW 입력
-            val clientId = "loplatdemo" // Test ID
-            val clientSecret = "loplatdemokey" // Test PW
             plengi.listener = LoplatPlengiListener()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 plengi.setBackgroundLocationAccessDialogLayout(R.layout.dialog_background_location_info)
@@ -49,11 +52,8 @@ class LoplatSampleApplication : Application() {
                         0,
                         0)
             }
-            Log.d("LOGTAG/APPLICATION", "init")
-            plengi.init(clientId, clientSecret, getEchoCode(context))
             plengi.start()
         } else {
-            Log.d("LOGTAG/APPLICATION", "stop")
             // 위치 서비스 약관 동의 거부한 user에 대해서 SDK stop
             plengi.stop()
         }
@@ -63,10 +63,11 @@ class LoplatSampleApplication : Application() {
         private var instance: LoplatSampleApplication? = null
         private val PREFS_NAME = LoplatSampleApplication::class.java.simpleName
 
-        // or return instance.getApplicationContext();
-        val context: Context?
-            get() = instance
-        // or return instance.getApplicationContext();
+        @JvmName("getContext1")
+        fun getContext(): Context? {
+            return instance
+            // or return instance.getApplicationContext();
+        }
 
         // 마케팅 수신 동의 여부 저장
         fun setMarketingServiceAgreement(context: Context, agree: Boolean) {
@@ -119,7 +120,7 @@ class LoplatSampleApplication : Application() {
                 val settings = context.getSharedPreferences(PREFS_NAME, 0)
                 val editor = settings.edit()
                 editor.putString("member_code", member_code)
-                editor.commit()
+                editor.apply()
             } catch (e: Exception) {
             }
         }

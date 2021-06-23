@@ -1,4 +1,4 @@
-package com.example.sample_kotlin
+package com.loplat.loplatsamplekotlin
 
 import android.Manifest
 import android.app.AlertDialog
@@ -12,22 +12,20 @@ import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.View
 import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.loplat.loplatsamplekotlin.LoplatSampleApplication.Companion.isLocationServiceAgreed
+import com.loplat.loplatsamplekotlin.LoplatSampleApplication.Companion.isMarketingServiceAgreed
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.LocationSettingsRequest
-import com.google.android.gms.location.LocationSettingsStatusCodes
+import com.google.android.gms.location.*
 import com.loplat.placeengine.OnPlengiListener
 import com.loplat.placeengine.PlaceEngineBase
 import com.loplat.placeengine.Plengi
@@ -66,7 +64,6 @@ class MainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFaile
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            Log.d("LOGTAG/grantResults[0]", grantResults[0].toString())
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 locationPermissionGranted()
             } else if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
@@ -105,7 +102,10 @@ class MainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFaile
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val context: Context = this
-
+        tv_status = findViewById(R.id.tv_status)
+        tv_result = findViewById(R.id.tv_result)
+        switchMarketing = findViewById<View>(R.id.switch_marketing) as Switch
+        switchLocation = findViewById<View>(R.id.switch_location) as Switch
         /**
          * 로그인 성공 시점이라 가정
          * 로그인 후 1)위치서비스 약관 동의 여부, 2)마케팅 수신 동의 여부 3)회원번호(optional) 를 각각 저장
@@ -114,10 +114,12 @@ class MainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFaile
 
         // 로그인 후 서버로 부터 받은 값을 local에 저장
         val memberCodeFromServer = "18497358207"
-        val isMarketingServiceAgreedFromServer = false
-        val isLocationServiceAgreedFromServer = false
-        LoplatSampleApplication.setMarketingServiceAgreement(context, isMarketingServiceAgreedFromServer)
-        LoplatSampleApplication.setLocationServiceAgreement(context, isLocationServiceAgreedFromServer)
+
+        // 테스트를 위해 간단하게 로컬에 저장한 값을 그대로 불러오는 과정. 실제로 각 유저들의 데이터는 서버로부터 받길 권장
+        val isMarketingServiceAgreedFromServer: Boolean = isMarketingServiceAgreed(this)
+        val isLocationServiceAgreedFromServer: Boolean = isLocationServiceAgreed(this)
+        switchMarketing!!.isChecked = isMarketingServiceAgreedFromServer
+        switchLocation!!.isChecked = isLocationServiceAgreedFromServer
         if (isLocationServiceAgreedFromServer) {
             /**
              * 하기 코드는 회원번호를 사용하는 경우만 활용
@@ -133,10 +135,6 @@ class MainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFaile
              */
             checkWiFiScanCondition()
         }
-        tv_status = findViewById(R.id.tv_status)
-        tv_result = findViewById(R.id.tv_result)
-        switchMarketing = findViewById<View>(R.id.switch_marketing) as Switch
-        switchLocation = findViewById<View>(R.id.switch_location) as Switch
         switchMarketing!!.setOnClickListener { onMarketServiceAgreement() }
         switchLocation!!.setOnClickListener { onLocationBasedServiceAgreement() }
 
@@ -156,14 +154,14 @@ class MainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFaile
                     println("mSampleUIReceiver: $type")
                     if (type == "error" || type == "placeevent") {
                         val response = intent.getStringExtra("response")
-                        tv_result!!.text = response
+                        tv_result?.let { it.text = response }
                     }
                 }
             }
         }
         val intentFilter = IntentFilter()
         intentFilter.addAction("com.loplat.sample.response")
-        LocalBroadcastManager.getInstance(this).registerReceiver(mSampleUIReceiver as BroadcastReceiver, intentFilter)
+        mSampleUIReceiver?.let { LocalBroadcastManager.getInstance(this).registerReceiver(it, intentFilter) }
     }
 
     override fun onDestroy() {
@@ -176,7 +174,6 @@ class MainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFaile
 
     override fun onResume() {
         super.onResume()
-        Log.d("LOGTAG/", "onResume")
         val tv_status = findViewById<View>(R.id.tv_status) as TextView
         val tv_result = findViewById<View>(R.id.tv_result) as TextView
 
@@ -210,12 +207,9 @@ class MainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFaile
 
     fun onRequestLocationInfo(view: View?) {
         // request location to loplat engine
-        Log.d("LOGTAG/onRequest", java.lang.String.valueOf(LoplatSampleApplication.isLocationServiceAgreed(this)))
-        if (LoplatSampleApplication.isLocationServiceAgreed(this)) {
-            Log.d("LOGTAG/onRequestLocationInfo", "start")
+        if (isLocationServiceAgreed(this)) {
             val result = Plengi.getInstance(this).TEST_refreshPlace_foreground(object : OnPlengiListener {
                 override fun onSuccess(response: PlengiResponse) {
-                    Log.d("LOGTAG/onRequestLocationInfo", "onSuccess")
                     if (mProgressDialog != null && mProgressDialog!!.isShowing) {
                         mProgressDialog!!.dismiss()
                     }
@@ -235,7 +229,7 @@ class MainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFaile
                             // device is outside the detected place
                             " (Nearby)"
                         }
-                        if (client_code != null && !client_code.isEmpty()) {
+                        if (client_code != null && client_code.isNotEmpty()) {
                             description += ", client_code: $client_code"
                         }
                     }
@@ -258,7 +252,6 @@ class MainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFaile
                 }
 
                 override fun onFail(plengiResponse: PlengiResponse) {
-                    Log.d("LOGTAG/onRequestLocationInfo", "onFail")
                     if (mProgressDialog != null && mProgressDialog!!.isShowing) {
                         mProgressDialog!!.dismiss()
                     }
@@ -267,24 +260,20 @@ class MainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFaile
                     }
                 }
             })
-            Log.d("LOGTAG/onRequestLocationInfo", "check1")
             if (result == PlengiResponse.Result.SUCCESS) {
-                Log.d("LOGTAG/onRequestLocationInfo", "check2")
                 mProgressDialog = ProgressDialog(this@MainActivity)
                 mProgressDialog!!.setMessage("I'm scanning wifi. Please wait...")
                 mProgressDialog!!.setCancelable(true)
                 mProgressDialog!!.show()
             } else if (result == PlengiResponse.Result.FAIL_INTERNET_UNAVAILABLE) {
-                Log.d("LOGTAG/onRequestLocationInfo", "check3")
                 // internet is not connected
             } else if (result == PlengiResponse.Result.FAIL_WIFI_SCAN_UNAVAILABLE) {
-                Log.d("LOGTAG/onRequestLocationInfo", "check4")
                 // wifi scan is not available
                 checkWiFiScanCondition()
             } else {
-                Log.d("LOGTAG/onRequestLocationInfo", result.toString())
+                // result is -1
+                Toast.makeText(applicationContext, "UNAVAILABLE", Toast.LENGTH_SHORT).show()
             }
-            Log.d("LOGTAG/onRequestLocationInfo", "check5")
         } else {
             Toast.makeText(applicationContext, "loplat 위치 기반 서비스 이용에 동의 해야합니다.", Toast.LENGTH_SHORT).show()
         }
@@ -293,7 +282,7 @@ class MainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFaile
     /**
      * Note: 아래의 코드는 loplat X 사용을 이용한 마케팅 동의 서비스 예제입니다.
      */
-    fun onMarketServiceAgreement() {
+    private fun onMarketServiceAgreement() {
         val title = "마케팅 서비스 동의"
         var message = "마케팅 서비스에"
         val builder = AlertDialog.Builder(this)
@@ -330,7 +319,7 @@ class MainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFaile
     /**
      * Note: 아래의 코드는 loplat SDK 구동(start)를 이용한 위치기반 서비스 예제입니다.
      */
-    fun onLocationBasedServiceAgreement() {
+    private fun onLocationBasedServiceAgreement() {
         if (switchLocation!!.isChecked) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_LOCATION_PERMISSION)
@@ -405,7 +394,7 @@ class MainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFaile
     }
 
     private fun turnGpsOnByGooglePlayService() {
-        val builder: LocationSettingsRequest.Builder = LocationSettingsRequest.Builder()
+        val builder = LocationSettingsRequest.Builder()
         builder.addLocationRequest(locationRequest)
         builder.setAlwaysShow(true)
         val result = LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build())
@@ -451,6 +440,8 @@ class MainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFaile
     private fun checkLocationPermissionIfNeeded(): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED
+                    || checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
 
                 // Should we show an explanation?
@@ -460,11 +451,7 @@ class MainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFaile
                     // Explain to the user why we need to write the permission.
                     //Toast.makeText(this, "Accept Permission", Toast.LENGTH_SHORT).show();
                 }
-                requestPermissions(
-                    arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                    ), REQUEST_LOCATION_PERMISSION
-                )
+                requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_LOCATION_PERMISSION)
                 // MY_PERMISSION is an
                 // app-defined int constant
                 //}
@@ -505,7 +492,6 @@ class MainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFaile
 
     companion object {
         private val PREFS_NAME = MainActivity::class.java.simpleName
-        private val TAG = PREFS_NAME
         private const val UPDATE_INTERVAL_MS = 1000 // 1초
         private const val FASTEST_UPDATE_INTERVAL_MS = 500 // 0.5초
         private const val REQUEST_LOCATION_PERMISSION = 10000

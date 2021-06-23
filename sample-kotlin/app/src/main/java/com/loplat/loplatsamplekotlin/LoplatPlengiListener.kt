@@ -1,4 +1,4 @@
-package com.example.sample_kotlin
+package com.loplat.loplatsamplekotlin
 
 import android.content.Context
 import android.content.Intent
@@ -7,7 +7,7 @@ import com.loplat.placeengine.PlengiListener
 import com.loplat.placeengine.PlengiResponse
 
 class LoplatPlengiListener : PlengiListener {
-    var mContext: Context = LoplatSampleApplication.context!!
+    var mContext: Context? = LoplatSampleApplication.getContext()
     override fun listen(response: PlengiResponse) {
         println("LoplatPlengiListener: " + response.type)
         val echo_code = response.echo_code // init시 전달된 echo code
@@ -119,6 +119,7 @@ class LoplatPlengiListener : PlengiListener {
         i.action = "com.loplat.sample.response"
         i.putExtra("type", type)
         i.putExtra("response", response)
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(i)
+        mContext?.let { LocalBroadcastManager.getInstance(it).sendBroadcast(i) }
+
     }
 }

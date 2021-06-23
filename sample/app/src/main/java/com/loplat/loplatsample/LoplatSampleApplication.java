@@ -4,10 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.util.Log;
-
 import com.loplat.placeengine.Plengi;
-
 
 public class LoplatSampleApplication extends Application {
 
@@ -19,7 +16,6 @@ public class LoplatSampleApplication extends Application {
         return instance;
         // or return instance.getApplicationContext();
     }
-
 
     @Override
     public void onCreate() {
@@ -127,7 +123,7 @@ public class LoplatSampleApplication extends Application {
             SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString("member_code", member_code);
-            editor.commit();
+            editor.apply();
         } catch (Exception e) {
         }
     }

@@ -26,7 +26,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -59,14 +58,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private Switch switchLocation;
 
     private static final String PREFS_NAME = MainActivity.class.getSimpleName();
-    private static final String TAG = PREFS_NAME;
 
     private static final int UPDATE_INTERVAL_MS = 1000;  // 1초
     private static final int FASTEST_UPDATE_INTERVAL_MS = 500; // 0.5초
     private static final int REQUEST_LOCATION_PERMISSION = 10000;
     private static final int REQUEST_LOCATION_STATUS = 10001;
     private static final int REQUEST_WIFI_STATUS = 10002;
-    private static final int REQUEST_FINE_LOCATION_PERMISSION = 10003;
 
     GoogleApiClient mGoogleApiClient;
 
@@ -137,6 +134,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Context context = this;
+
+        tv_status = findViewById(R.id.tv_status);
+        tv_result = findViewById(R.id.tv_result);
+        switchMarketing = (Switch)findViewById(R.id.switch_marketing);
+        switchLocation = (Switch)findViewById(R.id.switch_location);
+
         /**
          * 로그인 성공 시점이라 가정
          * 로그인 후 1)위치서비스 약관 동의 여부, 2)마케팅 수신 동의 여부 3)회원번호(optional) 를 각각 저장
@@ -150,8 +153,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         boolean isMarketingServiceAgreedFromServer = isMarketingServiceAgreed(this);
         boolean isLocationServiceAgreedFromServer = isLocationServiceAgreed(this);
 
-        LoplatSampleApplication.setMarketingServiceAgreement(context, isMarketingServiceAgreedFromServer);
-        LoplatSampleApplication.setLocationServiceAgreement(context, isLocationServiceAgreedFromServer);
+        switchMarketing.setChecked(isMarketingServiceAgreedFromServer);
+        switchLocation.setChecked(isLocationServiceAgreedFromServer);
+
         if (isLocationServiceAgreedFromServer) {
             /**
              * 하기 코드는 회원번호를 사용하는 경우만 활용
@@ -167,11 +171,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
              */
             checkWiFiScanCondition();
         }
-
-        tv_status = findViewById(R.id.tv_status);
-        tv_result = findViewById(R.id.tv_result);
-        switchMarketing = (Switch)findViewById(R.id.switch_marketing);
-        switchLocation = (Switch)findViewById(R.id.switch_location);
 
         switchMarketing.setOnClickListener(new View.OnClickListener() {
             @Override

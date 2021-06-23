@@ -1,4 +1,4 @@
-package com.example.sample_kotlin
+package com.loplat.loplatsamplekotlin
 
 import org.junit.Test
 
