@@ -2,15 +2,10 @@ package com.loplat.loplatsample;
 
 import android.content.Context;
 import android.content.Intent;
-
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import com.loplat.placeengine.PlengiListener;
 import com.loplat.placeengine.PlengiResponse;
 import com.loplat.placeengine.cloud.ResponseMessage;
-
-
-
 
 public class LoplatPlengiListener implements PlengiListener {
     Context mContext = LoplatSampleApplication.getContext();

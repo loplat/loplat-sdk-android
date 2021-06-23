@@ -1,36 +1,41 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
 
 android {
     compileSdkVersion 30
-    buildToolsVersion '30.0.3'
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.loplat.loplatsample"
+        applicationId "com.example.sample_kotlin"
         minSdkVersion 14
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 }
 
-
-/*repositories {
-    flatDir {
-        dirs 'libs'
-    }
-}*/
-
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    //implementation 'com.android.support:multidex:1.0.1'
 
-    // Loplat SDKz
     implementation 'com.loplat:placeengine:2.0.9.6.5'
 
     implementation 'com.google.code.gson:gson:2.8.5'
@@ -42,5 +47,4 @@ dependencies {
     implementation 'com.google.android.gms:play-services-awareness:16.0.0'
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'com.google.android.gms:play-services-ads:16.0.0'
-
 }
