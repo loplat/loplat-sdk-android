@@ -14,31 +14,30 @@ public class LoplatPlengiListener implements PlengiListener {
     public void listen(PlengiResponse response) {
         System.out.println("LoplatPlengiListener: " + response.type);
 
-        String echo_code = response.echo_code; // init시 전달된 echo code
+        // init시 전달된 echo code
+        String echo_code = response.echo_code;
 
-        // handle cloud access error
         if (response.result == PlengiResponse.Result.SUCCESS) {
 
-            // get location information from loplat server (refreshPlace())
             if(response.type == PlengiResponse.ResponseType.PLACE_EVENT
                     || response.type == PlengiResponse.ResponseType.PLACE_TRACKING) {
 
                 String description = "type: " + response.type + "\n";
 
-                // get events (place enter or place leave)
+                // 매장 방문 관련 event (NOT_AVAILABLE / ENTER / LEAVE / NEARBY)
                 int event = response.placeEvent;
 
+                // 매장이 인식 되었을 때
                 if (response.place != null) {
                     String branch = (response.place.tags == null) ? "" : response.place.tags;
                     String clientCode = (response.place.client_code == null || !response.place.client_code.isEmpty())
                             ? null : response.place.client_code;
+
                     if (event == PlengiResponse.PlaceEvent.ENTER) {
-                        //Plengi.getInstance(null).startNearbySession();
                         description += "   [ENTER]" + response.place.name + "," + branch + "(" + response.place.loplatid + "), "
                                 + response.place.floor + "F, " + String.format("%.3f", response.place.accuracy)
                                 + "/" + String.format("%.3f", response.place.threshold);
                     } else if (event == PlengiResponse.PlaceEvent.LEAVE) {
-                        //Plengi.getInstance(null).stopNearbySession();
                         description += "   [LEAVE]" + response.place.name + "," + branch + "(" + response.place.loplatid + ")";
                     } else if (event == PlengiResponse.PlaceEvent.NEARBY) {
                         description += "   [NEARBY]" + response.place.name + "," + branch + "(" + response.place.loplatid + "), "
@@ -125,7 +124,9 @@ public class LoplatPlengiListener implements PlengiListener {
         }
     }
 
-
+    /**
+     * 위치 인식 결과 전달
+     */
     private void sendLoplatResponseToApplication(String type, String response) {
         Intent i = new Intent();
         i.setAction("com.loplat.sample.response");
