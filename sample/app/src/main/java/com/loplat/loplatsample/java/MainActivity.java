@@ -1,4 +1,4 @@
-package com.loplat.loplatsample;
+package com.loplat.loplatsample.java;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -38,13 +38,14 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.loplat.loplatsample.R;
 import com.loplat.placeengine.OnPlengiListener;
 import com.loplat.placeengine.PlaceEngineBase;
 import com.loplat.placeengine.Plengi;
 import com.loplat.placeengine.PlengiResponse;
 
-import static com.loplat.loplatsample.LoplatSampleApplication.isLocationServiceAgreed;
-import static com.loplat.loplatsample.LoplatSampleApplication.isMarketingServiceAgreed;
+import static com.loplat.loplatsample.java.LoplatSampleApplication.isLocationServiceAgreed;
+import static com.loplat.loplatsample.java.LoplatSampleApplication.isMarketingServiceAgreed;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 

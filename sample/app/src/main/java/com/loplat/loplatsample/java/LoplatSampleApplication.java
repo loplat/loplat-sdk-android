@@ -1,4 +1,4 @@
-package com.loplat.loplatsample;
+package com.loplat.loplatsample.java;
 
 import android.app.Application;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.os.Build;
 
 import androidx.core.app.ActivityCompat;
 
+import com.loplat.loplatsample.R;
 import com.loplat.placeengine.Plengi;
 
 public class LoplatSampleApplication extends Application {

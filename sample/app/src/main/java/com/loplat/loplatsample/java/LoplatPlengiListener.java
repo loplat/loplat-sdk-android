@@ -1,4 +1,4 @@
-package com.loplat.loplatsample;
+package com.loplat.loplatsample.java;
 
 import android.content.Context;
 import android.content.Intent;
