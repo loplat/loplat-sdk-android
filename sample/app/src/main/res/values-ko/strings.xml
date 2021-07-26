@@ -1,7 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="permission_background_location_description">애피타이저는 사용자의 현재 위치를 기반으로 실내 매장 정보 안내 및 혜택 알림을 제공하기 위해 앱이 닫혀 있을 때나 사용되지 않을 때도 위치 데이터를 수집합니다.\n\n이 데이터는 광고를 지원하기 위해서도 사용됩니다.\n\애피타이저 앱을 사용하고 있지 않을 때도 이 기기의 위치에 접근하도록 허용하시겠습니까?</string>
+    <string name="permission_background_location_description">Loplat SDK Sample 앱은 사용자의 현재 위치를 기반으로 실내 매장 정보 안내 및 혜택 알림을 제공하기 위해 앱이 닫혀 있을 때나 사용되지 않을 때도 위치 데이터를 수집합니다.\n\n이 데이터는 광고를 지원하기 위해서도 사용됩니다.\n\Loplat SDK Sample 앱을 사용하고 있지 않을 때도 이 기기의 위치에 접근하도록 허용하시겠습니까?</string>
     <string name="foreground_service_noti_channel_name">"실내 매장 정보 및 혜택 알림"</string>
     <string name="foreground_service_noti_title">"실내 매장 및 혜택 탐색 중"</string>
     <string name="foreground_service_noti_content">"눌러서 설정 > 장소 알림 팝업 OFF 하기"</string>
+
+    <string name="marketing_services_title">마케팅 서비스 동의</string>
+    <string name="request_marketing_message_agree">마케팅 서비스 동의 하시겠습니까?</string>
+    <string name="request_marketing_message_revoke">마케팅 서비스 동의를 취소하시겠습니까?</string>
+    <string name="confirm">확인</string>
+    <string name="cancel">취소</string>
+    <string name="toast_marketing_message_argee">푸시 알림 마케팅 수신에 동의 하였습니다</string>
+    <string name="toast_marketing_message_revoke">푸시 알림 마케팅 수신을 취소 하였습니다</string>
+    <string name="revoke_location_service">위치 기반 서비스 동의 취소</string>
+    <string name="request_revoke_location_service">위치 기반 서비스 동의를 취소하시겠습니까?</string>
+    <string name="location_services_title">위치 기반 서비스 동의</string>
+    <string name="sample_prompt">예제 프롬프트</string>
+    <string name="get_current_place">현재 위치 확인</string>
+    <string name="use_for_testing">(테스트시에만 사용하세요)</string>
+    <string name="toast_location_message_agree">위치 기반 서비스 이용에 동의 하였습니다</string>
+    <string name="toast_location_message_revoke">위치 기반 서비스 이용을 취소 하였습니다</string>
+    <string name="message_scanning_wifi">WiFI 스캔 중입니다. 잠시만 기다려주세요</string>
+    <string name="error_network">네트워크를 사용할 수 없습니다</string>
+    <string name="error_wifi_scan">WiFi 스캔을 할 수 없습니다</string>
+    <string name="error_sdk">Loplat SDK를 사용할 수 없습니다</string>
+    <string name="error_location_services">위치 기반 서비스 이용에 동의해야 합니다.</string>
+    <string name="request_location_permission">위치 권한을 허용해주세요</string>
+    <string name="request_gps">GPS 를 활성화시켜주세요</string>
+    <string name="setting">설정</string>
+    <string name="request_revoked_permission">위치 권한에 접근할 수 없어 해당 기능을 사용할 수 없습니다. 권한을 허용하시려면 설정을 눌러주세요</string>
 </resources>
