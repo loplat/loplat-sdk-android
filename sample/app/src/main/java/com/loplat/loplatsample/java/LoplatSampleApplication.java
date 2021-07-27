@@ -41,6 +41,42 @@ public class LoplatSampleApplication extends Application {
         String clientId = "loplatdemo"; // Test ID
         String clientSecret = "loplatdemokey";  // Test PW
 
+        // 위치 인식 정보를 수신할 Listener 등록
+        plengi.setListener(new LoplatPlengiListener());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            /**
+             * 백그라운드에서 동작 시 출력될 ForgroundService의 알림 설정
+             * 따로 설정하지 않으면 기본 값으로 출력
+             *
+             * 특정 요소만 custom하기 원한다면 아래와 같이 resource 입력
+             * 기본 값을 쓰기 원하는 요소엔 0 입력
+             */
+            plengi.setDefaultNotificationChannel(R.string.foreground_service_noti_channel_name,0);
+            plengi.setDefaultNotificationInfo(
+                    R.drawable.ic_launcher,
+                    R.string.foreground_service_noti_title,
+                    0);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            /**
+             * 위치 권한-항상허용 심사 관련 설정
+             * Loplat이 제공하는 심사용 프롬프트를 사용하지 않고 자체 프롬프트를 사용할 경우에만
+             * Plengi.disableFeatureBgLocationReviewUX(true) 호출
+             *
+             * Loplat이 제공하는 심사용 프롬프트 중 사용자에게 표시되는 명시적인 인앱 공개 대화상자를
+             * custom 필요시 Plengi.setBackgroundLocationAccessDialogLayout(@LayoutRes) 호출
+             */
+
+            // plengi.disableFeatureBgLocationReviewUX(true);
+
+            plengi.setBackgroundLocationAccessDialogLayout(R.layout.dialog_background_location_info);
+        }
+
+        // Loplat SDK 설정들은 반드시 Plengi.init() 전에 호출 필요
+        plengi.init(clientId, clientSecret, getEchoCode(context));
+
         // 위치 서비스 약관 동의 여부 체크
         if (isLocationServiceAgreed(context)) {
             // 마케팅 동의 여부 체크
@@ -58,42 +94,6 @@ public class LoplatSampleApplication extends Application {
                 // 마케팅 동의 거부한 user에 대해서 로플랫 켐페인 설정 중단
                 plengi.enableAdNetwork(false);
             }
-
-            // 위치 인식 정보를 수신할 Listener 등록
-            plengi.setListener(new LoplatPlengiListener());
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                /**
-                 * 백그라운드에서 동작 시 출력될 ForgroundService의 알림 설정
-                 * 따로 설정하지 않으면 기본 값으로 출력
-                 *
-                 * 특정 요소만 custom하기 원한다면 아래와 같이 resource 입력
-                 * 기본 값을 쓰기 원하는 요소엔 0 입력
-                 */
-                plengi.setDefaultNotificationChannel(R.string.foreground_service_noti_channel_name,0);
-                plengi.setDefaultNotificationInfo(
-                        R.drawable.ic_launcher,
-                        R.string.foreground_service_noti_title,
-                        0);
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                /**
-                 * 위치 권한-항상허용 심사 관련 설정
-                 * Loplat이 제공하는 심사용 프롬프트를 사용하지 않고 자체 프롬프트를 사용할 경우에만
-                 * Plengi.disableFeatureBgLocationReviewUX(true) 호출
-                 *
-                 * Loplat이 제공하는 심사용 프롬프트 중 사용자에게 표시되는 명시적인 인앱 공개 대화상자를
-                 * custom 필요시 Plengi.setBackgroundLocationAccessDialogLayout(@LayoutRes) 호출
-                 */
-
-                // plengi.disableFeatureBgLocationReviewUX(true);
-
-                plengi.setBackgroundLocationAccessDialogLayout(R.layout.dialog_background_location_info);
-            }
-
-            // Loplat SDK 설정들은 반드시 Plengi.init() 전에 호출 필요
-            plengi.init(clientId, clientSecret, getEchoCode(context));
 
             plengi.start();
         } else {
@@ -141,8 +141,6 @@ public class LoplatSampleApplication extends Application {
         }
     }
 
-    //
-
     /**
      * 위치 기반 서비스 약관 동의 여부 확인
      */
@@ -185,11 +183,11 @@ public class LoplatSampleApplication extends Application {
     /**
      * 위치 권한 교육용 UI 출력 필요 여부 저장
      */
-    public static void setLocationShouldShowRationale(Context context, boolean shouldShow) {
+    public static void setLocationShouldShowRationale(Context context, boolean shouldShowRationale) {
         try {
             SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("location_should_show_rationale", shouldShow);
+            editor.putBoolean("location_should_show_rationale", shouldShowRationale);
             editor.apply();
         } catch (Exception e) {
         }
@@ -202,12 +200,12 @@ public class LoplatSampleApplication extends Application {
      * 요청 시 false 를 반환하기 때문
      */
     public static boolean getLocationShouldShowRationale(Context context) {
-        boolean should_show = false;
+        boolean should_show_rationale = false;
         try {
             SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
-            should_show = settings.getBoolean("location_should_show_rationale", true);
+            should_show_rationale = settings.getBoolean("location_should_show_rationale", true);
         } catch (Exception e) {
         }
-        return should_show;
+        return should_show_rationale;
     }
 }

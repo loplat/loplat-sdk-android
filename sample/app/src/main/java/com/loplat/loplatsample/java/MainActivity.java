@@ -131,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Context context = this;
 
         tv_status = findViewById(R.id.tv_status);
         tv_result = findViewById(R.id.tv_result);
@@ -160,8 +159,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
              * 회원번호가 변경된 경우 저장
              */
             if (memberCodeFromServer != null
-                    && !memberCodeFromServer.equals(LoplatSampleApplication.getEchoCode(context))) {
-                LoplatSampleApplication.setEchoCode(context, memberCodeFromServer);
+                    && !memberCodeFromServer.equals(LoplatSampleApplication.getEchoCode(this))) {
+                LoplatSampleApplication.setEchoCode(this, memberCodeFromServer);
             }
             ((LoplatSampleApplication) getApplicationContext()).loplatSdkConfiguration();
 
@@ -185,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
-        // LoplatPlengiListener로 부터 위치 인식 결과를 전달받은 receiver 등록
+        // LoplatPlengiListener로 부터 위치 인식 결과를 전달 받는 receiver 등록
         mSampleUIReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -241,7 +240,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
 
         int currentPlaceStatus = Plengi.getInstance(this).getCurrentPlaceStatus();
-
         switch (currentPlaceStatus) {
             case PlengiResponse.PlaceStatus.MOVE:
                 break;
@@ -362,6 +360,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 public void onClick(DialogInterface dialog, int which) {
                     // 직접 광고(푸시 메세지) 하는 경우
                     Plengi.getInstance(MainActivity.this).enableAdNetwork(true, false);
+
                     // loplat SDK의 (푸시 메세지) 활용하는 경우
                     // Plengi.getInstance(getApplicationContext()).enableAdNetwork(true);
                     // Plengi.getInstance(getApplicationContext()).setAdNotiLargeIcon(R.drawable.ic_launcher);
@@ -428,7 +427,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             builder.setNegativeButton(getText(R.string.cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    switchLocation.setChecked(!switchMarketing.isChecked());
+                    switchLocation.setChecked(!switchLocation.isChecked());
                 }
             });
             builder.show();
@@ -528,7 +527,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     /**
-     * Wi-Fi  활성화 여부 확인
+     * Wi-Fi 스캔 가능 여부 확인
      */
     private boolean checkWifiScanIsAvailable() {
         WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -539,11 +538,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             wifiScanEnabled = wifiManager.isScanAlwaysAvailable();
         }
 
-        if (!wifiManager.isWifiEnabled() && !wifiScanEnabled) {
-            return false;
-        }
-
-        return true;
+        return wifiManager.isWifiEnabled() || wifiScanEnabled;
     }
 
     /**
@@ -555,14 +550,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
             boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             if (!isNetworkEnabled && !isGPSEnabled) {
-                //
-                // please turn on location settings
                 return false;
             }
         }
-
         return true;
-
     }
 
     /**
@@ -641,9 +632,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private boolean isGoogleClientConnected() {
         if (mGoogleApiClient != null) {
-            if (mGoogleApiClient.isConnected() || mGoogleApiClient.isConnecting()) {
-                return true;
-            }
+            return mGoogleApiClient.isConnected() || mGoogleApiClient.isConnecting();
         }
         return false;
     }
