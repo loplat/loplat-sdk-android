@@ -12,7 +12,7 @@ class KotlinLoplatPlengiListener : PlengiListener{
     private val context = KotlinLoplatSampleApplication.getContext()
 
     override fun listen(response: PlengiResponse) {
-        System.out.println("LoplatPlengiListener: ${response.type}")
+        println("LoplatPlengiListener: ${response.type}")
 
         // init시 전달된 echo code
         val echo_code = response.echo_code
@@ -94,6 +94,8 @@ class KotlinLoplatPlengiListener : PlengiListener{
                     // Custom Notification 혹은 직접 이벤트 처리 할 경우 해당 객체를 사용
                 }
 
+                println(description)
+                sendLoplatResponseToApplication("placeevent", description)
             }
         } else if (response.result == PlengiResponse.Result.FAIL
                 && response.errorReason.equals(PlengiResponse.LOCATION_ACQUISITION_FAIL)) {
