@@ -131,14 +131,21 @@ class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectio
         switch_marketing.isChecked = isMarketingServiceAgreedFromServer
         switch_location.isChecked = isLocationServiceAgreedFromServer
 
+        /**
+         * 앱 시작 혹은 로그인 할 때 마다 사용자의 위치약관동의 여부를 매번 확인해서 Loplat SDK start 호출 필수
+         */
         if (isLocationServiceAgreedFromServer) {
             /**
              * 하기 코드는 회원번호를 사용하는 경우만 활용
              * 회원번호가 변경된 경우 저장
              */
             if (memberCodeFromServer != null && memberCodeFromServer != getEchoCode(this)) {
+                /**
+                 * echoCode에는 이메일, 전화번호와 같은 개인정보 반드시 제외
+                 */
                 setEchoCode(this, memberCodeFromServer)
             }
+            // Loplat SDK start
             (applicationContext as KotlinLoplatSampleApplication).loplatSdkConfiguration()
 
             /**
