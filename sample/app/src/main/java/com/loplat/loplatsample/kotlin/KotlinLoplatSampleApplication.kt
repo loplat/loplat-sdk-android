@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.os.Build
 import com.loplat.loplatsample.R
-import com.loplat.loplatsample.java.LoplatPlengiListener
 import com.loplat.placeengine.Plengi
 
 class KotlinLoplatSampleApplication : Application(){
