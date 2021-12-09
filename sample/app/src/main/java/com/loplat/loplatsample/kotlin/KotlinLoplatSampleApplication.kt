@@ -18,6 +18,7 @@ class KotlinLoplatSampleApplication : Application(){
 
     /**
      * Loplat SDK 설정 및 위치 권한, 위치 서비스약관 동의 여부에 따라 Loplat SDK 동작
+     * 앱 시작 혹은 로그인 할 때 마다 사용자의 위치약관동의 여부를 매번 확인해서 Loplat SDK start 호출 필수
      * init(), start()가 여러 번 호출되도 상관 없음
      */
     fun loplatSdkConfiguration() {
@@ -84,7 +85,11 @@ class KotlinLoplatSampleApplication : Application(){
 
             plengi.start()
         } else {
-            // 위치 서비스 약관 동의 거부한 user에 대해서 SDK stop
+            /**
+             * 위치 서비스 약관 동의 거부한 user에 대해서 SDK stop
+             * SDK stop은 반드시 사용자가 '위치 약관 동의'에 대한 거부했을 경우에만 호출
+             * 예외적인 케이스에 대해서는 SDK stop 호출 불필요
+             */
             plengi.stop()
         }
     }
@@ -154,7 +159,7 @@ class KotlinLoplatSampleApplication : Application(){
         }
 
         /**
-         * 회원 번호 저장. (중요)단, 이메일, 전화번호와 같은 개인정보 제외
+         * 회원 번호 저장. (중요)단, 이메일, 전화번호와 같은 개인정보 반드시 제외
          */
         fun setEchoCode(context: Context, member_code: String?) {
             try {

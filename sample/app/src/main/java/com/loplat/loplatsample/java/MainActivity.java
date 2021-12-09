@@ -1,6 +1,5 @@
 package com.loplat.loplatsample.java;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -9,11 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
-import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
@@ -44,8 +41,16 @@ import com.loplat.placeengine.PlaceEngineBase;
 import com.loplat.placeengine.Plengi;
 import com.loplat.placeengine.PlengiResponse;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.content.pm.PackageManager.PERMISSION_DENIED;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.JELLY_BEAN_MR2;
+import static android.os.Build.VERSION_CODES.M;
 import static com.loplat.loplatsample.java.LoplatSampleApplication.isLocationServiceAgreed;
 import static com.loplat.loplatsample.java.LoplatSampleApplication.isMarketingServiceAgreed;
+import static com.loplat.loplatsample.java.LoplatSampleApplication.setLocationServiceAgreement;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -74,10 +79,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (SDK_INT >= M) {
+                if (checkSelfPermission(ACCESS_FINE_LOCATION) == PERMISSION_GRANTED) {
                     locationPermissionGranted();
-                } else if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+                } else if (checkSelfPermission(ACCESS_FINE_LOCATION) == PERMISSION_DENIED) {
                     locationPermissionDenied();
                 }
             }
@@ -92,20 +97,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults[0] == PERMISSION_GRANTED) {
                 locationPermissionGranted();
-            } else if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+            } else if (grantResults[0] == PERMISSION_DENIED) {
                 locationPermissionDenied();
             }
             LoplatSampleApplication.setLocationShouldShowRationale(this, false);
-        } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED
-                || grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+        } else if (grantResults[0] == PERMISSION_GRANTED
+                || grantResults[1] == PERMISSION_GRANTED) {
         }
     }
 
     private void locationPermissionGranted() {
         toastMessage(getText(R.string.toast_location_message_agree));
-        LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, true);
+        setLocationServiceAgreement(MainActivity.this, true);
         Plengi.getInstance(this).start();
 
         /**
@@ -121,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private void locationPermissionDenied() {
         toastMessage(getText(R.string.toast_location_message_revoke));
-        LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, false);
+        setLocationServiceAgreement(MainActivity.this, false);
         Plengi.getInstance(this).stop();
         tv_status.setText(getText(R.string.sdk_stopped));
         switchLocation.setChecked(false);
@@ -153,6 +158,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         switchMarketing.setChecked(isMarketingServiceAgreedFromServer);
         switchLocation.setChecked(isLocationServiceAgreedFromServer);
 
+        /**
+         * 앱 시작 혹은 로그인 할 때 마다 사용자의 위치약관동의 여부를 매번 확인해서 Loplat SDK start 호출 필수
+         */
         if (isLocationServiceAgreedFromServer) {
             /**
              * 하기 코드는 회원번호를 사용하는 경우만 활용
@@ -160,8 +168,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
              */
             if (memberCodeFromServer != null
                     && !memberCodeFromServer.equals(LoplatSampleApplication.getEchoCode(this))) {
+                /**
+                 * echoCode에는 이메일, 전화번호와 같은 개인정보 반드시 제외
+                 */
                 LoplatSampleApplication.setEchoCode(this, memberCodeFromServer);
             }
+            // Loplat SDK start
             ((LoplatSampleApplication) getApplicationContext()).loplatSdkConfiguration();
 
             /**
@@ -405,8 +417,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 locationPermissionGranted();
             } else {
                 if (checkLocationShouldShowRationale()) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
+                    if (SDK_INT >= M) {
+                        requestPermissions(new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
                     }
                 } else {
                     switchLocation.setChecked(false);
@@ -421,7 +433,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Plengi.getInstance(MainActivity.this).stop();
-                    LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, false);
+                    setLocationServiceAgreement(MainActivity.this, false);
                 }
             });
             builder.setNegativeButton(getText(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -484,7 +496,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
              * 공장 초기화 기준 해당 옵션의 default 값은 On 입니다
              * [참고: https://developer.android.com/reference/android/net/wifi/WifiManager.html#isScanAlwaysAvailable()]
              */
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (SDK_INT >= JELLY_BEAN_MR2) {
                 Intent intent = new Intent(WifiManager.ACTION_REQUEST_SCAN_ALWAYS_AVAILABLE);
                 startActivityForResult(intent, REQUEST_WIFI_STATUS);
             } else {
@@ -534,7 +546,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         boolean wifiScanEnabled = false;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (SDK_INT >= JELLY_BEAN_MR2) {
             wifiScanEnabled = wifiManager.isScanAlwaysAvailable();
         }
 
@@ -545,7 +557,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
      * GPS 활성화 여부 확인
      */
     private boolean checkGpsStatus() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (SDK_INT >= M) {
             LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
             boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
             boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -561,19 +573,19 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
      */
     private boolean checkLocationShouldShowRationale() {
         return LoplatSampleApplication.getLocationShouldShowRationale(this)
-                || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+                || ActivityCompat.shouldShowRequestPermissionRationale(this, ACCESS_FINE_LOCATION)
+                || ActivityCompat.shouldShowRequestPermissionRationale(this, ACCESS_COARSE_LOCATION);
     }
 
     /**
      * 위치 권한 활성화 여부 확인
      */
     private boolean isGrantedLocationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED
-                    || checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED;
+        if (SDK_INT >= M) {
+            return checkSelfPermission(ACCESS_FINE_LOCATION)
+                    == PERMISSION_GRANTED
+                    || checkSelfPermission(ACCESS_COARSE_LOCATION)
+                    == PERMISSION_GRANTED;
         }
         return true;
     }
@@ -582,13 +594,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
      * 위치 권한 활성화 여부 확인 후 거부 상태라면 상태에 따라 처리
      */
     private boolean checkLocationPermissionIfNeeded() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (SDK_INT >= M) {
             if (isGrantedLocationPermission()) {
                 return true;
             } else {
                 if (checkLocationShouldShowRationale()) {
                     // 앱 내 권한 요청
-                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
+                    requestPermissions(new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
                 } else {
                     // 앱의 권한 설정 화면으로 안내
                     showSettingDialog();
