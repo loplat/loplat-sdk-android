@@ -22,7 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+//import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -226,7 +226,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         };
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.loplat.sample.response");
-        LocalBroadcastManager.getInstance(this).registerReceiver(mSampleUIReceiver, intentFilter);
+        registerReceiver(mSampleUIReceiver, intentFilter);
+//        LocalBroadcastManager.getInstance(this).registerReceiver(mSampleUIReceiver, intentFilter);
     }
 
     @Override
@@ -234,7 +235,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onDestroy();
 
         if (mSampleUIReceiver != null) {
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(mSampleUIReceiver);
+            //LocalBroadcastManager.getInstance(this).unregisterReceiver(mSampleUIReceiver);
+            unregisterReceiver(mSampleUIReceiver);
             mSampleUIReceiver = null;
         }
     }

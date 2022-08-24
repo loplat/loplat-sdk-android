@@ -11,7 +11,6 @@ import android.location.LocationManager.GPS_PROVIDER
 import android.location.LocationManager.NETWORK_PROVIDER
 import android.net.Uri
 import android.net.wifi.WifiManager
-import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.JELLY_BEAN_MR2
 import android.os.Build.VERSION_CODES.M
@@ -22,7 +21,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
@@ -42,10 +40,7 @@ import com.loplat.loplatsample.kotlin.KotlinLoplatSampleApplication.Companion.se
 import com.loplat.loplatsample.kotlin.KotlinLoplatSampleApplication.Companion.setLocationServiceAgreement
 import com.loplat.loplatsample.kotlin.KotlinLoplatSampleApplication.Companion.setLocationShouldShowRationale
 import com.loplat.loplatsample.kotlin.KotlinLoplatSampleApplication.Companion.setMarketingServiceAgreement
-import com.loplat.placeengine.OnPlengiListener
-import com.loplat.placeengine.PlaceEngineBase
-import com.loplat.placeengine.Plengi
-import com.loplat.placeengine.PlengiResponse
+import com.loplat.placeengine.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFailedListener{
@@ -91,7 +86,7 @@ class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectio
     private fun locationPermissionGranted() {
         toastMessage(getText(R.string.toast_location_message_agree))
         setLocationServiceAgreement(this, true)
-        Plengi.getInstance(this).start()
+        Plengi.getInstance(this).start("cashplace", "cashai_loplat")
 
         /**
          * loplat SDK는 위치 permission, GPS setting가 WiFi scan을 할 수 없더라도 start된 상태를 유지하고
@@ -161,6 +156,7 @@ class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectio
         mSampleUIReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 val action = intent.action
+                toastMessage("SampleUIReceiver [$action]")
                 if (action == "com.loplat.sample.response") {
                     try {
                         if (mProgressDialog != null && mProgressDialog!!.isShowing) {
@@ -180,15 +176,19 @@ class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectio
         }
         val intentFilter = IntentFilter()
         intentFilter.addAction("com.loplat.sample.response")
-        LocalBroadcastManager.getInstance(this)
-                .registerReceiver(mSampleUIReceiver as BroadcastReceiver, intentFilter)
+        registerReceiver(mSampleUIReceiver, intentFilter)
+//        LocalBroadcastManager.getInstance(this)
+//                .registerReceiver(mSampleUIReceiver as BroadcastReceiver, intentFilter)
+
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
         if (mSampleUIReceiver != null) {
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(mSampleUIReceiver!!)
+            //LocalBroadcastManager.getInstance(this).unregisterReceiver(mSampleUIReceiver!!)
+            unregisterReceiver(mSampleUIReceiver!!)
             mSampleUIReceiver = null
         }
     }
@@ -269,6 +269,13 @@ class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectio
 
                     println(description)
                     tv_result.text = description
+
+                    var intent = Intent()
+                    intent.action = "com.loplat.sample.response"
+                    intent.type = "placeevent"
+                    intent.putExtra("response", response.toString())
+                    sendBroadcast(intent)
+
                 }
 
                 override fun onFail(plengiResponse: PlengiResponse) {

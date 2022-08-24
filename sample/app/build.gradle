@@ -28,7 +28,7 @@ dependencies {
     //implementation 'com.android.support:appcompat-v7:28.0.0'
 
     // Loplat SDK
-    implementation 'com.loplat:placeengine:2.1.0.2'
+    implementation 'com.loplat:placeengine:2.1.1.5'
 
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
@@ -38,7 +38,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.android.gms:play-services-awareness:16.0.0'
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
-    implementation 'com.google.android.gms:play-services-ads:16.0.0'
+    //implementation 'com.google.android.gms:play-services-ads:16.0.0'
+    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
 }
