@@ -1,7 +1,6 @@
 package com.loplat.loplatsample.kotlin
 
 import android.content.Intent
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.loplat.placeengine.PlengiListener
 import com.loplat.placeengine.PlengiResponse
 import com.loplat.placeengine.PlengiResponse.PlaceEvent.*
@@ -121,6 +120,6 @@ class KotlinLoplatPlengiListener : PlengiListener{
         i.action = "com.loplat.sample.response"
         i.putExtra("type", type)
         i.putExtra("response", response)
-        LocalBroadcastManager.getInstance(context).sendBroadcast(i)
+//        LocalBroadcastManager.getInstance(context).sendBroadcast(i)
     }
 }

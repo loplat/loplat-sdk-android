@@ -75,9 +75,6 @@ public class LoplatSampleApplication extends Application {
             plengi.setBackgroundLocationAccessDialogLayout(R.layout.dialog_background_location_info);
         }
 
-        // Loplat SDK 설정들은 반드시 Plengi.init() 전에 호출 필요
-        plengi.init(clientId, clientSecret, getEchoCode(context));
-
         // 위치 서비스 약관 동의 여부 체크
         if (isLocationServiceAgreed(context)) {
             // 마케팅 동의 여부 체크
@@ -96,7 +93,8 @@ public class LoplatSampleApplication extends Application {
                 plengi.enableAdNetwork(false);
             }
 
-            plengi.start();
+            plengi.setEchoCode(getEchoCode(context));
+            plengi.start(clientId, clientSecret);
         } else {
             /**
              * 위치 서비스 약관 동의 거부한 user에 대해서 SDK stop
