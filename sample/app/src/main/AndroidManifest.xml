@@ -8,6 +8,8 @@
         android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION"
         android:maxSdkVersion="28"/>
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
     <application
         android:name=".kotlin.KotlinLoplatSampleApplication"
         android:allowBackup="true"
@@ -16,7 +18,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".java.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:exported="false">
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -24,7 +27,8 @@
         </activity>
         <activity
             android:name=".kotlin.KotlinMainActivity"
-            android:label="@string/app_name_kotlin" >
+            android:label="@string/app_name_kotlin"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

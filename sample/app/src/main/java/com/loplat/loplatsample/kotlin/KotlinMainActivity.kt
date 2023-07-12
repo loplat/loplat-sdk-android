@@ -1,9 +1,9 @@
 package com.loplat.loplatsample.kotlin
 
-import android.Manifest.permission.ACCESS_COARSE_LOCATION
-import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.*
 import android.app.ProgressDialog
 import android.content.*
+import android.content.pm.PackageManager
 import android.content.pm.PackageManager.PERMISSION_DENIED
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.LocationManager
@@ -16,6 +16,7 @@ import android.os.Build.VERSION_CODES.JELLY_BEAN_MR2
 import android.os.Build.VERSION_CODES.M
 import android.os.Bundle
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -26,6 +27,7 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationServices
@@ -78,7 +80,10 @@ class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectio
                 locationPermissionDenied()
             }
             setLocationShouldShowRationale(this, false)
-        } else if (grantResults[0] == PERMISSION_GRANTED
+        } else if (requestCode == REQUEST_POST_NOTIFICATION) {
+            //Toast.makeText(this, "Notification is grandResult[${grantResults[0]}", Toast.LENGTH_SHORT).show()
+        }
+        else if (grantResults[0] == PERMISSION_GRANTED
                 || grantResults[1] == PERMISSION_GRANTED) {
         }
     }
@@ -181,7 +186,22 @@ class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectio
 //                .registerReceiver(mSampleUIReceiver as BroadcastReceiver, intentFilter)
 
 
+        //GMSTest().test(this)
+
+        val packageInfo = applicationContext.packageManager.getPackageInfo(GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE, 0)
+        val versionCode = packageInfo.versionCode
+        val versionName = packageInfo.versionName
+
+
+        val interfaceClass: Class<*> = FusedLocationProviderClient::class.java
+        val isInterface = interfaceClass.isInterface
+
+        Log.i("goingfeel", "App GMS versionCode[${versionCode}], versionName[${versionName}], isInterface[${isInterface}]")
+        if (ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(POST_NOTIFICATIONS), REQUEST_POST_NOTIFICATION)
+        }
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -223,6 +243,9 @@ class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectio
                 }
             }
         }
+
+        val serverMode = Plengi.getInstance(this).testServerMode
+        Toast.makeText(this, "ServerMode [${serverMode}]", Toast.LENGTH_SHORT).show()
     }
 
     /**
@@ -448,7 +471,10 @@ class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectio
         val builder = LocationSettingsRequest.Builder()
         builder.addLocationRequest(locationRequest)
         builder.setAlwaysShow(true)
-        val result = LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build())
+        if (mGoogleApiClient == null) {
+            Toast.makeText(this, "GoogleApiClient is Null", Toast.LENGTH_SHORT).show()
+        }
+        val result = LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient!!, builder.build())
         result.setResultCallback { result ->
             val status = result.status
             when (status.statusCode) {
@@ -521,7 +547,7 @@ class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectio
             } else {
                 if (checkLocationShouldShowRationale()) {
                     // 앱 내 권한 요청
-                    requestPermissions(arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION), REQUEST_LOCATION_PERMISSION)
+                    requestPermissions(arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, POST_NOTIFICATIONS), REQUEST_LOCATION_PERMISSION)
                 } else {
                     // 앱의 권한 설정 화면으로 안내
                     showSettingDialog()
@@ -585,6 +611,7 @@ class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectio
         private const val REQUEST_LOCATION_PERMISSION = 10000
         private const val REQUEST_LOCATION_STATUS = 10001
         private const val REQUEST_WIFI_STATUS = 10002
+        private const val REQUEST_POST_NOTIFICATION = 2000
     }
 
 }
