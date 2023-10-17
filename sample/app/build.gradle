@@ -3,16 +3,18 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
     buildToolsVersion '30.0.3'
 
     defaultConfig {
         applicationId "com.loplat.loplatsample"
-        minSdkVersion 14
-        targetSdkVersion 30
+        minSdkVersion 21
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+        resValue "string", "[cliet_id 키]", "[client_id]".bytes.encodeBase64().toString()
+        resValue "string", "[cliet_id 키]", "[client_id]".bytes.encodeBase64().toString()
     }
     buildTypes {
         release {
@@ -28,7 +30,7 @@ dependencies {
     //implementation 'com.android.support:appcompat-v7:28.0.0'
 
     // Loplat SDK
-    implementation 'com.loplat:placeengine:2.1.1.5'
+    implementation 'com.loplat:placeengine:2.1.1.8.2'
 
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
@@ -36,11 +38,20 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
 
     implementation 'com.google.android.gms:play-services-location:16.0.0'
+    //implementation 'com.google.android.gms:play-services-location:21.0.1'
     implementation 'com.google.android.gms:play-services-awareness:16.0.0'
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
     //implementation 'com.google.android.gms:play-services-ads:16.0.0'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
+
+    // plengi-debug
+    implementation 'me.zhanghai.android.fastscroll:library:1.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+
+    implementation 'androidx.work:work-runtime:2.7.1'
 
 }
 repositories {

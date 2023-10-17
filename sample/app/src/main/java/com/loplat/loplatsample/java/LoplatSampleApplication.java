@@ -38,10 +38,6 @@ public class LoplatSampleApplication extends Application {
         Context context = this;
         Plengi plengi = Plengi.getInstance(this);
 
-        // 고객사에 발급한 로플랫 SDK client ID/PW 입력
-        String clientId = "loplatdemo"; // Test ID
-        String clientSecret = "loplatdemokey";  // Test PW
-
         // 위치 인식 정보를 수신할 Listener 등록
         plengi.setListener(new LoplatPlengiListener());
 
@@ -94,7 +90,11 @@ public class LoplatSampleApplication extends Application {
             }
 
             plengi.setEchoCode(getEchoCode(context));
-            plengi.start(clientId, clientSecret);
+            // id, pw 를 직접 입력
+            //plengi.start(clientId, clientSecret);
+
+            // build.gradle 에서 선언하였다면
+            plengi.start();
         } else {
             /**
              * 위치 서비스 약관 동의 거부한 user에 대해서 SDK stop

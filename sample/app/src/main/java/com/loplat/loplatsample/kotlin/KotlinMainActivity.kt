@@ -1,9 +1,9 @@
 package com.loplat.loplatsample.kotlin
 
-import android.Manifest.permission.ACCESS_COARSE_LOCATION
-import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.*
 import android.app.ProgressDialog
 import android.content.*
+import android.content.pm.PackageManager
 import android.content.pm.PackageManager.PERMISSION_DENIED
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.LocationManager
@@ -78,7 +78,10 @@ class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectio
                 locationPermissionDenied()
             }
             setLocationShouldShowRationale(this, false)
-        } else if (grantResults[0] == PERMISSION_GRANTED
+        } else if (requestCode == REQUEST_POST_NOTIFICATION) {
+            //Toast.makeText(this, "Notification is grandResult[${grantResults[0]}", Toast.LENGTH_SHORT).show()
+        }
+        else if (grantResults[0] == PERMISSION_GRANTED
                 || grantResults[1] == PERMISSION_GRANTED) {
         }
     }
@@ -86,7 +89,7 @@ class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectio
     private fun locationPermissionGranted() {
         toastMessage(getText(R.string.toast_location_message_agree))
         setLocationServiceAgreement(this, true)
-        Plengi.getInstance(this).start("cashplace", "cashai_loplat")
+        Plengi.getInstance(this).start()
 
         /**
          * loplat SDK는 위치 permission, GPS setting가 WiFi scan을 할 수 없더라도 start된 상태를 유지하고
@@ -177,10 +180,10 @@ class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectio
         val intentFilter = IntentFilter()
         intentFilter.addAction("com.loplat.sample.response")
         registerReceiver(mSampleUIReceiver, intentFilter)
-//        LocalBroadcastManager.getInstance(this)
-//                .registerReceiver(mSampleUIReceiver as BroadcastReceiver, intentFilter)
 
-
+        if (ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(POST_NOTIFICATIONS), REQUEST_POST_NOTIFICATION)
+        }
     }
 
     override fun onDestroy() {
@@ -448,7 +451,10 @@ class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectio
         val builder = LocationSettingsRequest.Builder()
         builder.addLocationRequest(locationRequest)
         builder.setAlwaysShow(true)
-        val result = LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build())
+        if (mGoogleApiClient == null) {
+            Toast.makeText(this, "GoogleApiClient is Null", Toast.LENGTH_SHORT).show()
+        }
+        val result = LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient!!, builder.build())
         result.setResultCallback { result ->
             val status = result.status
             when (status.statusCode) {
@@ -521,7 +527,7 @@ class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectio
             } else {
                 if (checkLocationShouldShowRationale()) {
                     // 앱 내 권한 요청
-                    requestPermissions(arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION), REQUEST_LOCATION_PERMISSION)
+                    requestPermissions(arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, POST_NOTIFICATIONS), REQUEST_LOCATION_PERMISSION)
                 } else {
                     // 앱의 권한 설정 화면으로 안내
                     showSettingDialog()
@@ -585,6 +591,7 @@ class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectio
         private const val REQUEST_LOCATION_PERMISSION = 10000
         private const val REQUEST_LOCATION_STATUS = 10001
         private const val REQUEST_WIFI_STATUS = 10002
+        private const val REQUEST_POST_NOTIFICATION = 2000
     }
 
 }
