@@ -48,9 +48,6 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.JELLY_BEAN_MR2;
 import static android.os.Build.VERSION_CODES.M;
-import static com.loplat.loplatsample.java.LoplatSampleApplication.isLocationServiceAgreed;
-import static com.loplat.loplatsample.java.LoplatSampleApplication.isMarketingServiceAgreed;
-import static com.loplat.loplatsample.java.LoplatSampleApplication.setLocationServiceAgreement;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -110,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private void locationPermissionGranted() {
         toastMessage(getText(R.string.toast_location_message_agree));
-        setLocationServiceAgreement(MainActivity.this, true);
+        LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, true);
         Plengi.getInstance(this).start();
 
         /**
@@ -126,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private void locationPermissionDenied() {
         toastMessage(getText(R.string.toast_location_message_revoke));
-        setLocationServiceAgreement(MainActivity.this, false);
+        LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, false);
         Plengi.getInstance(this).stop();
         tv_status.setText(getText(R.string.sdk_stopped));
         switchLocation.setChecked(false);
@@ -152,8 +149,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         String memberCodeFromServer = "18497358207";
 
         // 테스트를 위해 간단하게 로컬에 저장한 값을 그대로 불러오는 과정. 실제로 각 유저들의 데이터는 서버로부터 받길 권장
-        boolean isMarketingServiceAgreedFromServer = isMarketingServiceAgreed(this);
-        boolean isLocationServiceAgreedFromServer = isLocationServiceAgreed(this);
+        boolean isMarketingServiceAgreedFromServer = LoplatSampleApplication.isMarketingServiceAgreed(this);
+        boolean isLocationServiceAgreedFromServer = LoplatSampleApplication.isLocationServiceAgreed(this);
 
         switchMarketing.setChecked(isMarketingServiceAgreedFromServer);
         switchLocation.setChecked(isLocationServiceAgreedFromServer);
@@ -233,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
 
         if (mSampleUIReceiver != null) {
             //LocalBroadcastManager.getInstance(this).unregisterReceiver(mSampleUIReceiver);
@@ -435,7 +433,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Plengi.getInstance(MainActivity.this).stop();
-                    setLocationServiceAgreement(MainActivity.this, false);
+                    LoplatSampleApplication.setLocationServiceAgreement(MainActivity.this, false);
                 }
             });
             builder.setNegativeButton(getText(R.string.cancel), new DialogInterface.OnClickListener() {

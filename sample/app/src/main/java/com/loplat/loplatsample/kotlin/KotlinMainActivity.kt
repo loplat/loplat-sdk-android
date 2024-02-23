@@ -16,6 +16,7 @@ import android.os.Build.VERSION_CODES.JELLY_BEAN_MR2
 import android.os.Build.VERSION_CODES.M
 import android.os.Bundle
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -26,6 +27,7 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationServices
@@ -186,6 +188,7 @@ class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectio
         }
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
 
@@ -226,6 +229,9 @@ class KotlinMainActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectio
                 }
             }
         }
+
+        val serverMode = Plengi.getInstance(this).testServerMode
+        Toast.makeText(this, "ServerMode [${serverMode}]", Toast.LENGTH_SHORT).show()
     }
 
     /**

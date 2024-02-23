@@ -9,6 +9,8 @@
         android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION"
         android:maxSdkVersion="28"/>
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
     <application
         android:name=".kotlin.KotlinLoplatSampleApplication"
         android:allowBackup="true"

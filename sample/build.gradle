@@ -2,6 +2,7 @@
 
 buildscript {
     ext.kotlin_version = '1.7.0'
+
     repositories {
         jcenter()
         google()
@@ -19,6 +20,7 @@ allprojects {
     repositories {
         jcenter()
         maven { url "https://maven.loplat.com/artifactory/plengi"}
+        //maven { url "https://maven.loplat.com/artifactory/plengi-debug"}
         google()
     }
 }
